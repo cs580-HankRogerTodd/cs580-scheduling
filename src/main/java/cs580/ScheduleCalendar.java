@@ -1,4 +1,4 @@
-package cs580.cs580;
+package cs580;
 
 import java.awt.Color;
 import java.awt.Component;

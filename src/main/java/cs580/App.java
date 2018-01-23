@@ -1,4 +1,4 @@
-package cs580.cs580;
+package cs580;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

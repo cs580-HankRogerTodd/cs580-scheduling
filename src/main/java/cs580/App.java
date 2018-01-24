@@ -1,3 +1,7 @@
+/*
+ * Group 7.
+ * */
+
 package cs580;
 
 import java.time.DayOfWeek;

@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import java.awt.Font;
 
 public class ScheduleCalendar2 {
 
@@ -15,10 +18,10 @@ public class ScheduleCalendar2 {
 	private JTable table;
 	
 	private static String DAYS_OF_WEEK[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+	private static String MONTHS[] = {"January", "February", "March", "April", "May", "June", "July",
+			"August", "September", "October", "November", "December"};
 
-	/**
-	 * Launch the application.
-	 
+	// Launch the application.	 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -31,7 +34,7 @@ public class ScheduleCalendar2 {
 			}
 		});
 	}
-	*/
+	
 	/**
 	 * Create the application.
 	 */
@@ -69,6 +72,17 @@ public class ScheduleCalendar2 {
 		table.setFillsViewportHeight(true);
 		table.setBounds(65, 54, 324, 168);
 		frame.getContentPane().add(table);
+		
+		JLabel lblNewLabel = new JLabel();
+		int curMonth = LocalDate.now().getMonthValue();
+		lblNewLabel.setText(MONTHS[curMonth - 1]);
+		lblNewLabel.setBounds(196, 24, 46, 14);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JButton button = new JButton(">");
+		button.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		button.setBounds(247, 20, 46, 23);
+		frame.getContentPane().add(button);
 	}
 	
 	private Object[][] generateDaysInMonth() {

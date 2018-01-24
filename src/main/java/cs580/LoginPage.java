@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
+import java.awt.Font;
 
 public class LoginPage {
 
@@ -47,29 +48,30 @@ public class LoginPage {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(200, 200, 400, 300);
+		frame.setBounds(200, 200, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Login");
-		lblNewLabel.setBounds(176, 36, 42, 16);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel.setBounds(193, 35, 46, 26);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblUsername = new JLabel("User Name");
-		lblUsername.setBounds(100, 89, 84, 16);
+		lblUsername.setBounds(122, 89, 61, 16);
 		frame.getContentPane().add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(100, 145, 61, 16);
+		lblPassword.setBounds(122, 145, 61, 16);
 		frame.getContentPane().add(lblPassword);
 		
 		txtUsername = new JTextField();
-		txtUsername.setBounds(183, 84, 130, 26);
+		txtUsername.setBounds(193, 84, 130, 26);
 		frame.getContentPane().add(txtUsername);
 		txtUsername.setColumns(10);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(183, 142, 124, 21);
+		txtPassword.setBounds(193, 140, 130, 26);
 		frame.getContentPane().add(txtPassword);
 		
 		JButton btnLogin = new JButton("Login");
@@ -92,7 +94,7 @@ public class LoginPage {
 				}
 			}
 		});
-		btnLogin.setBounds(17, 207, 117, 29);
+		btnLogin.setBounds(34, 207, 117, 29);
 		frame.getContentPane().add(btnLogin);
 		
 		JButton btnReset = new JButton("Reset");
@@ -102,7 +104,7 @@ public class LoginPage {
 				txtPassword.setText(null);
 			}
 		});
-		btnReset.setBounds(146, 207, 117, 29);
+		btnReset.setBounds(161, 207, 117, 29);
 		frame.getContentPane().add(btnReset);
 		
 		JButton btnForgotPassword = new JButton("Forgot");
@@ -110,7 +112,7 @@ public class LoginPage {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnForgotPassword.setBounds(275, 207, 117, 29);
+		btnForgotPassword.setBounds(288, 207, 117, 29);
 		frame.getContentPane().add(btnForgotPassword);
 	}
 }

@@ -7,10 +7,13 @@ import java.time.format.DateTimeFormatter;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 public class App {
 	public static void main( String[] args ) {
@@ -33,15 +36,28 @@ public class App {
 		MongoClientURI clientUri = new MongoClientURI(uri);
 		MongoClient mongoClient = new MongoClient(clientUri);
 		MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
-		MongoCollection mongoCollection = mongoDatabase.getCollection("Users");
+		MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 		
-		//used to test the connection
-//		Document document = new Document("Name", "Roger");
-//		document.append("Position", "Employee");
+//		used to test the connection
+//		Document document = new Document("EID", "11");
+//		document.append("Name", "");
 //		document.append("Availability", "Available");
-//		document.append("age", "21");
+//		document.append("Username", "");
+//		document.append("Password", "1234");
 //		
 //		mongoCollection.insertOne(document);
+		
+		//used to read from the database by a specific Filter
+//		try{
+//			Document myDoc = mongoCollection.find(Filters.eq("Name", "Roger")).first();
+//			System.out.println(myDoc.get("Availability"));
+//		}
+//		catch(Exception e) 
+//		{
+//			System.out.println("Failed to find doc");
+//		}
+		
+		
 		
 	}
 }

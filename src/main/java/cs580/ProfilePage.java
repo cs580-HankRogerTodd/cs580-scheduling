@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -62,8 +63,10 @@ public class ProfilePage {
 		btnNewButton.setBounds(327, 19, 117, 29);
 		frame.getContentPane().add(btnNewButton);
 		
+		String currentDirectory = System.getProperty("user.dir");
+		
 		JLabel lblNewLabel = new JLabel("Image");
-		lblNewLabel.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/hank.png"));
+		lblNewLabel.setIcon(new ImageIcon(currentDirectory + "/image/hank.png"));
 		lblNewLabel.setBounds(32, 6, 137, 143);
 		frame.getContentPane().add(lblNewLabel);
 		

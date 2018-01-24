@@ -27,9 +27,11 @@ public class App {
 		System.out.println(localDate.getDayOfMonth());
 		System.out.println(yearMonth.lengthOfMonth());
 		System.out.println(dayOfWeek.getValue());*/
-				
-		ScheduleCalendar scal = new ScheduleCalendar();
-		scal.showFrames();
+		
+		LoginPage login = new LoginPage();
+		
+		//ScheduleCalendar scal = new ScheduleCalendar();
+		//scal.showFrames();
 		
 		//this connects to the database
 		String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";

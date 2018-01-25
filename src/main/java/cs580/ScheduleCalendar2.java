@@ -69,12 +69,12 @@ public class ScheduleCalendar2 {
 		table.setRowSelectionAllowed(false);
 		
 		DefaultTableModel model = new DefaultTableModel(generateDaysInMonth(currentYear, currentMonth),
-				DAYS_OF_WEEK) {
-						private static final long serialVersionUID = 1L;
-
-						public boolean isCellEditable(int row, int column) {
-							return false;
-						}
+			DAYS_OF_WEEK) {
+				private static final long serialVersionUID = 1L;
+	
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
 		};
 		
 		table.setModel(model);
@@ -83,13 +83,13 @@ public class ScheduleCalendar2 {
 		frame.getContentPane().add(table);
 		
 		lblNewLabel = new JLabel();
-		lblNewLabel.setBounds(199, 20, 65, 23);
+		lblNewLabel.setBounds(180, 20, 95, 23);
 		frame.getContentPane().add(lblNewLabel);
-		lblNewLabel.setText(MONTHS[currentMonth - 1]);
+		lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
 		
 		ResizableButton button = new ResizableButton(">");
 		button.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		button.setBounds(274, 20, 46, 23);
+		button.setBounds(290, 20, 45, 23);
 		frame.getContentPane().add(button);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -99,10 +99,11 @@ public class ScheduleCalendar2 {
 				currentMonth++;
 				if (currentMonth > MONTHS.length) {
 					currentMonth = 1;
+					currentYear++;
 				}
 				
-				lblNewLabel.setText(MONTHS[currentMonth - 1]);
-				Object[][] tempData = generateDaysInMonth(2018, currentMonth);
+				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
+				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
 				((AbstractTableModel)table.getModel()).fireTableDataChanged();
 			}
@@ -114,16 +115,17 @@ public class ScheduleCalendar2 {
 				currentMonth--;
 				if (currentMonth <= 0) {
 					currentMonth = MONTHS.length;
+					currentYear--;
 				}
 				
-				lblNewLabel.setText(MONTHS[currentMonth - 1]);
-				Object[][] tempData = generateDaysInMonth(2018, currentMonth);
+				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
+				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
 				((AbstractTableModel)table.getModel()).fireTableDataChanged();
 			}
 		});
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		button_1.setBounds(129, 20, 46, 23);
+		button_1.setBounds(115, 20, 45, 23);
 		frame.getContentPane().add(button_1);
 		
 		JButton btnCancel = new JButton("Cancel");

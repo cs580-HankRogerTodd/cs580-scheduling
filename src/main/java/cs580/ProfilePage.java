@@ -54,7 +54,6 @@ public class ProfilePage {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ScheduleCalendar scal = new ScheduleCalendar();
-				scal.showFrames();
 				frame.dispose();
 			}
 		});

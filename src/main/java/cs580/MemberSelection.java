@@ -47,7 +47,7 @@ public class MemberSelection {
 		JButton btnNextMeetingDate = new JButton("Next");
 		btnNextMeetingDate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ScheduleCalendar2 scal2 = new ScheduleCalendar2();
+				ScheduleCalendar scal2 = new ScheduleCalendar();
 				frame.dispose();
 			}
 		});

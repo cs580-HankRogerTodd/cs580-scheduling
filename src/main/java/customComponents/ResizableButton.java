@@ -16,11 +16,13 @@ public class ResizableButton extends JButton {
 	
 	public ResizableButton() {
 		super();
+		super.setFocusPainted(false);
 	}
 	
 	public ResizableButton(String arg0) {
 		super();
 		super.setText(arg0);
+		super.setFocusPainted(false);
 	}
 	
 	@Override
@@ -31,8 +33,7 @@ public class ResizableButton extends JButton {
 	    int height = metrics.getHeight();
 	    Dimension newDimension =  new Dimension(width+40,height+10);
 	    setPreferredSize(newDimension);
-	    setBounds(new Rectangle(
-	                   getLocation(), getPreferredSize()));
+	    setBounds(new Rectangle(getLocation(), getPreferredSize()));
 	}
 
 }

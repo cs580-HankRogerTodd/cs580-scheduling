@@ -15,6 +15,8 @@ import java.awt.Font;
 
 public class LoginPage {
 
+	public static final Font ARIAL_FONT = new Font("Arial", Font.PLAIN, 11);
+	
 	private JFrame frame;
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
@@ -58,11 +60,13 @@ public class LoginPage {
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblUsername = new JLabel("User Name");
-		lblUsername.setBounds(122, 89, 61, 16);
+		lblUsername.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblUsername.setBounds(109, 89, 74, 16);
 		frame.getContentPane().add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(122, 145, 61, 16);
+		lblPassword.setFont(new Font("Arial", Font.PLAIN, 11));
+		lblPassword.setBounds(109, 145, 61, 16);
 		frame.getContentPane().add(lblPassword);
 		
 		txtUsername = new JTextField();
@@ -75,6 +79,7 @@ public class LoginPage {
 		frame.getContentPane().add(txtPassword);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setFont(new Font("Arial", Font.BOLD, 11));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -98,6 +103,7 @@ public class LoginPage {
 		frame.getContentPane().add(btnLogin);
 		
 		JButton btnReset = new JButton("Reset");
+		btnReset.setFont(new Font("Arial", Font.BOLD, 11));
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtUsername.setText(null);
@@ -108,6 +114,7 @@ public class LoginPage {
 		frame.getContentPane().add(btnReset);
 		
 		JButton btnForgotPassword = new JButton("Forgot");
+		btnForgotPassword.setFont(new Font("Arial", Font.BOLD, 11));
 		btnForgotPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}

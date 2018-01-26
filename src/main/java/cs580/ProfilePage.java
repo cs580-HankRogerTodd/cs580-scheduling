@@ -18,22 +18,6 @@ public class ProfilePage {
 	private JFrame frame;
 
 	/**
-	 * Launch the application.
-	 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ProfilePage window = new ProfilePage();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	*/
-	/**
 	 * Create the application.
 	 */
 	public ProfilePage() {
@@ -85,7 +69,7 @@ public class ProfilePage {
 		btnNotification.setBounds(327, 120, 117, 29);
 		frame.getContentPane().add(btnNotification);
 		
-		JButton btnOther = new JButton("Creat Meeting");
+		JButton btnOther = new JButton("Create Meeting");
 		btnOther.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MemberSelection memslct = new MemberSelection();

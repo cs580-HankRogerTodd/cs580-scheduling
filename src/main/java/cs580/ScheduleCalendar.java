@@ -13,12 +13,17 @@ import customComponents.ResizableButton;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JPanel;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 
 public class ScheduleCalendar {
 
@@ -70,8 +75,8 @@ public class ScheduleCalendar {
 					selectedValue = table.getValueAt(row, col); // get the value at the cursor
 				}
 				
-				System.out.println(Integer.toString(currentYear) + "/" + 
-						Integer.toString(currentMonth) + "/" + selectedValue );
+				JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(currentYear) + "/" + 
+						Integer.toString(currentMonth) + "/" + selectedValue);
 			}
 		});
 		
@@ -96,18 +101,48 @@ public class ScheduleCalendar {
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		table.setDefaultRenderer(Object.class, centerRenderer);
 		
-		System.out.println(table.getRowCount());
+		ResizableButton btnCancel = new ResizableButton("Cancel");
+		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
+		btnCancel.setBounds(251, 210, 89, 23);
+		frame.getContentPane().add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ProfilePage();
+				frame.dispose();
+			}
+		});
 		
-		lblNewLabel = new JLabel();
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 11));
-		lblNewLabel.setBounds(180, 20, 95, 23);
-		frame.getContentPane().add(lblNewLabel);
-		lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
+		JPanel panel = new JPanel();
+		panel.setBounds(138, 25, 190, 23);
+		frame.getContentPane().add(panel);
+		panel.setLayout(new BorderLayout(10, 0));
+		
+		ResizableButton button_1 = new ResizableButton("<");
+		panel.add(button_1, BorderLayout.WEST);
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentMonth--;
+				if (currentMonth <= 0) {
+					currentMonth = MONTHS.length;
+					currentYear--;
+				}
+				
+				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
+				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
+				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
+				((AbstractTableModel)table.getModel()).fireTableDataChanged();
+			}
+		});
+		button_1.setFont(ARIAL_FONT);
 		
 		ResizableButton button = new ResizableButton(">");
+		panel.add(button, BorderLayout.EAST);
 		button.setFont(ARIAL_FONT);
-		button.setBounds(290, 20, 45, 23);
-		frame.getContentPane().add(button);
+		
+		lblNewLabel = new JLabel();
+		panel.add(lblNewLabel, BorderLayout.CENTER);
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 11));
+		lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel tempModel = (DefaultTableModel) table.getModel();
@@ -125,30 +160,6 @@ public class ScheduleCalendar {
 				((AbstractTableModel)table.getModel()).fireTableDataChanged();
 			}
 		});
-		
-		ResizableButton button_1 = new ResizableButton("<");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				currentMonth--;
-				if (currentMonth <= 0) {
-					currentMonth = MONTHS.length;
-					currentYear--;
-				}
-				
-				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
-				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
-				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
-				((AbstractTableModel)table.getModel()).fireTableDataChanged();
-			}
-		});
-		button_1.setFont(ARIAL_FONT);
-		button_1.setBounds(115, 20, 45, 23);
-		frame.getContentPane().add(button_1);
-		
-		ResizableButton btnCancel = new ResizableButton("Cancel");
-		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(251, 210, 89, 23);
-		frame.getContentPane().add(btnCancel);
 	}
 	
 	private Object[][] generateDaysInMonth(int year, int month) {
@@ -209,13 +220,5 @@ public class ScheduleCalendar {
 	
 	public void print(Object o) {
 		System.out.println(o);
-	}
-	
-	private class DatesGenerateWrapper {
-		private int rowCounter2 = 0;
-		
-		public int getRowCounter() {return rowCounter2;}
-		
-		
 	}
 }

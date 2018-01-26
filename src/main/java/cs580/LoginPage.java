@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import java.awt.Font;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+import java.awt.FlowLayout;
 
 public class LoginPage {
 
@@ -78,8 +81,32 @@ public class LoginPage {
 		txtPassword.setBounds(193, 140, 130, 26);
 		frame.getContentPane().add(txtPassword);
 		
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 207, 434, 30);
+		frame.getContentPane().add(panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		
 		JButton btnLogin = new JButton("Login");
+		panel.add(btnLogin);
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 11));
+		
+		JButton btnReset = new JButton("Reset");
+		panel.add(btnReset);
+		btnReset.setFont(new Font("Arial", Font.BOLD, 11));
+		
+		JButton btnForgotPassword = new JButton("Forgot");
+		panel.add(btnForgotPassword);
+		btnForgotPassword.setFont(new Font("Arial", Font.BOLD, 11));
+		btnForgotPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtUsername.setText(null);
+				txtPassword.setText(null);
+			}
+		});
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -99,27 +126,5 @@ public class LoginPage {
 				}
 			}
 		});
-		btnLogin.setBounds(34, 207, 117, 29);
-		frame.getContentPane().add(btnLogin);
-		
-		JButton btnReset = new JButton("Reset");
-		btnReset.setFont(new Font("Arial", Font.BOLD, 11));
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtUsername.setText(null);
-				txtPassword.setText(null);
-			}
-		});
-		btnReset.setBounds(161, 207, 117, 29);
-		frame.getContentPane().add(btnReset);
-		
-		JButton btnForgotPassword = new JButton("Forgot");
-		btnForgotPassword.setFont(new Font("Arial", Font.BOLD, 11));
-		btnForgotPassword.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnForgotPassword.setBounds(288, 207, 117, 29);
-		frame.getContentPane().add(btnForgotPassword);
 	}
 }

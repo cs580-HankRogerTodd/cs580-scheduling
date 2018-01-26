@@ -71,12 +71,18 @@ public class ScheduleCalendar {
 				int row = table.rowAtPoint(arg0.getPoint()); // get row of current mouse cursor
 				int col = table.columnAtPoint(arg0.getPoint()); // get column of current mouse cursor
 				
-				if (row > 0 && col > 0) {
+				if (row >= 0 && col >= 0) {
 					selectedValue = table.getValueAt(row, col); // get the value at the cursor
 				}
 				
-				JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(currentYear) + "/" + 
+				// Making sure the selected date is not null
+				if (selectedValue != null) {
+					JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(currentYear) + "/" + 
 						Integer.toString(currentMonth) + "/" + selectedValue);
+				}
+				else {
+					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+				}
 			}
 		});
 		

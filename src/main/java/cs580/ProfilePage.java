@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+import java.awt.Font;
 
 public class ProfilePage {
 
@@ -34,17 +37,6 @@ public class ProfilePage {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JButton btnNewButton = new JButton("Calendar");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ScheduleCalendar scal = new ScheduleCalendar();
-				frame.dispose();
-			}
-		});
-		
-		btnNewButton.setBounds(327, 19, 117, 29);
-		frame.getContentPane().add(btnNewButton);
-		
 		String currentDirectory = System.getProperty("user.dir");
 		
 		JLabel lblNewLabel = new JLabel("Image");
@@ -57,26 +49,42 @@ public class ProfilePage {
 		txtpnCaliforniaState.setBounds(32, 161, 137, 109);
 		frame.getContentPane().add(txtpnCaliforniaState);
 		
-		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(327, 241, 117, 29);
-		frame.getContentPane().add(btnBack);
+		JPanel panel = new JPanel();
+		panel.setBounds(345, 50, 117, 190);
+		frame.getContentPane().add(panel);
+		panel.setLayout(new GridLayout(5, 1, 0, 10));
+		
+		JButton btnNewButton = new JButton("Calendar");
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+		panel.add(btnNewButton);
 		
 		JButton btnMeeting = new JButton("Meeting");
-		btnMeeting.setBounds(327, 64, 117, 29);
-		frame.getContentPane().add(btnMeeting);
+		btnMeeting.setFont(new Font("Tahoma", Font.BOLD, 11));
+		panel.add(btnMeeting);
 		
 		JButton btnNotification = new JButton("Notification");
-		btnNotification.setBounds(327, 120, 117, 29);
-		frame.getContentPane().add(btnNotification);
+		btnNotification.setFont(new Font("Tahoma", Font.BOLD, 11));
+		panel.add(btnNotification);
 		
-		JButton btnOther = new JButton("Create Meeting");
+		JButton btnOther = new JButton();
+		btnOther.setText("<html><center>Create Meeting</center></html>");
+		btnOther.setFont(new Font("Tahoma", Font.BOLD, 11));
+		panel.add(btnOther);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.setFont(new Font("Tahoma", Font.BOLD, 11));
+		panel.add(btnBack);
 		btnOther.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MemberSelection memslct = new MemberSelection();
 				frame.dispose();
 			}
 		});
-		btnOther.setBounds(327, 177, 117, 29);
-		frame.getContentPane().add(btnOther);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ScheduleCalendar scal = new ScheduleCalendar();
+				frame.dispose();
+			}
+		});
 	}
 }

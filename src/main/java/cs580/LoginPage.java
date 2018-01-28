@@ -6,6 +6,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -19,6 +28,12 @@ import java.awt.FlowLayout;
 public class LoginPage {
 
 	public static final Font ARIAL_FONT = new Font("Arial", Font.PLAIN, 11);
+	
+	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
+	MongoClientURI clientUri = new MongoClientURI(uri);
+	MongoClient mongoClient = new MongoClient(clientUri);
+	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
+	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	
 	private JFrame frame;
 	private JTextField txtUsername;
@@ -113,17 +128,41 @@ public class LoginPage {
 				String password = txtPassword.getText();
 				String username = txtUsername.getText();
 				
-				if(username.contains("hank") && password.contains("1234")) {
-					//txtPassword.setText(null);
-					//txtUsername.setText(null);
-					ProfilePage profile = new ProfilePage();
-					frame.dispose();
+				try
+				{
+					Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();
+					if(myDoc.get("Password").equals(password))
+					{
+						ProfilePage profile = new ProfilePage();
+						frame.dispose();
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Login Error");
+						txtPassword.setText(null);
+						txtUsername.setText(null);
+					}
+					
 				}
-				else {
+				catch(Exception l) 
+				{
 					JOptionPane.showMessageDialog(null, "Login Error");
 					txtPassword.setText(null);
 					txtUsername.setText(null);
 				}
+				
+//				if(username.contains("hank") && password.contains("1234")) {
+//					//txtPassword.setText(null);
+//					//txtUsername.setText(null);
+//					
+//					ProfilePage profile = new ProfilePage();
+//					frame.dispose();
+//				}
+//				else {
+//					JOptionPane.showMessageDialog(null, "Login Error");
+//					txtPassword.setText(null);
+//					txtUsername.setText(null);
+//				}
 			}
 		});
 	}

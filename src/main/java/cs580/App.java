@@ -24,12 +24,14 @@ public class App {
 		LoginPage login = new LoginPage();
 		
 		//this connects to the database
-		String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
-		MongoClientURI clientUri = new MongoClientURI(uri);
-		MongoClient mongoClient = new MongoClient(clientUri);
-		MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
-		MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
-		
+//		String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
+//		MongoClientURI clientUri = new MongoClientURI(uri);
+//		MongoClient mongoClient = new MongoClient(clientUri);
+//		MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
+//		MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
+//		MongoCollection<Document> mongoCollectionMessages = mongoDatabase.getCollection("Messages");
+//		MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
+//		
 //		used to test the connection
 //		Document document = new Document("EID", "11");
 //		document.append("Name", "");
@@ -38,6 +40,14 @@ public class App {
 //		document.append("Password", "1234");
 //		
 //		mongoCollection.insertOne(document);
+		
+//		Document document = new Document("MID", "1");
+//		document.append("From", "Roger");
+//		document.append("To", "Hank");
+//		document.append("Message", "Hello! Meeting at 9 in Rhodes");
+//		document.append("Response", "");
+//		
+//		mongoCollectionMessages.insertOne(document);
 		
 		//Used to update only one document by a filter ("Name") and field("Availability")
 //		Bson filter = new Document("Name", "Roger");
@@ -79,14 +89,14 @@ public class App {
 //		Document subSubDoc = (Document) subDoc.get("Monday");
 //		System.out.println(subSubDoc.get("Start1"));
 		
-		try{
-			Document myDoc = mongoCollection.find(Filters.eq("Name", "Roger")).first();
-			System.out.println(myDoc.get("Name"));
-		}
-		catch(Exception e) 
-		{
-			System.out.println("Failed to find doc");
-		}
+//		try{
+//			Document myDoc = mongoCollectionMessages.find(Filters.eq("From", "Roger")).first();
+//			System.out.println(myDoc.get("Message"));
+//		}
+//		catch(Exception e) 
+//		{
+//			System.out.println("Failed to find doc");
+//		}
 		
 		
 		

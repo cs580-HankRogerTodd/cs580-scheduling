@@ -2,9 +2,21 @@ package cs580;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+
+import org.bson.Document;
+
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 public class MemberSelection extends JFrame
 	implements ActionListener, ItemListener, ListSelectionListener
@@ -58,17 +70,39 @@ public class MemberSelection extends JFrame
 	private final Font fontPlain = new Font(Font.DIALOG, Font.PLAIN, 14);
 	
 	//List_datd
-	private String [] employees = {"apple", "banana", "acat", "dog", "elephant", "fish", 
-			"girlgeneration", "ahah", "iamhandsome", "juice", "ak47", "Lion", "Momo", 
-			"Nima", "Octupus", "Python", "queen", "ruby"};
+//	private String [] employees = {"apple", "banana", "acat", "dog", "elephant", "fish", 
+//			"girlgeneration", "ahah", "iamhandsome", "juice", "ak47", "Lion", "Momo", 
+//			"Nima", "Octupus", "Python", "queen", "ruby"};
+	
+	private ArrayList<String> employees = new ArrayList<String>();
 	
 	private DefaultListModel<String> listModelEmployee = new DefaultListModel<String>();
 	private DefaultListModel<String> listModelInvitee = new DefaultListModel<String>();
 	
+	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
+	MongoClientURI clientUri = new MongoClientURI(uri);
+	MongoClient mongoClient = new MongoClient(clientUri);
+	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
+	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
+	MongoCursor<Document> cursor = mongoCollection.find().iterator();
+	
+
 	public MemberSelection()
 	{
 		super("Member Selection");
 		setFonts();
+		
+		try {
+		      while (cursor.hasNext()) {
+		        Document doc = cursor.next();
+		        if(doc.get("Availability").equals("Available"))
+		        {
+		        	employees.add(doc.get("Name").toString());
+		        }
+		      }
+		    } finally {
+		      cursor.close();
+		    }
 		
 		/////// main container //////
 		contents = new JPanel();
@@ -441,6 +475,13 @@ public class MemberSelection extends JFrame
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void iterateDatabase()
+	{
+		while (cursor.hasNext()) {
+	        Document doc = cursor.next();
+	      }
 	}
 	
 

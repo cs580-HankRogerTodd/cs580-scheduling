@@ -21,10 +21,7 @@ import com.mongodb.client.MongoDatabase;
 public class MemberSelection extends JFrame
 	implements ActionListener, ItemListener, ListSelectionListener
 {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	//boarder
 	private Border borderCenter = BorderFactory.createEmptyBorder(10, 10, 10,10); //(top, left, bottom, right) 
@@ -49,6 +46,7 @@ public class MemberSelection extends JFrame
 	private JButton btnSearch;
 	private JButton btnNext;
 	private JButton btnBack;
+	private JButton btnClear;
 	
 	private JLabel lblListEmployee;
 	private JLabel lblListInvitee;
@@ -78,6 +76,10 @@ public class MemberSelection extends JFrame
 	
 	private DefaultListModel<String> listModelEmployee = new DefaultListModel<String>();
 	private DefaultListModel<String> listModelInvitee = new DefaultListModel<String>();
+	private DefaultListModel<String> listModelTemp = new DefaultListModel<String>();
+	
+	private boolean pressSearch = false; 
+	private String ForClearReset;
 	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
 	MongoClientURI clientUri = new MongoClientURI(uri);
@@ -231,9 +233,14 @@ public class MemberSelection extends JFrame
 		btnBack = new JButton("<< BACK ");
 		setSpecificSize(btnBack, new Dimension(90, 50));
 		
+		//Clear button
+		btnClear = new JButton("Clear");
+		setSpecificSize(btnClear, new Dimension(80, 20));
+		
 		panelSouth.add(searchName);
 		panelSouth.add(btnSearch);
-		panelSouth.add(Box.createRigidArea(new Dimension(420, 50)));
+		panelSouth.add(btnClear);
+		panelSouth.add(Box.createRigidArea(new Dimension(350, 50)));
 		panelSouth.add(btnBack);
 		panelSouth.add(Box.createRigidArea(new Dimension(10, 1)));
 		panelSouth.add(btnNext);
@@ -250,8 +257,11 @@ public class MemberSelection extends JFrame
 		btnRemoveAll.addActionListener(this);
 		btnNext.addActionListener(this);
 		btnBack.addActionListener(this);
+		btnClear.addActionListener(this);
+		btnSearch.addActionListener(this);
 		listEmployee.addListSelectionListener(this);
 		listInvitee.addListSelectionListener(this);
+		//searchName.getDocument().addDocumentListener(new MyDocumentListener());
 
 		/////// set size /////////
 		setSize(850, 460);
@@ -302,9 +312,21 @@ public class MemberSelection extends JFrame
 			backToProfile();
 			return;
 		}
+		if(source == btnSearch)
+		{
+			//System.out.println("inin");
+			searchMember();
+			return;
+		}
+		if(source == btnClear)
+		{
+			showRestEmployee();
+			return;
+		}
 		
 	}
 	
+
 	private void addItem()
 	{
 		int isSelected = listEmployee.getSelectedIndex();
@@ -314,7 +336,7 @@ public class MemberSelection extends JFrame
 		}
 		
 		String addedItem = listEmployee.getSelectedValue();
-		
+		ForClearReset = listEmployee.getSelectedValue();
 		// remove from left list
 		listModelEmployee.remove(isSelected);
 		//displaySelectedItems(); ///////////////////////////////////////////////////////////
@@ -433,7 +455,73 @@ public class MemberSelection extends JFrame
 		}
 		
 	}
+	private void setTempModel()
+	{
+		int size = listModelEmployee.getSize();
 		
+		for(int i=0; i<size; i++)
+		{
+			listModelTemp.addElement(listModelEmployee.elementAt(i));
+		}
+	}
+
+	private void searchMember()
+	{
+		setTempModel();
+		pressSearch = true;
+		int size = listModelEmployee.getSize();
+		String findMe = searchName.getText();
+		
+		int findMeLength = findMe.length();
+		boolean foundIt = false;
+		int i = 0;
+		
+		while(i < size)
+		{
+			String searchMe = listModelEmployee.elementAt(i);
+			int searchMeLength = searchMe.length();
+			
+			for (int j = 0; j <= (searchMeLength - findMeLength); j++) 
+			{
+	           if (searchMe.regionMatches(j, findMe, 0, findMeLength)) 
+	           {
+	              foundIt = true;
+	              i++;
+	              break;
+	            }
+		     }
+			
+			if (!foundIt) {
+				listModelEmployee.removeElement(searchMe);
+				size = listModelEmployee.getSize();
+				i = 0;
+			}
+			foundIt = false;
+
+		   }
+	}	
+	private void showRestEmployee()
+	{
+		if(pressSearch == false)
+		{
+			searchName.setText(null);
+		}
+		else
+		{
+			searchName.setText(null);
+			listModelEmployee.clear();
+			int size = listModelTemp.getSize();
+			for(int i=0; i<size; i++)
+			{
+				listModelEmployee.addElement(listModelTemp.elementAt(i));
+			}
+			
+			listModelEmployee.removeElement(ForClearReset);
+			listModelTemp.clear();
+			pressSearch =false;
+		}
+		
+	}
 	private void setFonts()
 	{
 		UIManager.put("Button.font", fontBold);
@@ -442,14 +530,12 @@ public class MemberSelection extends JFrame
 		UIManager.put("List.font", fontPlain);
 		
 	}
-
 	private void setSpecificSize(JComponent component, Dimension dimension)
 	{
 		component.setMinimumSize(dimension);
 		component.setPreferredSize(dimension);
 		component.setMaximumSize(dimension);
 	}
-	
 	public void valueChanged(ListSelectionEvent e)
 	{
 		Object source = e.getSource();
@@ -464,13 +550,7 @@ public class MemberSelection extends JFrame
 			return;
 		}
 	}
-/*
-	public static void main(String[] args)
-	{
-		MemberSelection gui = new MemberSelection();
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-	}*/
+	
 
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub

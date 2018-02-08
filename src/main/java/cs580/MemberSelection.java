@@ -305,7 +305,7 @@ public class MemberSelection extends JFrame
 		if(source == btnNext)
 		{
 			goToScheduleCalender();
-			return;
+			//return;
 		}
 		if(source == btnBack)
 		{
@@ -314,7 +314,6 @@ public class MemberSelection extends JFrame
 		}
 		if(source == btnSearch)
 		{
-			//System.out.println("inin");
 			searchMember();
 			return;
 		}
@@ -336,9 +335,15 @@ public class MemberSelection extends JFrame
 		}
 		
 		String addedItem = listEmployee.getSelectedValue();
-		ForClearReset = listEmployee.getSelectedValue();
+		//ForClearReset = listEmployee.getSelectedValue();
 		// remove from left list
 		listModelEmployee.remove(isSelected);
+		if (pressSearch == true)
+		{
+			//System.out.print("hihiinin");
+			listModelTemp.removeElement(addedItem);
+			System.out.print(listModelTemp);
+		}
 		//displaySelectedItems(); ///////////////////////////////////////////////////////////
 		
 		// add to right list
@@ -422,7 +427,8 @@ public class MemberSelection extends JFrame
 
 	private void goToScheduleCalender()
 	{
-		System.out.println("IN goToScheduleCalender");
+		TimeSelection timeslct = new TimeSelection(listModelInvitee);
+		dispose();
 	}
 	
 	private void backToProfile()
@@ -455,6 +461,7 @@ public class MemberSelection extends JFrame
 		}
 		
 	}
+	
 	private void setTempModel()
 	{
 		int size = listModelEmployee.getSize();
@@ -462,6 +469,7 @@ public class MemberSelection extends JFrame
 		for(int i=0; i<size; i++)
 		{
 			listModelTemp.addElement(listModelEmployee.elementAt(i));
+			//System.out.print(listModelTemp);
 		}
 	}
 
@@ -516,7 +524,7 @@ public class MemberSelection extends JFrame
 				listModelEmployee.addElement(listModelTemp.elementAt(i));
 			}
 			
-			listModelEmployee.removeElement(ForClearReset);
+			//listModelEmployee.removeElement(ForClearReset);
 			listModelTemp.clear();
 			pressSearch =false;
 		}

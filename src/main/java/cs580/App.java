@@ -19,7 +19,6 @@ import com.mongodb.client.model.Filters;
 
 public class App {	
 	public static void main( String[] args ) {
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		
 		LoginPage login = new LoginPage();
 		

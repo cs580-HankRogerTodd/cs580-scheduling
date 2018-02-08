@@ -8,12 +8,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -60,13 +63,60 @@ public class LoginPage {
 	 */
 	public LoginPage() {
 		initialize();
+		DBtest();
 		frame.setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	private void DBtest()
+	{
+		//String username = "Abraham";
+        Bson filter = new Document("Name", "Joe");
+		//Bson newValue = new Document("Meeting", "");
+		//Bson updateOperationDocument = new Document("$set", newValue);
+		//mongoCollection.deleteOne(filter);
+		
+		/* new member
+		Document document = new Document("EID", "21");
+		document.append("Name", "Joe");
+		document.append("Availability", "Available");
+		document.append("Username", "Joe");
+		document.append("Password", "1234");
+		mongoCollection.insertOne(document);
+		*/
+        
+        /* add new element in member
+        //Bson filter = new Document("Name", "Joe");
+		Bson new_document = new Document("Meeting", "");
+		Bson updateOperationDocument2 = new Document("$set", new_document);
+		mongoCollection.updateOne(filter, updateOperationDocument2);
+		*/
+        
+        ///* add detail in element
+        Document document = new Document("Date", "0223");
+		document.append("StartTime", "8");
+		document.append("EndTime", "11");
+		document.append("Host", "Hank");
+		document.append("Room", "1001");
+		document.append("Respond", "W");
+		
+		BasicDBObject MeetingObj = new BasicDBObject();
+		MeetingObj.put("Meeting1",  document);
+		
+		Bson update = new Document("Meeting", MeetingObj);
+		Bson updateOperationDocument = new Document("$set", update);
+		mongoCollection.updateMany(filter, updateOperationDocument);
+		//*/
+		
+		Document myDoc = mongoCollection.find(Filters.eq("Name", "Joe" )).first(); 
+        System.out.println(myDoc); 
+        
+	}
+	
 	private void initialize() {
+		
 		frame = new JFrame();
 		frame.setBounds(200, 200, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

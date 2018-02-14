@@ -66,12 +66,7 @@ public class MemberSelection extends JFrame
 	//Fonts
 	private final Font fontBold = new Font(Font.DIALOG, Font.BOLD, 14);
 	private final Font fontPlain = new Font(Font.DIALOG, Font.PLAIN, 14);
-	
-	//List_datd
-//	private String [] employees = {"apple", "banana", "acat", "dog", "elephant", "fish", 
-//			"girlgeneration", "ahah", "iamhandsome", "juice", "ak47", "Lion", "Momo", 
-//			"Nima", "Octupus", "Python", "queen", "ruby"};
-	
+
 	private ArrayList<String> employees = new ArrayList<String>();
 	
 	private DefaultListModel<String> listModelEmployee = new DefaultListModel<String>();
@@ -80,19 +75,22 @@ public class MemberSelection extends JFrame
 	
 	private boolean pressSearch = false; 
 	private String ForClearReset;
+	private String LoginUsername;
 	
+//////Database Setup ////////////////////////////////////////////////////////////////	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
 	MongoClientURI clientUri = new MongoClientURI(uri);
 	MongoClient mongoClient = new MongoClient(clientUri);
 	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCursor<Document> cursor = mongoCollection.find().iterator();
-	
+///////////////////////////////////////////////////////////////////////////////////////	
 
-	public MemberSelection()
+	public MemberSelection(String username)
 	{
 		super("Member Selection");
 		setFonts();
+		LoginUsername = username;
 		
 		try {
 		      while (cursor.hasNext()) {
@@ -309,7 +307,7 @@ public class MemberSelection extends JFrame
 		}
 		if(source == btnBack)
 		{
-			backToProfile();
+			backToProfile(LoginUsername);
 			return;
 		}
 		if(source == btnSearch)
@@ -340,7 +338,6 @@ public class MemberSelection extends JFrame
 		listModelEmployee.remove(isSelected);
 		if (pressSearch == true)
 		{
-			//System.out.print("hihiinin");
 			listModelTemp.removeElement(addedItem);
 			System.out.print(listModelTemp);
 		}
@@ -427,13 +424,13 @@ public class MemberSelection extends JFrame
 
 	private void goToScheduleCalender()
 	{
-		TimeSelection timeslct = new TimeSelection(listModelInvitee);
+		ScheduleCalendar timeslct = new ScheduleCalendar(listModelInvitee, LoginUsername);
 		dispose();
 	}
 	
-	private void backToProfile()
+	private void backToProfile(String LoginUsername)
 	{
-		new ProfilePage();
+		new ProfilePage(LoginUsername);
 		dispose();
 	}
 	

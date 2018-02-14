@@ -2,12 +2,15 @@ package cs580;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
 
 import customComponents.ResizableButton;
 
@@ -39,19 +42,20 @@ public class ScheduleCalendar {
 	private final String MONTHS[] = {"January", "February", "March", "April", "May", "June", "July",
 			"August", "September", "October", "November", "December"};
 	
-	private JLabel lblNewLabel;
 	
-	/**
-	 * Create the application.
-	 */
-	public ScheduleCalendar() {
+	private DefaultListModel<String> Invitee;
+	private JLabel lblNewLabel;
+	private String LoginUsername;
+
+	
+	public ScheduleCalendar(DefaultListModel<String> listModelInvitee, String Username) {
+		Invitee = listModelInvitee;
+		LoginUsername = Username;
 		initialize();
 		frame.setVisible(true);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("CS580 Scheduling - Group 7");
@@ -79,6 +83,8 @@ public class ScheduleCalendar {
 				if (selectedValue != null) {
 					JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(currentYear) + "/" + 
 						Integer.toString(currentMonth) + "/" + selectedValue);
+					
+						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, currentMonth, selectedValue) ;
 				}
 				else {
 					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
@@ -113,7 +119,7 @@ public class ScheduleCalendar {
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new ProfilePage();
+				new ProfilePage(LoginUsername);
 				frame.dispose();
 			}
 		});
@@ -167,6 +173,9 @@ public class ScheduleCalendar {
 			}
 		});
 	}
+	
+	
+	
 	
 	private Object[][] generateDaysInMonth(int year, int month) {
 		int colCounter = 7;

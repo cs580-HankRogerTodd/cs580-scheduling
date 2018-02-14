@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -17,6 +18,8 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 
 import org.bson.Document;
+
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
@@ -47,6 +50,7 @@ public class TimeRoomSelection {
 	private String UserEndTime;
 	private String UserSelectedRoom;
 	private String LoginUsername;
+	private String Date;
 	private JList<String> ListRoom;
 	
 	private JTextField StartTimeText;
@@ -75,6 +79,7 @@ public class TimeRoomSelection {
 		currentMonth = InputcurrentMonth;
 		selectedValue = inputSelectedValue;
 		
+		CalculateDate(currentMonth, selectedValue);
 		findAvailableTime();
 		initialize();
 		
@@ -217,7 +222,23 @@ public class TimeRoomSelection {
         });
 	}
 	
-	
+	private void CalculateDate(int currentMonth, Object SelectedValue)
+	{
+		int intSelectedValue = (Integer) SelectedValue;
+		String stringSelectedValue = Integer.toString(intSelectedValue);
+		String stringCurrentMonth = Integer.toString(currentMonth);
+		
+		if (currentMonth/10 == 0)
+		{
+			stringCurrentMonth = "0" + stringCurrentMonth;
+		}
+		if (intSelectedValue/10 == 0)
+		{
+			stringSelectedValue = "0" + stringSelectedValue;
+		}
+		
+		Date = stringCurrentMonth + stringSelectedValue;
+	}
 	
 	private void findAvailableTime()
 	{
@@ -281,7 +302,6 @@ public class TimeRoomSelection {
 			ScheduleCalendar timeslct = new ScheduleCalendar(Invitee, LoginUsername);
 			frame.dispose();
 		}
-
 	}
 	
 	
@@ -346,18 +366,24 @@ public class TimeRoomSelection {
 		
 		FindIterable<Document> findIterable = mongoCollectionRooms.find();  
         MongoCursor<Document> mongoCursor = findIterable.iterator();  
+        
         while(mongoCursor.hasNext())
         {  
         		Document Room = (Document) mongoCursor.next(); 
         		List<Document> RoomBookedTime = (List<Document>) Room.get("TimeBooked"); 
+       
         		for(int i=0 ; i<RoomBookedTime.size(); i++)
         		{
-        			BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
-        			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
-
-        			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
+        			String StringRoomBookedTime = RoomBookedTime.get(i).get("Date").toString();
+        			if(StringRoomBookedTime .equals(Date))
         			{
-            			RoomAvailable = false;	
+        				BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
+            			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
+
+            			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
+            			{
+                			RoomAvailable = false;	
+            			}
         			}
         		}
         		
@@ -374,20 +400,61 @@ public class TimeRoomSelection {
 
 	private void UpdateDB_NewMeeting()
 	{
-		/*
+		/* Result Information
 		 DefaultListModel<String> Invitee;
 		 int currentMonth / Object selectedValue;
 		 String UserStartTime / String UserEndTime;
 		 String UserSelectedRoom;
 		 String LoginUsername
 		*/
+		
+		/*
+/////// Add new meeting into Meeting database
+
+		long TotalMeeting = mongoCollectionMeeting.count();
+		
+		ArrayList< DBObject > array = new ArrayList< DBObject >();
+		Document document = new Document("MeetingID", TotalMeeting+1);
+		document.append("Host", LoginUsername);
+		document.append("Date", Date);
+		document.append("StartTime", UserStartTime);
+		document.append("EndTime", UserEndTime);
+		document.append("Room", UserSelectedRoom);
+		document.append("Member", array);
+		mongoCollectionMeeting.insertOne(document);
+		*/
+		
+/////// Add new booked time into Room database
+		/*
+        BasicDBObject match = new BasicDBObject();
+        match.put( "RoomNo", UserSelectedRoom );
+
+        BasicDBObject addressSpec = new BasicDBObject();
+        addressSpec.put("Date", Date);
+        addressSpec.put("StartTime", UserStartTime);
+        addressSpec.put("EndTime", UserEndTime);
+        addressSpec.put("Host", LoginUsername);
+
+        BasicDBObject update = new BasicDBObject();
+        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
+        mongoCollectionRooms.updateMany( match, update );
+        //*/
+
+/////// Add new meeting schedule into Employee database
+		
+		//System.out.print(Invitee.size());
+		//System.out.print(Invitee.elementAt(0));
+		
+		
 		System.out.print("Host: " + LoginUsername + "\n");
 		System.out.print("Member: " + Invitee + "\n");
-		System.out.print("Date: " + currentMonth + " / " + selectedValue + "\n");
+		System.out.print("Date: " + Date + "\n");
 		System.out.print("Start time: " + UserStartTime + "\n");
 		System.out.print("End time: " + UserEndTime + "\n");
 		System.out.print("Room: " + UserSelectedRoom + "\n");
 
 	}
+	
+	
 	
 }

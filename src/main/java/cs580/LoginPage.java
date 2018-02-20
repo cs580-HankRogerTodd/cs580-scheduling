@@ -18,6 +18,7 @@ import com.mongodb.client.model.Filters;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JPanel;
@@ -96,8 +97,9 @@ public class LoginPage {
 					Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();
 					if(myDoc.get("Password").equals(password))
 					{
-						ProfilePage profile = new ProfilePage(username);
 						frame.dispose();
+						ProfilePage profile = new ProfilePage(username);
+						
 					}
 					else
 					{
@@ -138,4 +140,6 @@ public class LoginPage {
 //////////////////////////////////
 		
 	}
+	
+	
 }

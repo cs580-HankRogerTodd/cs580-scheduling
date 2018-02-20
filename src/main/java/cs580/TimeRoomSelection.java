@@ -19,6 +19,7 @@ import javax.swing.JTextArea;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -175,6 +176,7 @@ public class TimeRoomSelection {
 						EndTimeText.setText(null);
 						UserStartTime = null;
 						UserEndTime = null;
+						break;
 					}
 				}
 				
@@ -261,9 +263,10 @@ public class TimeRoomSelection {
 			{
 				Document MeetingElement = MeetingLists.get(j);
 				//System.out.println(MeetingElement); // get meeting ID to find the meeting date, start time and end time
-				
+				String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
+				int IntMeetingID = Integer.parseInt(StringMeetingID);
 				// use meeting ID to get meeting detail
-				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", MeetingElement.getString("MeetingID") )).first();
+				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
 				
 				String convertedToString = myMeeting.get("Date").toString();
 				
@@ -408,10 +411,10 @@ public class TimeRoomSelection {
 		 String LoginUsername
 		*/
 		
-		/*
 /////// Add new meeting into Meeting database
 
 		long TotalMeeting = mongoCollectionMeeting.count();
+		///*
 		
 		ArrayList< DBObject > array = new ArrayList< DBObject >();
 		Document document = new Document("MeetingID", TotalMeeting+1);
@@ -422,10 +425,18 @@ public class TimeRoomSelection {
 		document.append("Room", UserSelectedRoom);
 		document.append("Member", array);
 		mongoCollectionMeeting.insertOne(document);
-		*/
+		
+		
+		for (int i=0 ; i < Invitee.size(); i++)
+		{
+			mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", TotalMeeting+1),  
+	                new Document( "$addToSet", new Document( "Member", Invitee.getElementAt(i))))  
+	                .wasAcknowledged ();
+		}
+		//*/
 		
 /////// Add new booked time into Room database
-		/*
+		///*
         BasicDBObject match = new BasicDBObject();
         match.put( "RoomNo", UserSelectedRoom );
 
@@ -442,16 +453,48 @@ public class TimeRoomSelection {
 
 /////// Add new meeting schedule into Employee database
 		
+        for (int i= 0; i< Invitee.size(); i++)
+        {
+        		BasicDBObject matchEmployee = new BasicDBObject();
+        		matchEmployee.put( "Name", Invitee.elementAt(i) );
+
+            BasicDBObject Employee_addressSpec = new BasicDBObject();
+            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
+            Employee_addressSpec.put("Respond", "P");
+
+            BasicDBObject updateEmployee = new BasicDBObject();
+            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+            mongoCollection.updateMany( matchEmployee, updateEmployee );
+        }
 		//System.out.print(Invitee.size());
 		//System.out.print(Invitee.elementAt(0));
 		
-		
+		/*
 		System.out.print("Host: " + LoginUsername + "\n");
 		System.out.print("Member: " + Invitee + "\n");
 		System.out.print("Date: " + Date + "\n");
 		System.out.print("Start time: " + UserStartTime + "\n");
 		System.out.print("End time: " + UserEndTime + "\n");
 		System.out.print("Room: " + UserSelectedRoom + "\n");
+		//*/
+		
+		FindIterable<Document> findIterable = mongoCollection.find();
+        MongoCursor<Document> mongoCursor = findIterable.iterator();  
+        while(mongoCursor.hasNext()){  
+           System.out.println(mongoCursor.next());  
+        } 
+        System.out.print("\n");
+        FindIterable<Document> findIterableMeeting = mongoCollectionMeeting.find();
+        MongoCursor<Document> mongoCursorMeeting = findIterableMeeting.iterator();  
+        while(mongoCursorMeeting.hasNext()){  
+           System.out.println(mongoCursorMeeting.next());  
+        } 
+        System.out.print("\n");
+        FindIterable<Document> findIterableRoom = mongoCollectionRooms.find();
+        MongoCursor<Document> mongoCursorRoom = findIterableRoom.iterator();  
+        while(mongoCursorRoom.hasNext()){  
+           System.out.println(mongoCursorRoom.next());  
+        } 
 
 	}
 	

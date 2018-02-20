@@ -102,10 +102,11 @@ public class ScheduleCalendar {
 		};
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(65, 65, 324, 120);
+		scrollPane.setBounds(36, 65, 386, 172);
 		frame.getContentPane().add(scrollPane);
 		
 		table.setModel(model);
+		table.setRowHeight(50);
 		table.setFillsViewportHeight(true);
 		table.setBounds(65, 54, 324, 168);
 		scrollPane.setViewportView(table);
@@ -115,7 +116,7 @@ public class ScheduleCalendar {
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(251, 210, 89, 23);
+		btnCancel.setBounds(272, 249, 89, 23);
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

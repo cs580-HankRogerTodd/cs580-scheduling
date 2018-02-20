@@ -1,11 +1,12 @@
 package cs580;
 
-
-
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -16,8 +17,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 
 public class dbManage
 {
@@ -28,6 +29,8 @@ public class dbManage
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
 	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
+	
+	// Size of Database = System.out.print(mongoCollectionMeeting.count());
 
 	public dbManage()
 	{
@@ -37,15 +40,18 @@ public class dbManage
 	
 	private void DBtest()
 	{
-		String username = "LazyChou";
 		
-		//delete member document
+// Employee Database //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		//String username = "Hank";
+		
+		// Delete Member
 		/* 
         Bson filter = new Document("Name", username);
 		mongoCollection.deleteOne(filter);
-		*/
+		//*/
 		
-		//new member document
+		// New Member
 		/* 
 		ArrayList< DBObject > array = new ArrayList< DBObject >();
 		Document document = new Document("EID", "7");
@@ -57,33 +63,260 @@ public class dbManage
 		mongoCollection.insertOne(document);
 		//*/
         
-		//(RECORD FOR USED)create meeting Array
-        /* 
-        Bson filter = new Document("Name", username);
-        ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Bson new_document = new Document("Meeting", array);
-		Bson updateOperationDocument2 = new Document("$set", new_document);
-		mongoCollection.updateOne(filter, updateOperationDocument2);
-		*/
-		
-		//add meeting detail in array
+		// Add meeting detail in meeting array
 		/* 
 		BasicDBObject match = new BasicDBObject();
         match.put( "Name", username );
 
         BasicDBObject addressSpec = new BasicDBObject();
-        //addressSpec.put("Date", "0101");
-       // addressSpec.put("StartTime", "13");
-       // addressSpec.put("EndTime", "15");
-       // addressSpec.put("Host", "Todd");
-       // addressSpec.put("Room", "1001");
-        addressSpec.put("MeetingID", "6");
-        addressSpec.put("Respond", "A");
+        addressSpec.put("MeetingID", "5");
+        addressSpec.put("Respond", "P");
 
         BasicDBObject update = new BasicDBObject();
         update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
         mongoCollection.updateMany( match, update );
 		//*/
+
+//Meeting/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		 
+		//int MeetingID = 1;
+		
+		// Delete Meeting
+		/*
+			Bson filter = new Document("MeetingID", MeetingID);
+		    mongoCollectionMeeting.deleteOne(filter);
+	    //*/  
+		
+		
+		// Add New Meeting
+        /*
+        ArrayList< DBObject > array = new ArrayList< DBObject >();
+        
+		Document document = new Document("MeetingID", MeetingID);
+		document.append("Host", "Hank");
+		document.append("Date", "0221");
+		document.append("StartTime", "7");
+		document.append("EndTime", "8");
+		document.append("Room", "1001");
+		document.append("Member", array);
+		mongoCollectionMeeting.insertOne(document);
+		//*/
+		
+		/*
+		BasicDBObject match = new BasicDBObject();
+        match.put("MeetingID", MeetingID);
+
+        BasicDBObject addressSpec = new BasicDBObject();
+        addressSpec.put("member", "Hank");
+
+        BasicDBObject update = new BasicDBObject();
+        update.put( "$push", new BasicDBObject( "Member", addressSpec ) );
+        mongoCollectionMeeting.updateMany( match, update );
+		//*/
+		///*
+		// Add member in member array
+		/*
+		mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", "12"),  
+                new Document( "$addToSet", new Document( "Member", "Todd, Hank")))  
+                .wasAcknowledged ();
+		//*/
+		// how to create an array [aaa, bbb, ccc, ddd, eee] ????????????????????????????????
+		
+//ROOM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		
+        //String RoomNo = "1003";
+        
+        // Delete Room
+		/*
+        Bson filter = new Document("RoomNo", RoomNo);
+        mongoCollectionRooms.deleteOne(filter);
+        //*/
+        
+        // New a Room
+        /*
+		ArrayList< DBObject > array = new ArrayList< DBObject >();
+		Document document = new Document("RID", "3");
+		document.append("RoomNo", RoomNo);
+		document.append("TimeBooked", array);
+		mongoCollectionRooms.insertOne(document);
+		//*/
+        
+        // Add new booked time in the room schedule
+        /*
+        BasicDBObject match = new BasicDBObject();
+        match.put( "RoomNo", RoomNo );
+
+        BasicDBObject addressSpec = new BasicDBObject();
+        addressSpec.put("Date", "0101");
+        addressSpec.put("StartTime", "7");
+        addressSpec.put("EndTime", "17");
+        addressSpec.put("Host", "JackChen");
+
+        BasicDBObject update = new BasicDBObject();
+        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
+        mongoCollectionRooms.updateMany( match, update );
+        //*/
+
+
+////////// Update Meeting //////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// delete meeting
+		/*
+		   mongoCollection.updateOne(  
+                new Document ("Name","Roger"),  
+                new Document( "$pull", new Document("Meeting" ,  
+                        new Document( "MeetingID", 1))))  
+                .wasAcknowledged ();  
+                //*/
+
+		//Document myDoc = mongoCollectionMeeting.find(Filters.eq("MeetingID", 1 )).first(); //get member
+		
+		//List<Document> MeetingLists = (List<Document>) myDoc.get("Member");
+		//Document myMeeting = MeetingLists.
+	    //System.out.println(MeetingLists.get(0)); 
+	    
+////////// Print Database //////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+        // mongoCollection
+        // mongoCollectionRooms
+        // mongoCollectionMeeting
+        ///*
+	    FindIterable<Document> findIterable = mongoCollection.find();
+        MongoCursor<Document> mongoCursor = findIterable.iterator();  
+        while(mongoCursor.hasNext()){  
+           System.out.println(mongoCursor.next());  
+        } 
+        System.out.print("\n");
+        FindIterable<Document> findIterableMeeting = mongoCollectionMeeting.find();
+        MongoCursor<Document> mongoCursorMeeting = findIterableMeeting.iterator();  
+        while(mongoCursorMeeting.hasNext()){  
+           System.out.println(mongoCursorMeeting.next());  
+        } 
+        System.out.print("\n");
+        FindIterable<Document> findIterableRoom = mongoCollectionRooms.find();
+        MongoCursor<Document> mongoCursorRoom = findIterableRoom.iterator();  
+        while(mongoCursorRoom.hasNext()){  
+           System.out.println(mongoCursorRoom.next());  
+        } 
+        //*/
+        
+       // Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", 1)).first();
+        //System.out.println(myMeeting);  
+        
+	}
+
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Roger Tutorial //////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//this connects to the database
+//String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
+//MongoClientURI clientUri = new MongoClientURI(uri);
+//MongoClient mongoClient = new MongoClient(clientUri);
+//MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
+//MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
+//MongoCollection<Document> mongoCollectionMessages = mongoDatabase.getCollection("Messages");
+//MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
+//
+//used to test the connection
+//Document document = new Document("EID", "11");
+//document.append("Name", "");
+//document.append("Availability", "Available");
+//document.append("Username", "");
+//document.append("Password", "1234");
+//
+//mongoCollection.insertOne(document);
+
+//Document document = new Document("MID", "1");
+//document.append("From", "Roger");
+//document.append("To", "Hank");
+//document.append("Message", "Hello! Meeting at 9 in Rhodes");
+//document.append("Response", "");
+//
+//mongoCollectionMessages.insertOne(document);
+
+//Used to update only one document by a filter ("Name") and field("Availability")
+//Bson filter = new Document("Name", "Roger");
+//Bson newValue = new Document("Availability", "Unavailable");
+//Bson updateOperationDocument = new Document("$set", newValue);
+//mongoCollection.updateOne(filter, updateOperationDocument);
+
+//updating a sub document
+//Bson filter = new Document("Name", "Roger");
+//Bson newValue = new Document("TimeAvailable.Monday.Start1", "9");
+//Bson updateOperationDocument = new Document("$set", newValue);
+//mongoCollection.updateOne(filter, updateOperationDocument);
+
+//updated everyone with the new documents
+//Document document = new Document("Start1", "");
+//document.append("End1", "");
+//document.append("Start2", "");
+//document.append("End2", "");
+//document.append("Start3", "");
+//document.append("End3", "");
+//
+//BasicDBObject Available = new BasicDBObject();
+//Available.put("Monday",  document);
+//Available.put("Tuesday",document );
+//Available.put("Wednesday",document );
+//Available.put("Thursday", document);
+//Available.put("Friday", document);
+//Available.put("Saturday", document);
+//Available.put("Sunday", document);
+//Bson update = new Document("TimeAvailable", Available);
+//Bson updateOperationDocument = new Document("$set", update);
+//mongoCollection.updateMany(Filters.exists("Name"), updateOperationDocument);
+
+//used to read from the database by a specific Filter
+//filter can be "EID", "Name", "Availability", "Username", "Password"
+
+//how read sub documents
+//Document subDoc = (Document) myDoc.get("TimeAvailable");
+//Document subSubDoc = (Document) subDoc.get("Monday");
+//System.out.println(subSubDoc.get("Start1"));
+
+//try{
+//	Document myDoc = mongoCollectionMessages.find(Filters.eq("From", "Roger")).first();
+//	System.out.println(myDoc.get("Message"));
+//}
+//catch(Exception e) 
+//{
+//	System.out.println("Failed to find doc");
+//}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////// CODE METHOD RECORD //////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+FindIterable<Document> findIterable = mongoCollection.find();  
+MongoCursor<Document> mongoCursor = findIterable.iterator();  
+while(mongoCursor.hasNext()){  
+   System.out.println(mongoCursor.next());  
+}  
+*/
+
+//(RECORD FOR USED)create meeting Array
+/* 
+Bson filter = new Document("Name", username);
+ArrayList< DBObject > array = new ArrayList< DBObject >();
+Bson new_document = new Document("Meeting", array);
+Bson updateOperationDocument2 = new Document("$set", new_document);
+mongoCollection.updateOne(filter, updateOperationDocument2);
+
+
 		
 ///////// NOT USE just for record (add detail in element) ///////////////////////
         /* 
@@ -138,79 +371,3 @@ public class dbManage
 		//System.out.print(mongoCollectionRooms);
         //System.out.println(courses);
         //System.out.println(courses.size());
-		
-//ROOM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-		
-		/*
-		FindIterable<Document> findIterable = mongoCollection.find();  
-        MongoCursor<Document> mongoCursor = findIterable.iterator();  
-        while(mongoCursor.hasNext()){  
-           System.out.println(mongoCursor.next());  
-        }  
-       */
-		
-       
-        String RoomNo = "1003";
-        
-		/*
-        Bson filter = new Document("RoomNo", RoomNo);
-        mongoCollectionRooms.deleteOne(filter);
-        */
-        /*
-		ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Document document = new Document("RID", "3");
-		document.append("RoomNo", RoomNo);
-		document.append("TimeBooked", array);
-		mongoCollectionRooms.insertOne(document);
-		*/
-        
-        /*
-        BasicDBObject match = new BasicDBObject();
-        match.put( "RoomNo", RoomNo );
-
-        BasicDBObject addressSpec = new BasicDBObject();
-        addressSpec.put("Date", "0101");
-        addressSpec.put("StartTime", "7");
-        addressSpec.put("EndTime", "17");
-        addressSpec.put("Host", "JackChen");
-
-        BasicDBObject update = new BasicDBObject();
-        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
-        mongoCollectionRooms.updateMany( match, update );
-        //*/
-        
-//Meeting////////////////////////////////////////////////////////////////////////////////////////////////////
-		 String MeetingID = "6";
-		 
-		//Bson filter = new Document("MeetingID", MeetingID);
-	    //mongoCollectionMeeting.deleteOne(filter);
-	        
-       /*
-        ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Document document = new Document("MeetingID", MeetingID);
-		document.append("Host", "JackyChen");
-		document.append("Date", "0101");
-		document.append("StartTime", "7");
-		document.append("EndTime", "17");
-		document.append("Room", "1001");
-		document.append("Member", array);
-		mongoCollectionMeeting.insertOne(document);
-		//*/
-
-        
-		FindIterable<Document> findIterable = mongoCollection.find();  
-        MongoCursor<Document> mongoCursor = findIterable.iterator();  
-        while(mongoCursor.hasNext()){  
-           System.out.println(mongoCursor.next());  
-        } 
-        
-	}
-
-
-	
-	
-
-
-
-
-}

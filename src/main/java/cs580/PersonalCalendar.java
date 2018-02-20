@@ -405,9 +405,18 @@ public class PersonalCalendar {
 				boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			
-			if (row == 1 && column == 1) {
+			
+			//*****************************//
+			int IntColorSelectedValue = Integer.valueOf((String) table.getValueAt(row, column));
+			
+			if (currentMonth == 1 && IntColorSelectedValue/2 == 0) {
 				c.setBackground(Color.GREEN);
 			}
+			//*******************************//
+			
+			//if (row == 1 && column == 1) {
+			//	c.setBackground(Color.GREEN);
+			//}
 			else {
 				c.setBackground(table.getBackground());
 			}

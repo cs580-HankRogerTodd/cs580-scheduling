@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 import org.bson.Document;
 
@@ -53,6 +54,7 @@ public class ProfilePage {
 		frame.setBounds(100, 100, 500, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setTitle("Home Page");
 		
 		String currentDirectory = System.getProperty("user.dir");
 		
@@ -164,5 +166,7 @@ public class ProfilePage {
 			}
 		}
 	}
+	
+	
 
 }

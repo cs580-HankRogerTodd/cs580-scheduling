@@ -24,23 +24,27 @@ import com.mongodb.client.model.Filters;
 
 import customComponents.ResizableButton;
 
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.channels.SelectableChannel;
+
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import java.awt.FlowLayout;
+import javax.swing.SwingConstants;
 
 public class PersonalCalendar {
-
-	private final Font ARIAL_FONT = new Font("Arial", Font.PLAIN, 11);
 	
-	private JFrame frame;
+	private JFrame frmPersonalCalendar;
 	private JTable table;
 	
 	private int currentMonth = LocalDate.now().getMonthValue();
@@ -80,20 +84,20 @@ public class PersonalCalendar {
 		LoginUsername = username;
 		initialize();
 		setUpMeetingList();
-		frame.setVisible(true);
+		frmPersonalCalendar.setVisible(true);
 	}
 
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("CS580 Scheduling - Group 7");
-		frame.setBounds(100, 100, 580, 400);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmPersonalCalendar = new JFrame();
+		frmPersonalCalendar.setTitle("Personal Calendar");
+		frmPersonalCalendar.setBounds(100, 100, 612, 421);
+		frmPersonalCalendar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPersonalCalendar.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(16, 55, 314, 275);
-		frame.getContentPane().add(scrollPane);
+		frmPersonalCalendar.getContentPane().add(scrollPane);
 		
 ///++++++++++++++++++++++++++++++++++++++++		
 		tablemodel = new DefaultTableModel(generateDaysInMonth(currentYear, currentMonth), DAYS_OF_WEEK) 
@@ -105,8 +109,11 @@ public class PersonalCalendar {
 				}
 		};
 ///++++++++++++++++++++++++++++++++++++++++
-
+		CustomRenderer customRenderer = new CustomRenderer();
+		customRenderer.setHorizontalAlignment(JLabel.CENTER);
+		
 		table = new JTable(tablemodel);
+		table.setDefaultRenderer(Object.class, customRenderer);
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(false);
@@ -133,35 +140,21 @@ public class PersonalCalendar {
 					listMeetingSchedule();
 				}
 				else {
-					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+					JOptionPane.showMessageDialog(frmPersonalCalendar, "You selected an invalid date. Please select another date.");
 				}
 			}
 		});
-
-///////////////////////////////////////////////////////////////////////////////////////// cancel button
-/////////////////////////////////////////////////////////////////////////////////////////
-		ResizableButton btnCancel = new ResizableButton("Cancel");
-		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(485, 342, 89, 23);
-		frame.getContentPane().add(btnCancel);
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ProfilePage profile = new ProfilePage(LoginUsername);
-				frame.dispose();
-			}
-		});	
 		
 /////////////////////////////////////////////////////////////////////////////////////////  <<  month  >>
 /////////////////////////////////////////////////////////////////////////////////////////
 		JPanel panel = new JPanel();
 		panel.setBounds(48, 20, 244, 23);
-		frame.getContentPane().add(panel);
+		frmPersonalCalendar.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
 		
 // Button << ///////////////////		
 		ResizableButton button_1 = new ResizableButton("<");
 		panel.add(button_1, BorderLayout.WEST);
-		button_1.setFont(ARIAL_FONT);
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -181,7 +174,12 @@ public class PersonalCalendar {
 // Button >> ///////////////////		
 		ResizableButton button = new ResizableButton(">");
 		panel.add(button, BorderLayout.EAST);
-		button.setFont(ARIAL_FONT);
+		
+/////////////////////
+		lblNewLabel = new JLabel();
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblNewLabel, BorderLayout.CENTER);
+		lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
 		
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -201,17 +199,11 @@ public class PersonalCalendar {
 			}
 		});
 		
-/////////////////////
-		lblNewLabel = new JLabel();
-		panel.add(lblNewLabel, BorderLayout.CENTER);
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 11));
-		lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
-		
 ///////////////////////////////////////////////////////////////////////////////////////// Left side detail information
 /////////////////////////////////////////////////////////////////////////////////////////
 		MeetingDetail = new JTextArea();
-		MeetingDetail.setBounds(353, 182, 212, 148);
-		frame.getContentPane().add(MeetingDetail);
+		MeetingDetail.setBounds(353, 182, 231, 148);
+		frmPersonalCalendar.getContentPane().add(MeetingDetail);
 		
 		MeetinglistModel = new DefaultListModel();
 		Meetinglist = new JList(MeetinglistModel);
@@ -236,37 +228,52 @@ public class PersonalCalendar {
 									);
 			}
 		});
-		Meetinglist.setBounds(353, 56, 212, 118);
-		frame.getContentPane().add(Meetinglist);
+		Meetinglist.setBounds(353, 56, 231, 118);
+		frmPersonalCalendar.getContentPane().add(Meetinglist);
 		
-		JButton btnNotificationCenter = new JButton("Notification Center");
-		btnNotificationCenter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
-				List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(349, 342, 235, 40);
+		frmPersonalCalendar.getContentPane().add(panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 				
-				for(int i=0; i<meetingRes.size(); i++)
-				{
-					Document MeetingElement = meetingRes.get(i);					
-					String StringRespond = MeetingElement.getString("Respond");
-					if(StringRespond.equals("P")){
-						NewMeeting = true;
+				JButton btnNotificationCenter = new JButton("Notification Center");
+				panel_1.add(btnNotificationCenter);
+				
+				///////////////////////////////////////////////////////////////////////////////////////// cancel button
+				/////////////////////////////////////////////////////////////////////////////////////////
+						ResizableButton btnCancel = new ResizableButton("Cancel");
+						panel_1.add(btnCancel);
+						btnCancel.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								ProfilePage profile = new ProfilePage(LoginUsername);
+								frmPersonalCalendar.dispose();
+							}
+						});	
+				btnNotificationCenter.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+						List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
+						
+						for(int i=0; i<meetingRes.size(); i++)
+						{
+							Document MeetingElement = meetingRes.get(i);					
+							String StringRespond = MeetingElement.getString("Respond");
+							if(StringRespond.equals("P")){
+								NewMeeting = true;
+							}
+						}
+						
+						if(NewMeeting == true){
+							Notification Notice = new Notification(LoginUsername);
+							frmPersonalCalendar.dispose();
+						}
+						
+						else{
+							JOptionPane.showMessageDialog(frmPersonalCalendar, "No New Meeting!");
+						
+						}
 					}
-				}
-				
-				if(NewMeeting == true){
-					Notification Notice = new Notification(LoginUsername);
-					frame.dispose();
-				}
-				
-				else{
-					JOptionPane.showMessageDialog(frame, "No New Meeting!");
-				
-				}
-			}
-		});
-		btnNotificationCenter.setBounds(339, 338, 150, 29);
-		frame.getContentPane().add(btnNotificationCenter);
+				});
 	}
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -388,6 +395,25 @@ public class PersonalCalendar {
 	
 	public void print(Object o) {
 		System.out.println(o);
+	}
+	
+	// Set color
+	private class CustomRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		public Component getTableCellRendererComponent(JTable table, Object value,
+				boolean isSelected, boolean hasFocus, int row, int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			
+			if (row == 1 && column == 1) {
+				c.setBackground(Color.GREEN);
+			}
+			else {
+				c.setBackground(table.getBackground());
+			}
+			
+			return c;
+		}
 	}
 }
 

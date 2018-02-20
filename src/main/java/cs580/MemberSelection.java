@@ -63,10 +63,6 @@ public class MemberSelection extends JFrame
 	private JList<String> listInvitee;
 	private JTextField searchName;
 	
-	//Fonts
-	private final Font fontBold = new Font(Font.DIALOG, Font.BOLD, 14);
-	private final Font fontPlain = new Font(Font.DIALOG, Font.PLAIN, 14);
-
 	private ArrayList<String> employees = new ArrayList<String>();
 	
 	private DefaultListModel<String> listModelEmployee = new DefaultListModel<String>();
@@ -84,12 +80,13 @@ public class MemberSelection extends JFrame
 	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCursor<Document> cursor = mongoCollection.find().iterator();
+	private JSeparator separator;
 ///////////////////////////////////////////////////////////////////////////////////////	
 
 	public MemberSelection(String username)
 	{
 		super("Member Selection");
-		setFonts();
+		App.setFonts();
 		LoginUsername = username;
 		
 		try {
@@ -114,7 +111,6 @@ public class MemberSelection extends JFrame
 		
 		// North Part
 		JLabel lblTitle = new JLabel ("Member Selection", SwingConstants.CENTER);
-		lblTitle.setFont(new Font(Font.DIALOG, Font.BOLD, 18));
 		contents.add(lblTitle, BorderLayout.NORTH);
 		
 		/////// Center Part --> new panel --> set border --> set label + list + scroll --> add into "BOX" --> add into Center
@@ -193,7 +189,7 @@ public class MemberSelection extends JFrame
 /////// Space /////////
 		
 		// Image Part
-		lblListSearch = new JLabel("    personal information"); // space is for looking
+		lblListSearch = new JLabel("Personal Information"); // space is for looking
 		lblListSearch.setAlignmentX(LEFT_ALIGNMENT);
 		
 		// image position
@@ -224,12 +220,12 @@ public class MemberSelection extends JFrame
 		setSpecificSize(btnSearch, new Dimension(80, 20));
 		
 		// Next button
-		btnNext = new JButton(" NEXT >>");
-		setSpecificSize(btnNext, new Dimension(80, 50));
+		btnNext = new JButton("Next >>");
+		setSpecificSize(btnNext, new Dimension(80, 20));
 		
 		// Back button
-		btnBack = new JButton("<< BACK ");
-		setSpecificSize(btnBack, new Dimension(90, 50));
+		btnBack = new JButton("<< Back");
+		setSpecificSize(btnBack, new Dimension(80, 20));
 		
 		//Clear button
 		btnClear = new JButton("Clear");
@@ -238,7 +234,11 @@ public class MemberSelection extends JFrame
 		panelSouth.add(searchName);
 		panelSouth.add(btnSearch);
 		panelSouth.add(btnClear);
-		panelSouth.add(Box.createRigidArea(new Dimension(350, 50)));
+		
+		separator = new JSeparator();
+		panelSouth.add(separator);
+		Component rigidArea = Box.createRigidArea(new Dimension(350, 50));
+		panelSouth.add(rigidArea);
 		panelSouth.add(btnBack);
 		panelSouth.add(Box.createRigidArea(new Dimension(10, 1)));
 		panelSouth.add(btnNext);
@@ -527,14 +527,7 @@ public class MemberSelection extends JFrame
 		}
 		
 	}
-	private void setFonts()
-	{
-		UIManager.put("Button.font", fontBold);
-		UIManager.put("ComboBox.font", fontBold);
-		UIManager.put("Label.font", fontBold);
-		UIManager.put("List.font", fontPlain);
-		
-	}
+	
 	private void setSpecificSize(JComponent component, Dimension dimension)
 	{
 		component.setMinimumSize(dimension);

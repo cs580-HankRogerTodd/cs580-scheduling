@@ -13,6 +13,7 @@ public class App {
 		
 		LoginPage login = new LoginPage();
 		//MyMeeting Mymet = new MyMeeting();
+		//test mytest = new test();
 		//dbManage member = new dbManage();
 	}
 	

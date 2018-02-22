@@ -55,8 +55,10 @@ public class PersonalCalendar {
 			"August", "September", "October", "November", "December"};
 	
 	private ArrayList<String> myMeetingList = new ArrayList<String>();
+	private ArrayList<String> myMeetingListRC = new ArrayList<String>();
 	private JList<String> Meetinglist;
 	private DefaultListModel<String> MeetinglistModel;
+	private ArrayList<Integer> MeetingDateList=new ArrayList<Integer>();  
 	
 	private JLabel lblNewLabel;
 	private Object selectedValue;
@@ -66,7 +68,13 @@ public class PersonalCalendar {
 	private String Date;
 	private String StringDate;
 	private String LoginUsername;
+	private int MeetingMonth;
+	private int MeetingDay;
+	
+	private String RunningDay;
 
+	
+	
 	private DefaultTableCellRenderer tcr;
 	private DefaultTableModel tablemodel;
 	
@@ -82,6 +90,7 @@ public class PersonalCalendar {
 	
 	public PersonalCalendar(String username) {
 		LoginUsername = username;
+		SeperateDate();
 		initialize();
 		setUpMeetingList();
 		frmPersonalCalendar.setVisible(true);
@@ -117,7 +126,7 @@ public class PersonalCalendar {
 		table.setShowGrid(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(false);
-		table.setRowHeight(50);
+		table.setRowHeight(40);
 		table.setFillsViewportHeight(true);
 		table.setBounds(65, 54, 324, 168);
 		scrollPane.setViewportView(table);
@@ -167,6 +176,7 @@ public class PersonalCalendar {
 				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
 				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
+				SeperateDate();
 ///++++++++++++++++++++++++++++++++++++++++				
 			}
 		});		
@@ -315,6 +325,36 @@ public class PersonalCalendar {
 		Date = stringCurrentMonth + stringSelectedValue;
 	}
 	
+	private void SeperateDate()
+	{
+		Document myDoc = mongoCollection.find(Filters.eq("Name", "Hank" )).first(); //get member
+		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 						//get meeting list
+		int MeetingListSize = MeetingLists.size(); 												//get meeting list size
+		MeetingDateList.clear();
+		// Count meeting list
+		for(int j=0; j<MeetingListSize; j++)
+		{
+			Document MeetingElement = MeetingLists.get(j);
+			//System.out.println(MeetingElement); // get meeting ID to find the meeting date, start time and end time
+			String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
+			int IntMeetingID = Integer.parseInt(StringMeetingID);
+			// use meeting ID to get meeting detail
+			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
+			
+			//String convertedToString = myMeeting.get("Date").toString();
+			int MeetingDate = Integer.valueOf((String) myMeeting.get("Date"));
+			
+			MeetingMonth = MeetingDate/100;
+			MeetingDay = MeetingDate%100;
+			
+			MeetingDateList.add(MeetingMonth);
+			MeetingDateList.add(MeetingDay);
+			
+		}
+		
+		
+	}
+	
 	private void listMeetingSchedule()
 	{
 		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
@@ -405,18 +445,28 @@ public class PersonalCalendar {
 				boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			
-			
-			//*****************************//
-			int IntColorSelectedValue = Integer.valueOf((String) table.getValueAt(row, column));
-			
-			if (currentMonth == 1 && IntColorSelectedValue/2 == 0) {
-				c.setBackground(Color.GREEN);
+			if(table.getValueAt(row, column) != null)
+			{
+				RunningDay = table.getValueAt(row, column).toString();
+				Integer IntRunningDay = Integer.valueOf(RunningDay);
+				
+				for(int i=0; i<MeetingDateList.size();)
+				{
+					MeetingMonth = MeetingDateList.get(i);
+					MeetingDay =  MeetingDateList.get(i+1);
+
+					if (currentMonth == MeetingMonth && IntRunningDay == MeetingDay) {
+						c.setBackground(Color.GREEN);
+						break;
+					}
+					
+					else{
+						c.setBackground(table.getBackground());
+					}
+					i=i+2;
+				}
 			}
-			//*******************************//
-			
-			//if (row == 1 && column == 1) {
-			//	c.setBackground(Color.GREEN);
-			//}
+
 			else {
 				c.setBackground(table.getBackground());
 			}
@@ -425,76 +475,3 @@ public class PersonalCalendar {
 		}
 	}
 }
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Add color on the calendar  //////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-///++++++++++++++++++++++++++++++++++++++++	
-/*{
-	public Component prepareRenderer(TableCellRenderer renderer, int row, int col) 
-	{
-		int i = 0;
-		Component comp = super.prepareRenderer(renderer, row, col);
-		System.out.print(getColumnCount());
-		//Object value = getModel().getValueAt(row, col);
-		System.out.print(getModel().getValueAt(5, 5));
-		System.out.print("\n");
-       
-       return comp;
-    }
-};
-
-*
-*Object HasValue= model.getValueAt(row, column);
-				if(HasValue != null)
-				{
-					System.out.print(HasValue); 
-				}
-				Object temp= model.getColumnCount();				
-				*/
-
-/*
-tcr = new DefaultTableCellRenderer() {
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
-			{
-				Component cell = super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
-
-				selectedValue = tablemodel.getValueAt(row, column);
-
-				if(selectedValue != null)
-				{
-					CalculateDate();
-					System.out.print(Date+"\n");
-					for (String meeting : myMeetingList )
-					{
-						//System.out.print(meeting);
-						if(meeting.equals(Date))
-						{
-							//System.out.print(Date+"\n");
-							cell.setBackground(Color.GRAY);
-						}
-						else
-							cell.setBackground(Color.WHITE);
-				    }
-
-				}
-
-				return cell;
-			
-			}
-			
-		};
-///++++++++++++++++++++++++++++++++++++++++		
-		for(int i = 0; i < DAYS_OF_WEEK.length; i++) 
-		{
-			table.getColumn(DAYS_OF_WEEK[i]).setCellRenderer(tcr);
-		}
-///++++++++++++++++++++++++++++++++++++++++
-*/
-
-

@@ -76,6 +76,7 @@ public class Notification {
 					
 					MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
 										 "Room: " + myMeeting.getString("Room") + "\n" +
+										 "Date: " + myMeeting.getString("Date") + "\n" +
 										 "Start time: " + myMeeting.getString("StartTime") + "\n" +
 										 "End Time: " + myMeeting.getString("EndTime")  
 										);

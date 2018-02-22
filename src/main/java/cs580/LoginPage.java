@@ -18,6 +18,7 @@ import com.mongodb.client.model.Filters;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -32,11 +33,19 @@ public class LoginPage {
 	MongoClient mongoClient = new MongoClient(clientUri);
 	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
+	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
+	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
 ///////////////////////////////////////////////////////////////////////////////////////
 	
+	private JFrame frame;
 	private JFrame frmLoginPage;
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
+	private String password;
+	private String username;
+	
+	private int MeetingDay;
+	private int currentDay = LocalDate.now().getDayOfMonth();
 
 	
 	public LoginPage() {
@@ -86,8 +95,8 @@ public class LoginPage {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String password = txtPassword.getText();
-				String username = txtUsername.getText();
+				password = txtPassword.getText();
+				username = txtUsername.getText();
 				
 				try
 				{
@@ -95,6 +104,8 @@ public class LoginPage {
 					if(myDoc.get("Password").equals(password))
 					{
 						frmLoginPage.dispose();
+						MeetingNotification();
+						ExpireNotification();
 						ProfilePage profile = new ProfilePage(username);
 						
 					}
@@ -134,6 +145,58 @@ public class LoginPage {
 		});
 //////////////////////////////////
 		
+	}
+	
+	
+
+	private void MeetingNotification()
+	{
+		Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();    //get member
+		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 					//get meeting list
+		int MeetingListSize = MeetingLists.size(); 											//get meeting list size
+		
+		// Count meeting list
+		for(int j=0; j<MeetingListSize; j++)
+		{
+			Document MeetingElement = MeetingLists.get(j);
+			String StringRespond = MeetingElement.getString("Respond");
+
+			if(StringRespond.equals("P")){
+				JOptionPane.showMessageDialog(frame, "You have a New Meeting, Please go to Notification center!");
+			}
+		}
+	}
+	
+	private void ExpireNotification()
+	{
+		Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();    //get member
+		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 					//get meeting list
+		int MeetingListSize = MeetingLists.size(); 											//get meeting list size
+		
+		// Count meeting list
+		for(int j=0; j<MeetingListSize; j++)
+		{
+			Document MeetingElement = MeetingLists.get(j);
+			String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));  
+			Integer IntMeetingID = Integer.valueOf(StringMeetingID);
+			
+			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first(); 
+			int Date = Integer.valueOf((String) myMeeting.get("Date"));
+			MeetingDay = Date % 100;
+			
+			if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 3){
+				JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 3 days!");
+				break;
+			}
+			if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 2){
+				JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 2 days!");
+				break;
+			}
+			if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 1){
+				JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 1 days!");
+				break;
+			}
+		}
 	}
 	
 	

@@ -242,23 +242,13 @@ public class PersonalCalendar {
 		frmPersonalCalendar.getContentPane().add(Meetinglist);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(349, 342, 235, 40);
+		panel_1.setBounds(340, 342, 266, 39);
 		frmPersonalCalendar.getContentPane().add(panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-				
-				JButton btnNotificationCenter = new JButton("Notification Center");
-				panel_1.add(btnNotificationCenter);
-				
-				///////////////////////////////////////////////////////////////////////////////////////// cancel button
-				/////////////////////////////////////////////////////////////////////////////////////////
-						ResizableButton btnCancel = new ResizableButton("Cancel");
-						panel_1.add(btnCancel);
-						btnCancel.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								ProfilePage profile = new ProfilePage(LoginUsername);
-								frmPersonalCalendar.dispose();
-							}
-						});	
+						
+						JButton btnNotificationCenter = new JButton("Notification Center");
+						panel_1.add(btnNotificationCenter);
+						
 				btnNotificationCenter.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
@@ -284,6 +274,17 @@ public class PersonalCalendar {
 						}
 					}
 				});
+				
+				///////////////////////////////////////////////////////////////////////////////////////// cancel button
+				/////////////////////////////////////////////////////////////////////////////////////////
+						ResizableButton btnCancel = new ResizableButton("Cancel");
+						panel_1.add(btnCancel);
+						btnCancel.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								ProfilePage profile = new ProfilePage(LoginUsername);
+								frmPersonalCalendar.dispose();
+							}
+						});	
 	}
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,7 +322,6 @@ public class PersonalCalendar {
 		if (intSelectedValue/10 == 0){
 			stringSelectedValue = "0" + stringSelectedValue;
 		}
-		
 		Date = stringCurrentMonth + stringSelectedValue;
 	}
 	
@@ -348,11 +348,8 @@ public class PersonalCalendar {
 			MeetingDay = MeetingDate%100;
 			
 			MeetingDateList.add(MeetingMonth);
-			MeetingDateList.add(MeetingDay);
-			
+			MeetingDateList.add(MeetingDay);	
 		}
-		
-		
 	}
 	
 	private void listMeetingSchedule()

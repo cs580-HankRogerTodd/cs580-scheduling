@@ -3,6 +3,7 @@ package cs580;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -28,6 +29,7 @@ public class ProfilePage {
 	private JFrame frame;
 	private String LoginUsername;
 	private boolean NewMeeting = false;
+	
 
 //////Database Setup /////////////////////////////////////////////////////////////////////////
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
@@ -43,7 +45,6 @@ public class ProfilePage {
 	public ProfilePage(String username){
 		LoginUsername = username;
 		initialize();
-		MeetingNotification();
 		frame.setVisible(true);
 	}
 
@@ -147,26 +148,5 @@ public class ProfilePage {
 		});
 //////////////////////////////////	
 	}
-	
-	
-	private void MeetingNotification()
-	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();    //get member
-		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 					//get meeting list
-		int MeetingListSize = MeetingLists.size(); 											//get meeting list size
-		
-		// Count meeting list
-		for(int j=0; j<MeetingListSize; j++)
-		{
-			Document MeetingElement = MeetingLists.get(j);
-			String StringRespond = MeetingElement.getString("Respond");
-
-			if(StringRespond.equals("P")){
-				JOptionPane.showMessageDialog(frame, "You have a New Meeting, Please go to Notification center!");
-			}
-		}
-	}
-	
-	
 
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -18,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -47,8 +49,8 @@ public class TimeRoomSelection {
 	
 	private Object selectedValue;
 	
-	private String UserStartTime;
-	private String UserEndTime;
+	private String UserStartTime = "";
+	private String UserEndTime = "";
 	private String UserSelectedRoom;
 	private String LoginUsername;
 	private String Date;
@@ -59,6 +61,9 @@ public class TimeRoomSelection {
 	
 	JTextArea AvailableRoomText;
 	JTextArea AvailableTimeText;
+	
+	private Boolean ExistMeeting;
+	private int ExistMeetingID;
     
 
     
@@ -74,11 +79,13 @@ public class TimeRoomSelection {
 
 	
 
-	public TimeRoomSelection(DefaultListModel<String> listModelInvitee, String Username, int InputcurrentMonth, Object inputSelectedValue) {
+	public TimeRoomSelection(DefaultListModel<String> listModelInvitee, String Username, int InputcurrentMonth, Object inputSelectedValue, Boolean existmeeting, int existmeetingid) {
 		Invitee = listModelInvitee;
 		LoginUsername = Username;
 		currentMonth = InputcurrentMonth;
 		selectedValue = inputSelectedValue;
+		ExistMeeting = existmeeting;
+		ExistMeetingID = existmeetingid;
 		
 		CalculateDate(currentMonth, selectedValue);
 		findAvailableTime();
@@ -164,27 +171,25 @@ public class TimeRoomSelection {
 				UserStartTime = StartTimeText.getText();
 				UserEndTime = EndTimeText.getText();
 				
-				IntUserStartTime = Integer.valueOf((String) UserStartTime);
-				IntUserEndTime = Integer.valueOf((String) UserEndTime);
-				
-				for(int i=IntUserStartTime; i<IntUserEndTime; i++)
+				if(UserStartTime.equals("") || UserEndTime.equals(""))
 				{
-					if(AvailableTimeArray[i] == 1)
+					JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
+					StartTimeText.setText(null);
+					EndTimeText.setText(null);
+					UserStartTime = null;
+					UserEndTime = null;
+				}	
+				
+				else//(UserStartTime != null && UserEndTime != null)
+				{
+
+					IntUserStartTime = Integer.valueOf((String) UserStartTime);
+					IntUserEndTime = Integer.valueOf((String) UserEndTime);
+				
+					if(IntUserStartTime > IntUserEndTime || IntUserStartTime == IntUserEndTime)
 					{
 						JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
-						StartTimeText.setText(null);
-						EndTimeText.setText(null);
-						UserStartTime = null;
-						UserEndTime = null;
-						break;
-					}
-				}
-				
-				if(UserStartTime != null && UserEndTime != null)
-				{
-					if(IntUserStartTime > IntUserEndTime)
-					{
-						JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
+						RoomlistModel.clear();
 						StartTimeText.setText(null);
 						EndTimeText.setText(null);
 						UserStartTime = null;
@@ -192,7 +197,23 @@ public class TimeRoomSelection {
 					}
 					else
 					{
-						findAvailableRoom();
+						for(int i=IntUserStartTime; i<IntUserEndTime; i++)
+						{
+							if(AvailableTimeArray[i] == 1)
+							{
+								JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
+								RoomlistModel.clear();
+								StartTimeText.setText(null);
+								EndTimeText.setText(null);
+								UserStartTime = null;
+								UserEndTime = null;
+								break;
+							}
+							else if(i == IntUserEndTime-1)
+							{
+								findAvailableRoom();
+							}
+						}	
 					}
 				}
 			}
@@ -246,9 +267,21 @@ public class TimeRoomSelection {
 	{
 		boolean HaveAvailableTime = false;
 		int size = Invitee.getSize();
+		String Four_Digit_Date="0";
 		AvailableTimeArray = new int[] {1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0};
 		
-		String Four_Digit_Date = '0' + Integer.toString(currentMonth) + '0' + selectedValue;
+		String StringSelectedValue = String.valueOf(selectedValue); 
+		int IntSelectedValue = Integer.parseInt(StringSelectedValue);
+		//System.out.println(convertedToString2);
+		if(IntSelectedValue < 10)
+		{
+			Four_Digit_Date = '0' + Integer.toString(currentMonth) + '0' + selectedValue;
+		}
+		else
+		{
+			Four_Digit_Date = '0' + Integer.toString(currentMonth) + selectedValue;
+		}
+		
 
 		// Count member
 		for(int i=0; i<size; i++)
@@ -263,27 +296,36 @@ public class TimeRoomSelection {
 			{
 				Document MeetingElement = MeetingLists.get(j);
 				//System.out.println(MeetingElement); // get meeting ID to find the meeting date, start time and end time
-				String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
-				int IntMeetingID = Integer.parseInt(StringMeetingID);
-				// use meeting ID to get meeting detail
-				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
-				
-				String convertedToString = myMeeting.get("Date").toString();
-				
-				if (convertedToString.equals(Four_Digit_Date)==true)
+				if(MeetingElement.getString("Respond").equals("A"))
 				{
-					int IntStartTime = Integer.valueOf((String) myMeeting.get("StartTime"));
-					int IntEndTime = Integer.valueOf((String) myMeeting.get("EndTime"));
+					String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
+					int IntMeetingID = Integer.parseInt(StringMeetingID);
+					// use meeting ID to get meeting detail
+					Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
 					
-					for (int Mtime=IntStartTime; Mtime<IntEndTime; Mtime++)
+					String convertedToString = myMeeting.get("Date").toString();
+					
+					//System.out.print(convertedToString+"\n");
+					//System.out.print(Four_Digit_Date+"\n");
+					
+					if (convertedToString.equals(Four_Digit_Date)==true)
 					{
-						AvailableTimeArray[Mtime] = 1;
+						int IntStartTime = Integer.valueOf((String) myMeeting.get("StartTime"));
+						int IntEndTime = Integer.valueOf((String) myMeeting.get("EndTime"));
+						
+						for (int Mtime=IntStartTime; Mtime<IntEndTime; Mtime++)
+						{
+							AvailableTimeArray[Mtime] = 1;
+						}
+						//System.out.println(Arrays.toString(AvailableTimeArray));
+						//System.out.print(AvailableTimeArray);
+					}
+					else 
+					{
+						continue;	
 					}
 				}
-				else 
-				{
-					continue;
-				}
+				
 			}
 		}
 		
@@ -302,7 +344,7 @@ public class TimeRoomSelection {
 		if(HaveAvailableTime == false)
 		{
 			JOptionPane.showMessageDialog(null, "No Available Time");
-			ScheduleCalendar timeslct = new ScheduleCalendar(Invitee, LoginUsername);
+			ScheduleCalendar timeslct = new ScheduleCalendar(Invitee, LoginUsername, ExistMeeting, ExistMeetingID);
 			frame.dispose();
 		}
 	}
@@ -412,60 +454,123 @@ public class TimeRoomSelection {
 		*/
 		
 /////// Add new meeting into Meeting database
-
-		long TotalMeeting = mongoCollectionMeeting.count();
-		///*
-		
-		ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Document document = new Document("MeetingID", TotalMeeting+1);
-		document.append("Host", LoginUsername);
-		document.append("Date", Date);
-		document.append("StartTime", UserStartTime);
-		document.append("EndTime", UserEndTime);
-		document.append("Room", UserSelectedRoom);
-		document.append("Member", array);
-		mongoCollectionMeeting.insertOne(document);
-		
-		
-		for (int i=0 ; i < Invitee.size(); i++)
+		if(ExistMeeting == false)
 		{
-			mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", TotalMeeting+1),  
-	                new Document( "$addToSet", new Document( "Member", Invitee.getElementAt(i))))  
-	                .wasAcknowledged ();
+			long TotalMeeting = mongoCollectionMeeting.count();
+			///*
+			
+			ArrayList< DBObject > array = new ArrayList< DBObject >();
+			Document document = new Document("MeetingID", TotalMeeting+1);
+			document.append("Host", LoginUsername);
+			document.append("Date", Date);
+			document.append("StartTime", UserStartTime);
+			document.append("EndTime", UserEndTime);
+			document.append("Room", UserSelectedRoom);
+			document.append("Member", array);
+			mongoCollectionMeeting.insertOne(document);
+			
+			
+			for (int i=0 ; i < Invitee.size(); i++)
+			{
+				mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", TotalMeeting+1),  
+		                new Document( "$addToSet", new Document( "Member", Invitee.getElementAt(i))))  
+		                .wasAcknowledged ();
+			}
+			//*/
+			
+	/////// Add new booked time into Room database
+			///*
+	        BasicDBObject match = new BasicDBObject();
+	        match.put( "RoomNo", UserSelectedRoom );
+
+	        BasicDBObject addressSpec = new BasicDBObject();
+	        addressSpec.put("Date", Date);
+	        addressSpec.put("StartTime", UserStartTime);
+	        addressSpec.put("EndTime", UserEndTime);
+	        addressSpec.put("Host", LoginUsername);
+	        addressSpec.put("MeetingID", TotalMeeting+1);
+
+	        BasicDBObject update = new BasicDBObject();
+	        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
+	        mongoCollectionRooms.updateMany( match, update );
+	        //*/
+
+	/////// Add new meeting schedule into Employee database
+			
+	        for (int i= 0; i< Invitee.size(); i++)
+	        {
+	        		BasicDBObject matchEmployee = new BasicDBObject();
+	        		matchEmployee.put( "Name", Invitee.elementAt(i) );
+
+	            BasicDBObject Employee_addressSpec = new BasicDBObject();
+	            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
+	            Employee_addressSpec.put("Respond", "P");
+	            Employee_addressSpec.put("Update", "0");
+
+	            BasicDBObject updateEmployee = new BasicDBObject();
+	            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+	            mongoCollection.updateMany( matchEmployee, updateEmployee );
+	        }
 		}
-		//*/
 		
-/////// Add new booked time into Room database
-		///*
-        BasicDBObject match = new BasicDBObject();
-        match.put( "RoomNo", UserSelectedRoom );
+		else
+		{
+			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", ExistMeetingID )).first();
+			String previousRoom = myMeeting.getString("Room");
+			
+			for (int i= 0; i< Invitee.size(); i++)
+	        {
+				mongoCollection.updateOne(  
+		                new Document ("Name",Invitee.elementAt(i)),  
+		                new Document( "$pull", new Document("Meeting" ,  
+		                        new Document( "MeetingID", ExistMeetingID))))  
+		                .wasAcknowledged ();  
+				
+	        		BasicDBObject matchEmployee = new BasicDBObject();
+	        		matchEmployee.put( "Name", Invitee.elementAt(i) );
 
-        BasicDBObject addressSpec = new BasicDBObject();
-        addressSpec.put("Date", Date);
-        addressSpec.put("StartTime", UserStartTime);
-        addressSpec.put("EndTime", UserEndTime);
-        addressSpec.put("Host", LoginUsername);
+	            BasicDBObject Employee_addressSpec = new BasicDBObject();
+	            Employee_addressSpec.put("MeetingID", ExistMeetingID);
+	            Employee_addressSpec.put("Respond", "P");
+	            Employee_addressSpec.put("Update", "1");
 
-        BasicDBObject update = new BasicDBObject();
-        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
-        mongoCollectionRooms.updateMany( match, update );
-        //*/
+	            BasicDBObject updateEmployee = new BasicDBObject();
+	            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+	            mongoCollection.updateMany( matchEmployee, updateEmployee );
+	        }
+			
+			mongoCollectionRooms.updateOne(  
+	                new Document ("RoomNo",previousRoom),  
+	                new Document( "$pull", new Document("TimeBooked" ,  
+	                        new Document( "MeetingID", ExistMeetingID))))  
+	                .wasAcknowledged ();  
+			
+			 BasicDBObject match = new BasicDBObject();
+		        match.put( "RoomNo", UserSelectedRoom );
 
-/////// Add new meeting schedule into Employee database
+		        BasicDBObject addressSpec = new BasicDBObject();
+		        addressSpec.put("Date", Date);
+		        addressSpec.put("StartTime", UserStartTime);
+		        addressSpec.put("EndTime", UserEndTime);
+		        addressSpec.put("Host", LoginUsername);
+		        addressSpec.put("MeetingID", ExistMeetingID);
+
+		        BasicDBObject update = new BasicDBObject();
+		        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
+		        mongoCollectionRooms.updateMany( match, update );
+			
+			//private Boolean ExistMeeting;
+			//Used to update only one document by a filter ("Name") and field("Availability")
+			//document.append("Update", "0");
+			Bson filter = new Document("MeetingID", ExistMeetingID);
+			Document document = new Document("Date", Date);
+			document.append("StartTime", UserStartTime);
+			document.append("EndTime", UserEndTime);
+			document.append("Room", UserSelectedRoom);
+			Bson updateOperationDocument = new Document("$set", document);
+			mongoCollectionMeeting.updateOne(filter, updateOperationDocument);
+		}
 		
-        for (int i= 0; i< Invitee.size(); i++)
-        {
-        		BasicDBObject matchEmployee = new BasicDBObject();
-        		matchEmployee.put( "Name", Invitee.elementAt(i) );
-
-            BasicDBObject Employee_addressSpec = new BasicDBObject();
-            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
-            Employee_addressSpec.put("Respond", "P");
-
-            BasicDBObject updateEmployee = new BasicDBObject();
-            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
-            mongoCollection.updateMany( matchEmployee, updateEmployee );
-        }
 		//System.out.print(Invitee.size());
 		//System.out.print(Invitee.elementAt(0));
 		

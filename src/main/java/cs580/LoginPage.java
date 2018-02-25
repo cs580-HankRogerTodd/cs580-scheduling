@@ -100,20 +100,31 @@ public class LoginPage {
 				
 				try
 				{
-					Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();
-					if(myDoc.get("Password").equals(password))
+					if(username.equals("Admin"))
 					{
-						frmLoginPage.dispose();
-						MeetingNotification();
-						ExpireNotification();
-						ProfilePage profile = new ProfilePage(username);
-						
+						if(password.equals("0000"))
+						{
+							frmLoginPage.dispose();
+							AdminPage Admin = new AdminPage();
+						}
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(null, "Login Error");
-						txtPassword.setText(null);
-						txtUsername.setText(null);
+						Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();
+						if(myDoc.get("Password").equals(password))
+						{
+							frmLoginPage.dispose();
+							MeetingNotification();
+							ExpireNotification();
+							ProfilePage profile = new ProfilePage(username);
+							
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Login Error");
+							txtPassword.setText(null);
+							txtUsername.setText(null);
+						}
 					}
 					
 				}
@@ -160,9 +171,11 @@ public class LoginPage {
 		{
 			Document MeetingElement = MeetingLists.get(j);
 			String StringRespond = MeetingElement.getString("Respond");
+			String StringUpdate = MeetingElement.getString("Update");
 
-			if(StringRespond.equals("P")){
-				JOptionPane.showMessageDialog(frame, "You have a New Meeting, Please go to Notification center!");
+			if(StringRespond.equals("P") || StringUpdate.equals("1")){
+				JOptionPane.showMessageDialog(frame, "You have a Notification, Please go to Notification center!");
+				break;
 			}
 		}
 	}
@@ -181,20 +194,24 @@ public class LoginPage {
 			Integer IntMeetingID = Integer.valueOf(StringMeetingID);
 			
 			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first(); 
-			int Date = Integer.valueOf((String) myMeeting.get("Date"));
-			MeetingDay = Date % 100;
 			
-			if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 3){
-				JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 3 days!");
-				break;
-			}
-			if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 2){
-				JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 2 days!");
-				break;
-			}
-			if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 1){
-				JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 1 days!");
-				break;
+			if(myMeeting != null)
+			{
+				int Date = Integer.valueOf((String) myMeeting.get("Date"));
+				MeetingDay = Date % 100;
+				
+				if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 3){
+					JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 3 days!");
+					break;
+				}
+				if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 2){
+					JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 2 days!");
+					break;
+				}
+				if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 1){
+					JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 1 days!");
+					break;
+				}
 			}
 		}
 	}

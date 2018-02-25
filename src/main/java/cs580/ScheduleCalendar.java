@@ -46,11 +46,15 @@ public class ScheduleCalendar {
 	private DefaultListModel<String> Invitee;
 	private JLabel lblNewLabel;
 	private String LoginUsername;
+	private Boolean ExistMeeting;
+	private int ExistMeetingID;
 
 	
-	public ScheduleCalendar(DefaultListModel<String> listModelInvitee, String Username) {
+	public ScheduleCalendar(DefaultListModel<String> listModelInvitee, String Username, Boolean existmeeting, int existmeetingID) {
 		Invitee = listModelInvitee;
 		LoginUsername = Username;
+		ExistMeeting = existmeeting;
+		ExistMeetingID = existmeetingID;
 		initialize();
 		frame.setVisible(true);
 	}
@@ -84,7 +88,8 @@ public class ScheduleCalendar {
 					JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(currentYear) + "/" + 
 						Integer.toString(currentMonth) + "/" + selectedValue);
 					
-						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, currentMonth, selectedValue) ;
+						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, currentMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
+						frame.dispose();
 				}
 				else {
 					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");

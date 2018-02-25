@@ -72,6 +72,8 @@ public class MemberSelection extends JFrame
 	private boolean pressSearch = false; 
 	private String ForClearReset;
 	private String LoginUsername;
+	private Boolean ExistMeeting=false;
+	private int ExistMeetingID = 0;
 	
 //////Database Setup ////////////////////////////////////////////////////////////////	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
@@ -79,9 +81,10 @@ public class MemberSelection extends JFrame
 	MongoClient mongoClient = new MongoClient(clientUri);
 	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
+///////////////////////////////////////////////////////////////////////////////////////
+	
 	MongoCursor<Document> cursor = mongoCollection.find().iterator();
 	private JSeparator separator;
-///////////////////////////////////////////////////////////////////////////////////////	
 
 	public MemberSelection(String username)
 	{
@@ -424,7 +427,7 @@ public class MemberSelection extends JFrame
 
 	private void goToScheduleCalender()
 	{
-		ScheduleCalendar timeslct = new ScheduleCalendar(listModelInvitee, LoginUsername);
+		ScheduleCalendar timeslct = new ScheduleCalendar(listModelInvitee, LoginUsername, ExistMeeting, ExistMeetingID);
 		dispose();
 	}
 	

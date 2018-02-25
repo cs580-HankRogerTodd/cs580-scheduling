@@ -22,14 +22,18 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ListModel;
 
 public class Notification {
 
 	private JFrame frame;
 	private JList Meetinglist ;
 	private DefaultListModel<String> MeetinglistModel;
+	private DefaultListModel<String> UpdateMeetinglistModel;
 	private String userName; 
 	private int IntSelectMeeting = 0;
+	private int IntSelectUpdateMeeting = 0;
+	private JList UpdateMeetingList;
 
 /////Database Setup ////////////////////////////////////////////////////////////////	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
@@ -55,7 +59,7 @@ public class Notification {
 		frame.getContentPane().setLayout(null);
 		
 		final JTextArea MeetingDetail = new JTextArea();
-		MeetingDetail.setBounds(251, 46, 161, 149);
+		MeetingDetail.setBounds(283, 46, 150, 177);
 		frame.getContentPane().add(MeetingDetail);
 
 /// Meeting list table //////////////////////////////////////////////////////// 
@@ -72,7 +76,6 @@ public class Notification {
 					
 					
 					Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntSelectMeeting )).first();
-					System.out.print(myMeeting);
 					
 					MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
 										 "Room: " + myMeeting.getString("Room") + "\n" +
@@ -83,7 +86,7 @@ public class Notification {
 				}
 			}
 		});
-		Meetinglist.setBounds(42, 46, 153, 177);
+		Meetinglist.setBounds(31, 46, 97, 177);
 		frame.getContentPane().add(Meetinglist);
 		
 // Button ////////////////////////////////////////////////////////		
@@ -108,6 +111,7 @@ public class Notification {
 			        BasicDBObject addressSpec = new BasicDBObject();
 			        addressSpec.put("MeetingID", IntSelectMeeting);
 			        addressSpec.put("Respond", "A");
+			        addressSpec.put("Update", "0");
 
 			        BasicDBObject update = new BasicDBObject();
 			        update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
@@ -121,7 +125,7 @@ public class Notification {
 				}
 			}
 		});
-		btnAccept.setBounds(29, 235, 91, 29);
+		btnAccept.setBounds(6, 235, 75, 29);
 		frame.getContentPane().add(btnAccept);
 		
 /////////////////////////////////////////////////
@@ -139,27 +143,29 @@ public class Notification {
 			                new Document( "$pull", new Document("Meeting" ,  
 			                        new Document( "MeetingID", IntSelectMeeting))))  
 			                .wasAcknowledged ();  
-					
+					/*
 					BasicDBObject match = new BasicDBObject();
 			        match.put( "Name", userName );
 
 			        BasicDBObject addressSpec = new BasicDBObject();
 			        addressSpec.put("MeetingID", IntSelectMeeting);
 			        addressSpec.put("Respond", "D");
+			        addressSpec.put("Update", "0");
 
 			        BasicDBObject update = new BasicDBObject();
 			        update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
 			        mongoCollection.updateMany( match, update );
-			        
+			         */
+					
 			        int isSelected = Meetinglist.getSelectedIndex();
 			        MeetinglistModel.remove(isSelected);
 			        MeetingDetail.setText(null);
-			        
+			       
 					JOptionPane.showMessageDialog(frame, "Meeting DECLINE!");
 				}
 			}
 		});
-		btnDecline.setBounds(116, 235, 91, 29);
+		btnDecline.setBounds(79, 235, 75, 29);
 		frame.getContentPane().add(btnDecline);
 		
 /////////////////////////////////////////////////
@@ -170,17 +176,75 @@ public class Notification {
 				frame.dispose();
 			}
 		});
-		btnCancel.setBounds(315, 235, 97, 29);
+		btnCancel.setBounds(336, 235, 97, 29);
 		frame.getContentPane().add(btnCancel);
 
 /////////////////////////////////////////////////
-		JLabel lblNewMeeting = new JLabel("New Meeting");
-		lblNewMeeting.setBounds(79, 18, 91, 16);
+		JLabel lblNewMeeting = new JLabel("Pending");
+		lblNewMeeting.setBounds(50, 18, 57, 16);
 		frame.getContentPane().add(lblNewMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
-		lblMeetingDetail.setBounds(282, 18, 108, 16);
+		lblMeetingDetail.setBounds(308, 18, 108, 16);
 		frame.getContentPane().add(lblMeetingDetail);
+		
+		UpdateMeetinglistModel = new DefaultListModel();
+		UpdateMeetingList = new JList(UpdateMeetinglistModel);
+		UpdateMeetingList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(UpdateMeetingList.getSelectedValue() != null)
+				{
+					MeetingDetail.setText(null);
+					IntSelectUpdateMeeting = Integer.valueOf((String) UpdateMeetingList.getSelectedValue());
+					
+					Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntSelectUpdateMeeting )).first();
+					if(myMeeting != null)
+					{
+						MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
+								 "Room: " + myMeeting.getString("Room") + "\n" +
+								 "Date: " + myMeeting.getString("Date") + "\n" +
+								 "Start time: " + myMeeting.getString("StartTime") + "\n" +
+								 "End Time: " + myMeeting.getString("EndTime")  
+								);
+		
+						JOptionPane.showMessageDialog(frame, "Host: " + myMeeting.getString("Host") + "\n" +
+								 "Room: " + myMeeting.getString("Room") + "\n" +
+								 "Date: " + myMeeting.getString("Date") + "\n" +
+								 "Start time: " + myMeeting.getString("StartTime") + "\n" +
+								 "End Time: " + myMeeting.getString("EndTime") );
+						
+						int isSelected = UpdateMeetingList.getSelectedIndex();
+						UpdateMeetinglistModel.remove(isSelected);
+				        MeetingDetail.setText(null);
+				        
+				        UserNoticed();
+					}
+					else
+					{
+						mongoCollection.updateOne(  
+				                new Document ("Name",userName),  
+				                new Document( "$pull", new Document("Meeting" ,  
+				                        new Document( "MeetingID", IntSelectUpdateMeeting))))  
+				                .wasAcknowledged ();  
+						
+						JOptionPane.showMessageDialog(frame, "Meeting "+IntSelectUpdateMeeting+" has been cancel");
+						int isSelected = UpdateMeetingList.getSelectedIndex();
+						UpdateMeetinglistModel.remove(isSelected);
+				        MeetingDetail.setText(null);
+						
+					}
+					
+				
+				}
+			}
+		});
+		UpdateMeetingList.setBounds(156, 46, 97, 177);
+		frame.getContentPane().add(UpdateMeetingList);
+		
+		JLabel lblUpdate = new JLabel("Meeting Update");
+		lblUpdate.setBounds(156, 18, 108, 16);
+		frame.getContentPane().add(lblUpdate);
 	}
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,12 +261,42 @@ public class Notification {
 		{
 			Document MeetingElement = MeetingLists.get(j);
 			String StringRespond = MeetingElement.getString("Respond");
+			String StringUpdate = MeetingElement.getString("Update");
+			String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
 
 			if(StringRespond.equals("P")){
-				String StringeetingID = String.valueOf(MeetingElement.get("MeetingID"));
-				MeetinglistModel.addElement(StringeetingID);
+				MeetinglistModel.addElement(StringMeetingID);
 			}
-		}		
+			
+			if(StringUpdate.equals("1"))
+			{
+				UpdateMeetinglistModel.addElement(StringMeetingID);
+			}
+		}	
+		
+		
+	}
+	
+	private void UserNoticed()
+	{
+		 mongoCollection.updateOne(  
+	                new Document ("Name",userName),  
+	                new Document( "$pull", new Document("Meeting" ,  
+	                        new Document( "MeetingID", IntSelectUpdateMeeting))))  
+	                .wasAcknowledged (); 
+		 
+		 BasicDBObject matchEmployee = new BasicDBObject();
+ 		 matchEmployee.put( "Name", userName);
+
+	     BasicDBObject Employee_addressSpec = new BasicDBObject();
+	     Employee_addressSpec.put("MeetingID", IntSelectUpdateMeeting);
+	     Employee_addressSpec.put("Respond", "P");
+	     Employee_addressSpec.put("Update", "0");
+	
+	     BasicDBObject updateEmployee = new BasicDBObject();
+	     updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+	     mongoCollection.updateMany( matchEmployee, updateEmployee );
+	    
 	}
 }
 

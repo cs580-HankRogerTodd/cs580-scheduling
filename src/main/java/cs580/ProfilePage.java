@@ -90,9 +90,9 @@ public class ProfilePage {
 		panel.add(btnMeeting);
 		btnMeeting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Show Meeting List");
-				//MyMeeting Mymet = new MyMeeting();
-				//frame.dispose();
+				//JOptionPane.showMessageDialog(null, "Show Meeting List");
+				MyMeeting Mymet = new MyMeeting(LoginUsername);
+				frame.dispose();
 			}
 		});
 //////////////////////////////////		
@@ -109,7 +109,8 @@ public class ProfilePage {
 				{
 					Document MeetingElement = meetingRes.get(i);
 					String StringRespond = MeetingElement.getString("Respond");
-					if(StringRespond.equals("P")){
+					String StringUpdate = MeetingElement.getString("Update");
+					if(StringRespond.equals("P")||StringUpdate.equals("1")){
 						NewMeeting = true;
 					}
 				}
@@ -120,7 +121,7 @@ public class ProfilePage {
 				}
 				
 				else{
-					JOptionPane.showMessageDialog(frame, "No New Meeting!");
+					JOptionPane.showMessageDialog(frame, "No New Notification!");
 				}
 				
 			}

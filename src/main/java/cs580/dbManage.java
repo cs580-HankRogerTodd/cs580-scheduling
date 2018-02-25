@@ -43,7 +43,7 @@ public class dbManage
 		
 // Employee Database //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		//String username = "Hank";
+		String username = "Admin";
 		
 		// Delete Member
 		/* 
@@ -54,11 +54,11 @@ public class dbManage
 		// New Member
 		/* 
 		ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Document document = new Document("EID", "7");
+		Document document = new Document("EID", "0");
 		document.append("Name", username);
 		document.append("Availability", "Available");
 		document.append("Username", username);
-		document.append("Password", "1234");
+		document.append("Password", "0000");
 		document.append("Meeting", array);
 		mongoCollection.insertOne(document);
 		//*/
@@ -69,8 +69,9 @@ public class dbManage
         match.put( "Name", username );
 
         BasicDBObject addressSpec = new BasicDBObject();
-        addressSpec.put("MeetingID", "5");
-        addressSpec.put("Respond", "P");
+        addressSpec.put("MeetingID", 1);
+        addressSpec.put("Respond", "X");
+        addressSpec.put("Update", "1");
 
         BasicDBObject update = new BasicDBObject();
         update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
@@ -83,8 +84,12 @@ public class dbManage
 		
 		// Delete Meeting
 		/*
-			Bson filter = new Document("MeetingID", MeetingID);
+		for(int i =1; i<9; i++)
+		{
+			Bson filter = new Document("MeetingID", i);
 		    mongoCollectionMeeting.deleteOne(filter);
+		}
+			
 	    //*/  
 		
 		
@@ -124,7 +129,7 @@ public class dbManage
 		
 //ROOM///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 		
-        //String RoomNo = "1003";
+        //String RoomNo = "1005";
         
         // Delete Room
 		/*
@@ -135,7 +140,7 @@ public class dbManage
         // New a Room
         /*
 		ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Document document = new Document("RID", "3");
+		Document document = new Document("RID", "5");
 		document.append("RoomNo", RoomNo);
 		document.append("TimeBooked", array);
 		mongoCollectionRooms.insertOne(document);
@@ -163,11 +168,20 @@ public class dbManage
 		// delete meeting
 		/*
 		   mongoCollection.updateOne(  
-                new Document ("Name","Roger"),  
+                new Document ("Name","Henry"),  
                 new Document( "$pull", new Document("Meeting" ,  
-                        new Document( "MeetingID", 1))))  
+                        new Document( "MeetingID", 2))))  
                 .wasAcknowledged ();  
                 //*/
+		
+		// delete meeting
+					/*
+				   mongoCollectionRooms.updateOne(  
+		                new Document ("RoomNo","1001"),  
+		                new Document( "$pull", new Document("TimeBooked" ,  
+		                        new Document( "Host", "Hank"))))  
+		                .wasAcknowledged ();  
+		                //*/
 
 		//Document myDoc = mongoCollectionMeeting.find(Filters.eq("MeetingID", 1 )).first(); //get member
 		
@@ -176,7 +190,6 @@ public class dbManage
 	    //System.out.println(MeetingLists.get(0)); 
 	    
 ////////// Print Database //////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
         // mongoCollection
         // mongoCollectionRooms
         // mongoCollectionMeeting

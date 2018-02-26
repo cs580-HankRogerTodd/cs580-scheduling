@@ -28,10 +28,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 public class MyMeeting {
 
-	private JFrame frame;
+	private JFrame frmMeetingManagement;
 	private DefaultListModel<String> AcceptMeetinglistModel;
 	private DefaultListModel<String> MyMeetinglistModel;
 	//private DefaultListModel<String> UpdateMeetinglistModel;
@@ -56,15 +57,16 @@ public class MyMeeting {
 		LoginUsername = username;
 		initialize();
 		setMeetinglist();
-		frame.setVisible(true);
+		frmMeetingManagement.setVisible(true);
 	}
 
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 640, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmMeetingManagement = new JFrame();
+		frmMeetingManagement.setTitle("Meeting Management");
+		frmMeetingManagement.setBounds(100, 100, 640, 300);
+		frmMeetingManagement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmMeetingManagement.getContentPane().setLayout(null);
 		
 		AcceptMeetinglistModel = new DefaultListModel();
 		AcceptMeetinglist = new JList(AcceptMeetinglistModel);
@@ -94,7 +96,7 @@ public class MyMeeting {
 			}
 		});
 		AcceptMeetinglist.setBounds(23, 45, 135, 166);
-		frame.getContentPane().add(AcceptMeetinglist);
+		frmMeetingManagement.getContentPane().add(AcceptMeetinglist);
 		
 		MyMeetinglistModel = new DefaultListModel();
 		MyMeetinglist = new JList(MyMeetinglistModel);
@@ -158,7 +160,7 @@ public class MyMeeting {
 			}
 		});
 		MyMeetinglist.setBounds(175, 45, 135, 166);
-		frame.getContentPane().add(MyMeetinglist);
+		frmMeetingManagement.getContentPane().add(MyMeetinglist);
 		/*
 		UpdateMeetinglistModel = new DefaultListModel();
 		UpdateMeetingList = new JList(UpdateMeetinglistModel);
@@ -220,23 +222,25 @@ public class MyMeeting {
 		//frame.getContentPane().add(MeetingDetail);
 		
 		JLabel lblAcceptMeeting = new JLabel("Accept Meeting");
-		lblAcceptMeeting.setBounds(41, 17, 106, 16);
-		frame.getContentPane().add(lblAcceptMeeting);
+		lblAcceptMeeting.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAcceptMeeting.setBounds(23, 17, 135, 16);
+		frmMeetingManagement.getContentPane().add(lblAcceptMeeting);
 		
 		JLabel lblMyMeeting = new JLabel("My Meeting");
-		lblMyMeeting.setBounds(205, 17, 98, 16);
-		frame.getContentPane().add(lblMyMeeting);
+		lblMyMeeting.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMyMeeting.setBounds(175, 17, 128, 16);
+		frmMeetingManagement.getContentPane().add(lblMyMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
 		lblMeetingDetail.setBounds(422, 17, 98, 16);
-		frame.getContentPane().add(lblMeetingDetail);
+		frmMeetingManagement.getContentPane().add(lblMeetingDetail);
 		
 		JButton btnDecline = new JButton("Decline");
 		btnDecline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(SelectAcceptMeeting == 0)
 				{
-					JOptionPane.showMessageDialog(frame, "Please select a meeting!");
+					JOptionPane.showMessageDialog(frmMeetingManagement, "Please select a meeting!");
 				}
 				else
 				{
@@ -265,28 +269,28 @@ public class MyMeeting {
 				        AcceptMeetinglistModel.remove(isSelected);
 				        MeetingDetail.setText(null);
 				        
-						JOptionPane.showMessageDialog(frame, "Meeting DECLINE!");
+						JOptionPane.showMessageDialog(frmMeetingManagement, "Meeting DECLINE!");
 					}
 					else
 					{	
-						JOptionPane.showMessageDialog(frame, "Meeting "+SelectAcceptMeeting+" has been cancel");
+						JOptionPane.showMessageDialog(frmMeetingManagement, "Meeting "+SelectAcceptMeeting+" has been cancel");
 					}
 					
 				}
 			}
 		});
 		btnDecline.setBounds(30, 223, 117, 29);
-		frame.getContentPane().add(btnDecline);
+		frmMeetingManagement.getContentPane().add(btnDecline);
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProfilePage profile = new ProfilePage(LoginUsername);
-				frame.dispose();
+				frmMeetingManagement.dispose();
 			}
 		});
 		btnCancel.setBounds(505, 223, 117, 29);
-		frame.getContentPane().add(btnCancel);
+		frmMeetingManagement.getContentPane().add(btnCancel);
 		
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
@@ -294,24 +298,24 @@ public class MyMeeting {
 				if(IntSelectMyMeeting!=0)
 				{
 					MeetingUpdate MeetUp = new MeetingUpdate(LoginUsername, IntSelectMyMeeting);
-					frame.dispose();
+					frmMeetingManagement.dispose();
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(frame, "Pleace select a meeting!");
+					JOptionPane.showMessageDialog(frmMeetingManagement, "Pleace select a meeting!");
 				}
 				
 			}
 		});
 		btnUpdate.setBounds(167, 223, 79, 29);
-		frame.getContentPane().add(btnUpdate);
+		frmMeetingManagement.getContentPane().add(btnUpdate);
 		
-		JButton MeetCancel = new JButton("Cancel");
+		JButton MeetCancel = new JButton("Delete");
 		MeetCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(IntSelectMyMeeting == 0)
 				{
-					JOptionPane.showMessageDialog(frame, "Please select a meeting!");
+					JOptionPane.showMessageDialog(frmMeetingManagement, "Please select a meeting!");
 					
 				}
 				else
@@ -360,17 +364,17 @@ public class MyMeeting {
 			                .wasAcknowledged ();  
 			         
 			        
-				    JOptionPane.showMessageDialog(frame, "Meeting Delete! Room reservation cancel!");
+				    JOptionPane.showMessageDialog(frmMeetingManagement, "Meeting Delete! Room reservation cancel!");
 				}
 
 			}
 		});
 		MeetCancel.setBounds(241, 223, 79, 29);
-		frame.getContentPane().add(MeetCancel);
+		frmMeetingManagement.getContentPane().add(MeetCancel);
 		
 		JScrollPane MeetingDetailS = new JScrollPane(MeetingDetail);
 		MeetingDetailS.setBounds(332, 45, 289, 166);
-		frame.getContentPane().add(MeetingDetailS);
+		frmMeetingManagement.getContentPane().add(MeetingDetailS);
 	}
 	
 	private void setMeetinglist()

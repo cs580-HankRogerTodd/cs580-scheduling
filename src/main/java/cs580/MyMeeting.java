@@ -52,7 +52,7 @@ public class MyMeeting {
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
 	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
-
+	
 	public MyMeeting(String username) {
 		LoginUsername = username;
 		initialize();
@@ -64,7 +64,7 @@ public class MyMeeting {
 	private void initialize() {
 		frmMeetingManagement = new JFrame();
 		frmMeetingManagement.setTitle("Meeting Management");
-		frmMeetingManagement.setBounds(100, 100, 640, 300);
+		frmMeetingManagement.setBounds(100, 100, 649, 301);
 		frmMeetingManagement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMeetingManagement.getContentPane().setLayout(null);
 		
@@ -159,7 +159,7 @@ public class MyMeeting {
 				}
 			}
 		});
-		MyMeetinglist.setBounds(175, 45, 135, 166);
+		MyMeetinglist.setBounds(185, 45, 152, 166);
 		frmMeetingManagement.getContentPane().add(MyMeetinglist);
 		/*
 		UpdateMeetinglistModel = new DefaultListModel();
@@ -216,8 +216,6 @@ public class MyMeeting {
 		UpdateMeetingList.setBounds(333, 45, 134, 166);
 		frame.getContentPane().add(UpdateMeetingList);
 		*/
-		
-		MeetingDetail = new JTextArea();
 		//MeetingDetail.setBounds(333, 59, 289, 166);
 		//frame.getContentPane().add(MeetingDetail);
 		
@@ -228,7 +226,7 @@ public class MyMeeting {
 		
 		JLabel lblMyMeeting = new JLabel("My Meeting");
 		lblMyMeeting.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMyMeeting.setBounds(175, 17, 128, 16);
+		lblMyMeeting.setBounds(185, 18, 152, 16);
 		frmMeetingManagement.getContentPane().add(lblMyMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
@@ -279,7 +277,7 @@ public class MyMeeting {
 				}
 			}
 		});
-		btnDecline.setBounds(30, 223, 117, 29);
+		btnDecline.setBounds(23, 222, 135, 29);
 		frmMeetingManagement.getContentPane().add(btnDecline);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -307,7 +305,7 @@ public class MyMeeting {
 				
 			}
 		});
-		btnUpdate.setBounds(167, 223, 79, 29);
+		btnUpdate.setBounds(185, 222, 79, 29);
 		frmMeetingManagement.getContentPane().add(btnUpdate);
 		
 		JButton MeetCancel = new JButton("Delete");
@@ -369,12 +367,15 @@ public class MyMeeting {
 
 			}
 		});
-		MeetCancel.setBounds(241, 223, 79, 29);
+		MeetCancel.setBounds(258, 222, 79, 29);
 		frmMeetingManagement.getContentPane().add(MeetCancel);
 		
-		JScrollPane MeetingDetailS = new JScrollPane(MeetingDetail);
-		MeetingDetailS.setBounds(332, 45, 289, 166);
+		JScrollPane MeetingDetailS = new JScrollPane();
+		MeetingDetailS.setBounds(351, 45, 270, 166);
 		frmMeetingManagement.getContentPane().add(MeetingDetailS);
+		
+		MeetingDetail = new JTextArea();
+		MeetingDetailS.setViewportView(MeetingDetail);
 	}
 	
 	private void setMeetinglist()

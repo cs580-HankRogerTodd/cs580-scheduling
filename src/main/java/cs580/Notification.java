@@ -23,10 +23,11 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListModel;
+import javax.swing.SwingConstants;
 
 public class Notification {
 
-	private JFrame frame;
+	private JFrame frmNotification;
 	private JList Meetinglist ;
 	private DefaultListModel<String> MeetinglistModel;
 	private DefaultListModel<String> UpdateMeetinglistModel;
@@ -49,18 +50,19 @@ public class Notification {
 		userName = username;
 		initialize();
 		showPendingMeeting();
-		frame.setVisible(true);
+		frmNotification.setVisible(true);
 	}
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmNotification = new JFrame();
+		frmNotification.setTitle("Notification");
+		frmNotification.setBounds(100, 100, 500, 315);
+		frmNotification.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmNotification.getContentPane().setLayout(null);
 		
 		final JTextArea MeetingDetail = new JTextArea();
-		MeetingDetail.setBounds(283, 46, 150, 177);
-		frame.getContentPane().add(MeetingDetail);
+		MeetingDetail.setBounds(298, 46, 150, 177);
+		frmNotification.getContentPane().add(MeetingDetail);
 
 /// Meeting list table //////////////////////////////////////////////////////// 
 		MeetinglistModel = new DefaultListModel();
@@ -86,8 +88,8 @@ public class Notification {
 				}
 			}
 		});
-		Meetinglist.setBounds(31, 46, 97, 177);
-		frame.getContentPane().add(Meetinglist);
+		Meetinglist.setBounds(6, 46, 148, 177);
+		frmNotification.getContentPane().add(Meetinglist);
 		
 // Button ////////////////////////////////////////////////////////		
 		JButton btnAccept = new JButton("Accept");
@@ -95,7 +97,7 @@ public class Notification {
 			public void actionPerformed(ActionEvent e) {
 				if(IntSelectMeeting == 0)
 				{
-					JOptionPane.showMessageDialog(frame, "Please select a meeting!");
+					JOptionPane.showMessageDialog(frmNotification, "Please select a meeting!");
 				}
 				else
 				{
@@ -121,12 +123,12 @@ public class Notification {
 			        MeetinglistModel.remove(isSelected);
 			        MeetingDetail.setText(null);
 			        
-					JOptionPane.showMessageDialog(frame, "Meeting ACCEPT!");
+					JOptionPane.showMessageDialog(frmNotification, "Meeting ACCEPT!");
 				}
 			}
 		});
 		btnAccept.setBounds(6, 235, 75, 29);
-		frame.getContentPane().add(btnAccept);
+		frmNotification.getContentPane().add(btnAccept);
 		
 /////////////////////////////////////////////////
 		JButton btnDecline = new JButton("Decline");
@@ -134,7 +136,7 @@ public class Notification {
 			public void actionPerformed(ActionEvent e) {
 				if(IntSelectMeeting == 0)
 				{
-					JOptionPane.showMessageDialog(frame, "Please select a meeting!");
+					JOptionPane.showMessageDialog(frmNotification, "Please select a meeting!");
 				}
 				else
 				{
@@ -161,32 +163,34 @@ public class Notification {
 			        MeetinglistModel.remove(isSelected);
 			        MeetingDetail.setText(null);
 			       
-					JOptionPane.showMessageDialog(frame, "Meeting DECLINE!");
+					JOptionPane.showMessageDialog(frmNotification, "Meeting DECLINE!");
 				}
 			}
 		});
 		btnDecline.setBounds(79, 235, 75, 29);
-		frame.getContentPane().add(btnDecline);
+		frmNotification.getContentPane().add(btnDecline);
 		
 /////////////////////////////////////////////////
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProfilePage profile = new ProfilePage(userName);
-				frame.dispose();
+				frmNotification.dispose();
 			}
 		});
-		btnCancel.setBounds(336, 235, 97, 29);
-		frame.getContentPane().add(btnCancel);
+		btnCancel.setBounds(351, 235, 97, 29);
+		frmNotification.getContentPane().add(btnCancel);
 
 /////////////////////////////////////////////////
 		JLabel lblNewMeeting = new JLabel("Pending");
-		lblNewMeeting.setBounds(50, 18, 57, 16);
-		frame.getContentPane().add(lblNewMeeting);
+		lblNewMeeting.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewMeeting.setBounds(6, 18, 148, 16);
+		frmNotification.getContentPane().add(lblNewMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
-		lblMeetingDetail.setBounds(308, 18, 108, 16);
-		frame.getContentPane().add(lblMeetingDetail);
+		lblMeetingDetail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMeetingDetail.setBounds(298, 18, 150, 16);
+		frmNotification.getContentPane().add(lblMeetingDetail);
 		
 		UpdateMeetinglistModel = new DefaultListModel();
 		UpdateMeetingList = new JList(UpdateMeetinglistModel);
@@ -208,7 +212,7 @@ public class Notification {
 								 "End Time: " + myMeeting.getString("EndTime")  
 								);
 		
-						JOptionPane.showMessageDialog(frame, "Host: " + myMeeting.getString("Host") + "\n" +
+						JOptionPane.showMessageDialog(frmNotification, "Host: " + myMeeting.getString("Host") + "\n" +
 								 "Room: " + myMeeting.getString("Room") + "\n" +
 								 "Date: " + myMeeting.getString("Date") + "\n" +
 								 "Start time: " + myMeeting.getString("StartTime") + "\n" +
@@ -228,7 +232,7 @@ public class Notification {
 				                        new Document( "MeetingID", IntSelectUpdateMeeting))))  
 				                .wasAcknowledged ();  
 						
-						JOptionPane.showMessageDialog(frame, "Meeting "+IntSelectUpdateMeeting+" has been cancel");
+						JOptionPane.showMessageDialog(frmNotification, "Meeting "+IntSelectUpdateMeeting+" has been cancel");
 						int isSelected = UpdateMeetingList.getSelectedIndex();
 						UpdateMeetinglistModel.remove(isSelected);
 				        MeetingDetail.setText(null);
@@ -239,12 +243,13 @@ public class Notification {
 				}
 			}
 		});
-		UpdateMeetingList.setBounds(156, 46, 97, 177);
-		frame.getContentPane().add(UpdateMeetingList);
+		UpdateMeetingList.setBounds(164, 46, 124, 177);
+		frmNotification.getContentPane().add(UpdateMeetingList);
 		
 		JLabel lblUpdate = new JLabel("Meeting Update");
-		lblUpdate.setBounds(156, 18, 108, 16);
-		frame.getContentPane().add(lblUpdate);
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setBounds(164, 18, 124, 16);
+		frmNotification.getContentPane().add(lblUpdate);
 	}
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////

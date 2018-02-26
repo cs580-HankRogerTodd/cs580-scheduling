@@ -63,7 +63,7 @@ public class ScheduleCalendar {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("CS580 Scheduling - Group 7");
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 325);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		

@@ -25,7 +25,7 @@ public class MeetingUpdate {
 
 	private DefaultListModel<String> listModelInvitee = new DefaultListModel<String>();
 	
-	private JFrame frame;
+	private JFrame frmMeetingUpdate;
 	private String LoginUsername;
 	private int MeetingID;
 	private Document myMeeting;
@@ -51,65 +51,71 @@ public class MeetingUpdate {
 		MeetingID = meetingid;
 		initialize();
 		setUpMeetingDetail();
-		frame.setVisible(true);
+		frmMeetingUpdate.setVisible(true);
 	}
 
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 320);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmMeetingUpdate = new JFrame();
+		frmMeetingUpdate.setTitle("Meeting Update");
+		frmMeetingUpdate.setBounds(100, 100, 475, 337);
+		frmMeetingUpdate.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmMeetingUpdate.getContentPane().setLayout(null);
 		
 		Datetxt = new JTextArea();
 		Datetxt.setBounds(159, 31, 125, 32);
-		frame.getContentPane().add(Datetxt);
+		frmMeetingUpdate.getContentPane().add(Datetxt);
 		
 		Timetxt = new JTextArea();
 		Timetxt.setBounds(159, 75, 125, 32);
-		frame.getContentPane().add(Timetxt);
+		frmMeetingUpdate.getContentPane().add(Timetxt);
 		
 		Roomtxt = new JTextArea();
 		Roomtxt.setBounds(159, 123, 125, 32);
-		frame.getContentPane().add(Roomtxt);
+		frmMeetingUpdate.getContentPane().add(Roomtxt);
 		
 		Memtxt = new JTextArea();
 		Memtxt.setBounds(159, 167, 125, 105);
-		frame.getContentPane().add(Memtxt);
+		frmMeetingUpdate.getContentPane().add(Memtxt);
 		
 		JLabel lblDate = new JLabel("Date");
 		lblDate.setBounds(86, 42, 61, 16);
-		frame.getContentPane().add(lblDate);
+		frmMeetingUpdate.getContentPane().add(lblDate);
 		
 		JLabel lblTime = new JLabel("Time");
 		lblTime.setBounds(86, 85, 61, 16);
-		frame.getContentPane().add(lblTime);
+		frmMeetingUpdate.getContentPane().add(lblTime);
 		
 		JLabel lblRoom = new JLabel("Room");
 		lblRoom.setBounds(86, 134, 61, 16);
-		frame.getContentPane().add(lblRoom);
+		frmMeetingUpdate.getContentPane().add(lblRoom);
 		
 		JLabel lblMember = new JLabel("Member");
 		lblMember.setBounds(86, 207, 61, 16);
-		frame.getContentPane().add(lblMember);
+		frmMeetingUpdate.getContentPane().add(lblMember);
 		
 		JButton btnDateEdit = new JButton("Edit");
 		btnDateEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new ScheduleCalendar(listModelInvitee, LoginUsername, ExistMeeting, MeetingID);
-				frame.dispose();
+				frmMeetingUpdate.dispose();
 			}
 		});
 		btnDateEdit.setBounds(296, 75, 75, 32);
-		frame.getContentPane().add(btnDateEdit);
+		frmMeetingUpdate.getContentPane().add(btnDateEdit);
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.setBounds(296, 202, 75, 29);
-		frame.getContentPane().add(btnAdd);
+		frmMeetingUpdate.getContentPane().add(btnAdd);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new MyMeeting(LoginUsername);
+			}
+		});
 		btnCancel.setBounds(358, 263, 86, 29);
-		frame.getContentPane().add(btnCancel);
+		frmMeetingUpdate.getContentPane().add(btnCancel);
 	}
 	
 	private void setUpMeetingDetail()

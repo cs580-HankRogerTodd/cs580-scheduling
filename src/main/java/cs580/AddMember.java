@@ -10,6 +10,7 @@ import javax.swing.event.*;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
@@ -17,8 +18,9 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
-public class MemberSelection extends JFrame
+public class AddMember extends JFrame
 	implements ActionListener, ItemListener, ListSelectionListener
 {
 
@@ -74,6 +76,10 @@ public class MemberSelection extends JFrame
 	private String LoginUsername;
 	private Boolean ExistMeeting=false;
 	private int ExistMeetingID = 0;
+	private int MeetingID;
+	private JFrame frame;
+	
+	//private ArrayList<String> ExistMember = new ArrayList<String>();
 	
 //////Database Setup ////////////////////////////////////////////////////////////////	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
@@ -81,29 +87,21 @@ public class MemberSelection extends JFrame
 	MongoClient mongoClient = new MongoClient(clientUri);
 	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
+	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
 ///////////////////////////////////////////////////////////////////////////////////////
 	
 	MongoCursor<Document> cursor = mongoCollection.find().iterator();
 	private JSeparator separator;
 
-	public MemberSelection(String username)
+	public AddMember(String username, int meetingid)
 	{
 		super("Member Selection");
 		App.setFonts();
 		LoginUsername = username;
+		MeetingID = meetingid;
 		
-		try {
-		      while (cursor.hasNext()) {
-		        Document doc = cursor.next();
-		        if(doc.get("Availability").equals("Available"))
-		        {
-		        	employees.add(doc.get("Username").toString());
-		        }
-		      }
-		    } finally {
-		      cursor.close();
-		    }
-		
+		RestEmployeelist();
+
 		/////// main container //////
 		contents = new JPanel();
 		contents.setBorder(borderContents); // biggest border around Frame
@@ -272,6 +270,38 @@ public class MemberSelection extends JFrame
 	
 	 }
 
+	private void RestEmployeelist()
+	{
+		Boolean MemberSelected=false;
+		Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", MeetingID )).first();
+		ArrayList MemberLists = (ArrayList) myMeeting.get("Member");
+		
+		try {
+		      while (cursor.hasNext()) {
+		        Document doc = cursor.next();
+		        if(doc.get("Availability").equals("Available"))
+		        {
+			        	for(int i=0; i<MemberLists.size(); i++)
+			    		{
+			        		if(doc.get("Username").toString().equals(String.valueOf(MemberLists.get(i))))
+			        		{
+			        			MemberSelected = true;
+			        			break;
+			        		}
+			    		}
+
+			        	if(MemberSelected==false)
+			        	{
+			        		employees.add(doc.get("Username").toString());
+			        	}
+			        	MemberSelected = false;
+		        }
+		      }
+		    } finally {
+		      cursor.close();
+		    }
+	}
+	
 	private void initEmployeeModel()
 	{
 		for(String s : employees)
@@ -305,12 +335,12 @@ public class MemberSelection extends JFrame
 		}
 		if(source == btnNext)
 		{
-			goToScheduleCalender();
+			AddNewEmployee();
 			//return;
 		}
 		if(source == btnBack)
 		{
-			backToProfile(LoginUsername);
+			backToProfile();
 			return;
 		}
 		if(source == btnSearch)
@@ -342,7 +372,7 @@ public class MemberSelection extends JFrame
 		if (pressSearch == true)
 		{
 			listModelTemp.removeElement(addedItem);
-			System.out.print(listModelTemp);
+			//System.out.print(listModelTemp);
 		}
 		//displaySelectedItems(); ///////////////////////////////////////////////////////////
 		
@@ -425,15 +455,44 @@ public class MemberSelection extends JFrame
 		listModelInvitee.clear();
 	}
 
-	private void goToScheduleCalender()
+	private void AddNewEmployee()
 	{
-		ScheduleCalendar timeslct = new ScheduleCalendar(listModelInvitee, LoginUsername, ExistMeeting, ExistMeetingID);
-		dispose();
+		if(listModelInvitee.size()==0)
+		{
+			JOptionPane.showMessageDialog(frame, "Please Select the Employees");
+		}
+		else 
+		{
+			for(int i=0; i<listModelInvitee.size(); i++ )
+			{
+				System.out.print(listModelInvitee.getElementAt(i));
+				
+				BasicDBObject match = new BasicDBObject();
+		        match.put( "Name", listModelInvitee.getElementAt(i) );
+
+		        BasicDBObject addressSpec = new BasicDBObject();
+		        addressSpec.put("MeetingID", MeetingID);
+		        addressSpec.put("Respond", "P");
+		        addressSpec.put("Update", "0");
+
+		        BasicDBObject update = new BasicDBObject();
+		        update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
+		        mongoCollection.updateMany( match, update );
+		        
+		        mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", MeetingID),  
+		                new Document( "$addToSet", new Document( "Member", listModelInvitee.getElementAt(i))))  
+		                .wasAcknowledged ();
+			}
+			
+			JOptionPane.showMessageDialog(frame, "Add new Member to Meeting!");
+			MyMeeting Mymet = new MyMeeting(LoginUsername);
+			dispose();
+		}
 	}
 	
-	private void backToProfile(String LoginUsername)
+	private void backToProfile()
 	{
-		new ProfilePage(LoginUsername);
+		new MeetingUpdate(LoginUsername, MeetingID);
 		dispose();
 	}
 	

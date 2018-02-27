@@ -35,8 +35,12 @@ public class ScheduleCalendar {
 	private JFrame frame;
 	private JTable table;
 	
+	private int selectMonth = LocalDate.now().getMonthValue();
+	private int selectYear = LocalDate.now().getYear();
+	
 	private int currentMonth = LocalDate.now().getMonthValue();
 	private int currentYear = LocalDate.now().getYear();
+	private int currentDay = LocalDate.now().getDayOfMonth();
 	
 	private final String DAYS_OF_WEEK[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 	private final String MONTHS[] = {"January", "February", "March", "April", "May", "June", "July",
@@ -61,9 +65,10 @@ public class ScheduleCalendar {
 
 
 	private void initialize() {
+		
 		frame = new JFrame();
 		frame.setTitle("CS580 Scheduling - Group 7");
-		frame.setBounds(100, 100, 450, 325);
+		frame.setBounds(100, 100, 450, 440);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -85,11 +90,43 @@ public class ScheduleCalendar {
 				
 				// Making sure the selected date is not null
 				if (selectedValue != null) {
-					JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(currentYear) + "/" + 
-						Integer.toString(currentMonth) + "/" + selectedValue);
+					//System.out.print(currentYear +" "+currentMonth+" "+currentDay+"\n");
 					
-						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, currentMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
-						frame.dispose();
+					int IntSelectValue = (Integer) selectedValue;
+					//System.out.print(selectYear +" "+selectMonth+" "+IntSelectValue+"\n");
+					
+					if(selectYear==currentYear)// && selectMonth>=currentMonth && IntSelectValue>=currentDay)
+					{
+						if(selectMonth>=currentMonth)
+						{
+							if(selectMonth>currentMonth)
+							{
+								JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(selectYear) + "/" + 
+										Integer.toString(selectMonth) + "/" + selectedValue);
+									
+								TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
+								frame.dispose();
+							}
+							else if(selectMonth == currentMonth && IntSelectValue>=currentDay)
+							{
+								JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(selectYear) + "/" + 
+										Integer.toString(selectMonth) + "/" + selectedValue);
+									
+								TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
+								frame.dispose();
+							}
+							else {
+								JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+							}
+						}
+						else {
+							JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+						}
+						
+					}
+					else {
+						JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+					}
 				}
 				else {
 					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
@@ -97,7 +134,7 @@ public class ScheduleCalendar {
 			}
 		});
 		
-		DefaultTableModel model = new DefaultTableModel(generateDaysInMonth(currentYear, currentMonth),
+		DefaultTableModel model = new DefaultTableModel(generateDaysInMonth(selectYear, selectMonth),
 			DAYS_OF_WEEK) {
 				private static final long serialVersionUID = 1L;
 	
@@ -107,7 +144,7 @@ public class ScheduleCalendar {
 		};
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 65, 386, 172);
+		scrollPane.setBounds(36, 65, 386, 300);
 		frame.getContentPane().add(scrollPane);
 		
 		table.setModel(model);
@@ -121,7 +158,7 @@ public class ScheduleCalendar {
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(272, 249, 89, 23);
+		btnCancel.setBounds(333, 378, 89, 23);
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -131,7 +168,7 @@ public class ScheduleCalendar {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(138, 25, 190, 23);
+		panel.setBounds(91, 30, 275, 23);
 		frame.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
 		
@@ -139,14 +176,14 @@ public class ScheduleCalendar {
 		panel.add(button_1, BorderLayout.WEST);
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				currentMonth--;
-				if (currentMonth <= 0) {
-					currentMonth = MONTHS.length;
-					currentYear--;
+				selectMonth--;
+				if (selectMonth <= 0) {
+					selectMonth = MONTHS.length;
+					selectYear--;
 				}
 				
-				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
-				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
+				lblNewLabel.setText(MONTHS[selectMonth - 1] + " " + selectYear);
+				Object[][] tempData = generateDaysInMonth(selectYear, selectMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
 				((AbstractTableModel)table.getModel()).fireTableDataChanged();
 			}
@@ -160,20 +197,20 @@ public class ScheduleCalendar {
 		lblNewLabel = new JLabel();
 		panel.add(lblNewLabel, BorderLayout.CENTER);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 11));
-		lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
+		lblNewLabel.setText(MONTHS[selectMonth - 1] + " " + selectYear);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel tempModel = (DefaultTableModel) table.getModel();
 				tempModel.setRowCount(0);
 				
-				currentMonth++;
-				if (currentMonth > MONTHS.length) {
-					currentMonth = 1;
-					currentYear++;
+				selectMonth++;
+				if (selectMonth > MONTHS.length) {
+					selectMonth = 1;
+					selectYear++;
 				}
 				
-				lblNewLabel.setText(MONTHS[currentMonth - 1] + " " + currentYear);
-				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
+				lblNewLabel.setText(MONTHS[selectMonth - 1] + " " + selectYear);
+				Object[][] tempData = generateDaysInMonth(selectYear, selectMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
 				((AbstractTableModel)table.getModel()).fireTableDataChanged();
 			}
@@ -237,7 +274,7 @@ public class ScheduleCalendar {
 	//*****************************
 	// Getter and setters
 	//*****************************
-	public int getCurrentMonth() {return currentMonth;}
+	public int getCurrentMonth() {return selectMonth;}
 	
 	public void print(Object o) {
 		System.out.println(o);

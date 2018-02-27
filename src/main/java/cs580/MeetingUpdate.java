@@ -25,7 +25,7 @@ public class MeetingUpdate {
 
 	private DefaultListModel<String> listModelInvitee = new DefaultListModel<String>();
 	
-	private JFrame frmMeetingUpdate;
+	private JFrame frmMeetingUpdate; //private JFrame frame;
 	private String LoginUsername;
 	private int MeetingID;
 	private Document myMeeting;
@@ -64,7 +64,7 @@ public class MeetingUpdate {
 		
 		Datetxt = new JTextArea();
 		Datetxt.setBounds(159, 31, 125, 32);
-		frmMeetingUpdate.getContentPane().add(Datetxt);
+		frmMeetingUpdate.getContentPane().add(Datetxt); 
 		
 		Timetxt = new JTextArea();
 		Timetxt.setBounds(159, 75, 125, 32);
@@ -72,11 +72,11 @@ public class MeetingUpdate {
 		
 		Roomtxt = new JTextArea();
 		Roomtxt.setBounds(159, 123, 125, 32);
-		frmMeetingUpdate.getContentPane().add(Roomtxt);
+		frmMeetingUpdate.getContentPane().add(Roomtxt); 
 		
 		Memtxt = new JTextArea();
 		Memtxt.setBounds(159, 167, 125, 105);
-		frmMeetingUpdate.getContentPane().add(Memtxt);
+		frmMeetingUpdate.getContentPane().add(Memtxt); 
 		
 		JLabel lblDate = new JLabel("Date");
 		lblDate.setBounds(86, 42, 61, 16);
@@ -107,6 +107,11 @@ public class MeetingUpdate {
 		JButton btnAdd = new JButton("Add");
 		btnAdd.setBounds(296, 202, 75, 29);
 		frmMeetingUpdate.getContentPane().add(btnAdd);
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddMember AdMem = new AddMember(LoginUsername, MeetingID);
+			}
+		});
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {

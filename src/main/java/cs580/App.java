@@ -9,12 +9,22 @@ public class App {
 	private static final Font FONT_PLAIN = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 	private static final Font FOLD_BOLD = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 	
+	private static String LoginUsername = "Hank";
+	private static int MeetingID = 2;
+	
+	
 	public static void main( String[] args ) {
 		
-		LoginPage login = new LoginPage();
+		
+		DB_setUp ProgramStart = new DB_setUp();
+		//LoginPage login = new LoginPage();
 		//MyMeeting Mymet = new MyMeeting();
 		//AdminPage mytest = new AdminPage();
+		//AddEmployee AdEmp = new AddEmployee();
+		//AddMember AdMem = new AddMember(LoginUsername, MeetingID);
 		//dbManage member = new dbManage();
+		
+	
 	}
 	
 	public static void setFonts() {

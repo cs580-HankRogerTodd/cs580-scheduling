@@ -295,37 +295,50 @@ public class TimeRoomSelection {
 			for(int j=0; j<MeetingListSize; j++)
 			{
 				Document MeetingElement = MeetingLists.get(j);
+				String testString = String.valueOf(MeetingElement.get("MeetingID"));
+				Integer testint = Integer.valueOf(testString);
+
 				//System.out.println(MeetingElement); // get meeting ID to find the meeting date, start time and end time
-				if(MeetingElement.getString("Respond").equals("A"))
+				
+				if( ExistMeeting == true && testint == ExistMeetingID)
 				{
-					String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
-					int IntMeetingID = Integer.parseInt(StringMeetingID);
-					// use meeting ID to get meeting detail
-					Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
-					
-					String convertedToString = myMeeting.get("Date").toString();
-					
-					//System.out.print(convertedToString+"\n");
-					//System.out.print(Four_Digit_Date+"\n");
-					
-					if (convertedToString.equals(Four_Digit_Date)==true)
-					{
-						int IntStartTime = Integer.valueOf((String) myMeeting.get("StartTime"));
-						int IntEndTime = Integer.valueOf((String) myMeeting.get("EndTime"));
-						
-						for (int Mtime=IntStartTime; Mtime<IntEndTime; Mtime++)
-						{
-							AvailableTimeArray[Mtime] = 1;
-						}
-						//System.out.println(Arrays.toString(AvailableTimeArray));
-						//System.out.print(AvailableTimeArray);
-					}
-					else 
-					{
-						continue;	
-					}
+					continue;	
 				}
 				
+				else
+				{
+					 if(MeetingElement.getString("Respond").equals("A"))
+						{
+							System.out.print("BBB");
+							String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
+							int IntMeetingID = Integer.parseInt(StringMeetingID);
+							// use meeting ID to get meeting detail
+							Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
+							
+							String convertedToString = myMeeting.get("Date").toString();
+							
+							//System.out.print(convertedToString+"\n");
+							//System.out.print(Four_Digit_Date+"\n");
+							
+							if (convertedToString.equals(Four_Digit_Date)==true)
+							{
+								System.out.print("CCC");
+								int IntStartTime = Integer.valueOf((String) myMeeting.get("StartTime"));
+								int IntEndTime = Integer.valueOf((String) myMeeting.get("EndTime"));
+								
+								for (int Mtime=IntStartTime; Mtime<IntEndTime; Mtime++)
+								{
+									AvailableTimeArray[Mtime] = 1;
+								}
+								//System.out.println(Arrays.toString(AvailableTimeArray));
+								//System.out.print(AvailableTimeArray);
+							}
+							else 
+							{
+								continue;	
+							}
+						}
+				}
 			}
 		}
 		
@@ -377,13 +390,30 @@ public class TimeRoomSelection {
         		List<Document> RoomBookedTime = (List<Document>) Room.get("TimeBooked"); 
         		for(int i=0 ; i<RoomBookedTime.size(); i++)
         		{
-        			BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
-        			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
-
-        			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
-        			{
-            			RoomAvailable = false;	
-        			}
+        			String StringRoomBookedTime = RoomBookedTime.get(i).get("Date").toString();
+        			
+        			String testString = String.valueOf(RoomBookedTime.get(i).get("MeetingID"));
+    				Integer testint = Integer.valueOf(testString);
+    				
+        			if( ExistMeeting == true && testint == ExistMeetingID)
+    				{
+    					continue;	
+    				}
+    				
+    				else
+    				{
+    					if(StringRoomBookedTime.equals(Date))
+            			{
+            				BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
+                			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
+                			//int UpdateMeetingID = Integer.valueOf((String) RoomBookedTime.get(i).get("MeetingID"));
+                			
+                			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
+                			{
+                    			RoomAvailable = false;	
+                			}
+            			}
+    				}
         		}
         		
         		if (RoomAvailable == true)
@@ -420,16 +450,28 @@ public class TimeRoomSelection {
         		for(int i=0 ; i<RoomBookedTime.size(); i++)
         		{
         			String StringRoomBookedTime = RoomBookedTime.get(i).get("Date").toString();
-        			if(StringRoomBookedTime .equals(Date))
-        			{
-        				BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
-            			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
-
-            			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
+        			String testString = String.valueOf(RoomBookedTime.get(i).get("MeetingID"));
+    				Integer testint = Integer.valueOf(testString);
+    				
+        			if( ExistMeeting == true && testint == ExistMeetingID)
+    				{
+    					continue;	
+    				}
+    				
+    				else
+    				{
+    					if(StringRoomBookedTime .equals(Date))
             			{
-                			RoomAvailable = false;	
+            				BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
+                			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
+
+                			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
+                			{
+                    			RoomAvailable = false;	
+                			}
             			}
-        			}
+    				}
+        			
         		}
         		
         		if (RoomAvailable == true)
@@ -476,6 +518,7 @@ public class TimeRoomSelection {
 		                new Document( "$addToSet", new Document( "Member", Invitee.getElementAt(i))))  
 		                .wasAcknowledged ();
 			}
+			
 			//*/
 			
 	/////// Add new booked time into Room database
@@ -499,18 +542,37 @@ public class TimeRoomSelection {
 			
 	        for (int i= 0; i< Invitee.size(); i++)
 	        {
-	        		BasicDBObject matchEmployee = new BasicDBObject();
-	        		matchEmployee.put( "Name", Invitee.elementAt(i) );
+	        		if(Invitee.elementAt(i).equals(LoginUsername))
+	        		{
+	        			BasicDBObject matchEmployee = new BasicDBObject();
+		        		matchEmployee.put( "Name", LoginUsername);
 
-	            BasicDBObject Employee_addressSpec = new BasicDBObject();
-	            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
-	            Employee_addressSpec.put("Respond", "P");
-	            Employee_addressSpec.put("Update", "0");
+		            BasicDBObject Employee_addressSpec = new BasicDBObject();
+		            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
+		            Employee_addressSpec.put("Respond", "A");
+		            Employee_addressSpec.put("Update", "0");
 
-	            BasicDBObject updateEmployee = new BasicDBObject();
-	            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
-	            mongoCollection.updateMany( matchEmployee, updateEmployee );
+		            BasicDBObject updateEmployee = new BasicDBObject();
+		            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+		            mongoCollection.updateMany( matchEmployee, updateEmployee );
+	        		}
+	        		else
+	        		{
+	        			BasicDBObject matchEmployee = new BasicDBObject();
+		        		matchEmployee.put( "Name", Invitee.elementAt(i) );
+
+		            BasicDBObject Employee_addressSpec = new BasicDBObject();
+		            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
+		            Employee_addressSpec.put("Respond", "P");
+		            Employee_addressSpec.put("Update", "0");
+
+		            BasicDBObject updateEmployee = new BasicDBObject();
+		            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+		            mongoCollection.updateMany( matchEmployee, updateEmployee );
+	        		}
+	        		
 	        }
+	        
 		}
 		
 		else
@@ -520,23 +582,47 @@ public class TimeRoomSelection {
 			
 			for (int i= 0; i< Invitee.size(); i++)
 	        {
-				mongoCollection.updateOne(  
-		                new Document ("Name",Invitee.elementAt(i)),  
-		                new Document( "$pull", new Document("Meeting" ,  
-		                        new Document( "MeetingID", ExistMeetingID))))  
-		                .wasAcknowledged ();  
+				if(Invitee.elementAt(i).equals(LoginUsername))
+	        		{
+					mongoCollection.updateOne(  
+			                new Document ("Name",Invitee.elementAt(i)),  
+			                new Document( "$pull", new Document("Meeting" ,  
+			                        new Document( "MeetingID", ExistMeetingID))))  
+			                .wasAcknowledged ();  
+					
+		        		BasicDBObject matchEmployee = new BasicDBObject();
+		        		matchEmployee.put( "Name", Invitee.elementAt(i) );
+
+		            BasicDBObject Employee_addressSpec = new BasicDBObject();
+		            Employee_addressSpec.put("MeetingID", ExistMeetingID);
+		            Employee_addressSpec.put("Respond", "A");
+		            Employee_addressSpec.put("Update", "0");
+
+		            BasicDBObject updateEmployee = new BasicDBObject();
+		            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+		            mongoCollection.updateMany( matchEmployee, updateEmployee );
+	        		}
+				else
+				{
+					mongoCollection.updateOne(  
+			                new Document ("Name",Invitee.elementAt(i)),  
+			                new Document( "$pull", new Document("Meeting" ,  
+			                        new Document( "MeetingID", ExistMeetingID))))  
+			                .wasAcknowledged ();  
+					
+		        		BasicDBObject matchEmployee = new BasicDBObject();
+		        		matchEmployee.put( "Name", Invitee.elementAt(i) );
+
+		            BasicDBObject Employee_addressSpec = new BasicDBObject();
+		            Employee_addressSpec.put("MeetingID", ExistMeetingID);
+		            Employee_addressSpec.put("Respond", "P");
+		            Employee_addressSpec.put("Update", "1");
+
+		            BasicDBObject updateEmployee = new BasicDBObject();
+		            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
+		            mongoCollection.updateMany( matchEmployee, updateEmployee );
+				}
 				
-	        		BasicDBObject matchEmployee = new BasicDBObject();
-	        		matchEmployee.put( "Name", Invitee.elementAt(i) );
-
-	            BasicDBObject Employee_addressSpec = new BasicDBObject();
-	            Employee_addressSpec.put("MeetingID", ExistMeetingID);
-	            Employee_addressSpec.put("Respond", "P");
-	            Employee_addressSpec.put("Update", "1");
-
-	            BasicDBObject updateEmployee = new BasicDBObject();
-	            updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
-	            mongoCollection.updateMany( matchEmployee, updateEmployee );
 	        }
 			
 			mongoCollectionRooms.updateOne(  
@@ -600,9 +686,5 @@ public class TimeRoomSelection {
         while(mongoCursorRoom.hasNext()){  
            System.out.println(mongoCursorRoom.next());  
         } 
-
 	}
-	
-	
-	
 }

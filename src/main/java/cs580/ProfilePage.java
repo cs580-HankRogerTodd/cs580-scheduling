@@ -13,6 +13,7 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -22,13 +23,21 @@ import com.mongodb.client.model.Filters;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JRadioButton;
 
 public class ProfilePage {
 
 	private JFrame frame;
 	private String LoginUsername;
 	private boolean NewMeeting = false;
+	
+	private JRadioButton[] radioButton;
+	private JPanel contentPane;
+	private JRadioButton rdbtnUnavailable;
+	private JRadioButton rdbtnAvailable;
 	
 
 //////Database Setup /////////////////////////////////////////////////////////////////////////
@@ -45,6 +54,7 @@ public class ProfilePage {
 	public ProfilePage(String username){
 		LoginUsername = username;
 		initialize();
+		setAvailable();
 		frame.setVisible(true);
 	}
 
@@ -60,17 +70,22 @@ public class ProfilePage {
 		String currentDirectory = System.getProperty("user.dir");
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(currentDirectory + "/image/"+ LoginUsername + ".jpg"));
-		lblNewLabel.setBounds(80, 29, 102, 143);
+		lblNewLabel.setBounds(255, 46, 137, 161);
+		ImageIcon MyImage = new ImageIcon(currentDirectory + "/image/"+ LoginUsername + ".jpg");
+		Image img = MyImage.getImage();
+		Image NewImg = img.getScaledInstance(lblNewLabel.getWidth(), lblNewLabel.getHeight(), Image.SCALE_SMOOTH);  
+		ImageIcon image = new ImageIcon(NewImg);
+		lblNewLabel.setIcon(image);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JTextPane txtpnCaliforniaState = new JTextPane();
-		txtpnCaliforniaState.setText("Hank, Tsou\nCal Poly Pomona\nMaster student\nComputer Science\n1992\n");
-		txtpnCaliforniaState.setBounds(60, 184, 137, 109);
+		txtpnCaliforniaState.setText("                  "+LoginUsername + "\n\n         Cal Poly Pomona\n          Master student\n        Computer Science\n");
+		txtpnCaliforniaState.setBounds(240, 219, 177, 89);
 		frame.getContentPane().add(txtpnCaliforniaState);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(331, 37, 131, 261);
+		panel.setBounds(20, 37, 131, 261);
+		panel.setBackground(new Color(0,0,0,0));
 		frame.getContentPane().add(panel);
 		panel.setLayout(new GridLayout(5, 1, 0, 10));
 		
@@ -141,13 +156,67 @@ public class ProfilePage {
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panel.add(btnLogout);
+		
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
 				frame.dispose();
 			}
 		});
+		
+		rdbtnAvailable = new JRadioButton("Available");
+		rdbtnAvailable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Bson filter = new Document("Name", LoginUsername);
+				Bson newValue = new Document("Availability", "Available");
+				Bson updateOperationDocument = new Document("$set", newValue);
+				mongoCollection.updateOne(filter, updateOperationDocument);
+				
+				rdbtnUnavailable.setSelected(false);
+			}
+		});
+		rdbtnAvailable.setBounds(404, 6, 89, 23);
+		frame.getContentPane().add(rdbtnAvailable);
+		
+		rdbtnUnavailable = new JRadioButton("Busy");
+		rdbtnUnavailable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Bson filter = new Document("Name", LoginUsername);
+				Bson newValue = new Document("Availability", "Unavailable");
+				Bson updateOperationDocument = new Document("$set", newValue);
+				mongoCollection.updateOne(filter, updateOperationDocument);
+				
+				rdbtnAvailable.setSelected(false);
+			}
+		});
+		rdbtnUnavailable.setBounds(404, 26, 89, 23);
+		frame.getContentPane().add(rdbtnUnavailable);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+		lblNewLabel_1.setBounds(-30, 0, 199, 328);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		JLabel ImgBackground = new JLabel("");
+		ImgBackground.setBounds(249, 40, 150, 174);
+		ImgBackground.setOpaque(true);
+		ImgBackground.setBackground(new Color(255, 255, 224));
+		frame.getContentPane().add(ImgBackground);
+		
+		
 //////////////////////////////////	
 	}
-
+	
+	private void setAvailable()
+	{
+		Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+		if(myStatus.getString("Availability").equals("Available"))
+		{
+			rdbtnAvailable.setSelected(true);
+		}
+		else
+		{
+			rdbtnUnavailable.setSelected(true);
+		}
+	}
 }

@@ -81,8 +81,16 @@ public class AdminPage {
 		JButton btnAddEmployee = new JButton("Add");
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddEmployee AddEmp = new AddEmployee();
-				frame.dispose();
+				if(EmployeeList.getSelectedValue()!=null)
+				{
+					AddEmployee AddEmp = new AddEmployee();
+					frame.dispose();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(frame, "Please select an Employee!");
+				}
+				
 			}
 		});
 		btnAddEmployee.setBounds(55, 215, 75, 29);
@@ -91,13 +99,20 @@ public class AdminPage {
 		JButton btnDeleteEmployee = new JButton("Delete");
 		btnDeleteEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				Bson filter = new Document("Name", String.valueOf(EmployeeList.getSelectedValue()));
+				if(EmployeeList.getSelectedValue()!=null)
+				{
+					Bson filter = new Document("Name", String.valueOf(EmployeeList.getSelectedValue()));
 					mongoCollection.deleteOne(filter);
 			
-				listModelEmployee.remove(EmployeeList.getSelectedIndex());
+					listModelEmployee.remove(EmployeeList.getSelectedIndex());
+					
+					JOptionPane.showMessageDialog(frame, "Employee Delete!");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(frame, "Please select an Employee!");
+				}
 				
-				JOptionPane.showMessageDialog(frame, "Employee Delete!");
 				
 			}
 		});
@@ -130,13 +145,19 @@ public class AdminPage {
 		JButton btnDeleteRoom = new JButton("Delete");
 		btnDeleteRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				Bson filter = new Document("RoomNo", String.valueOf(RoomList.getSelectedValue()));
+				if(EmployeeList.getSelectedValue()!=null)
+				{
+					Bson filter = new Document("RoomNo", String.valueOf(RoomList.getSelectedValue()));
 					mongoCollectionRooms.deleteOne(filter);
 			
-				listModelRoom.remove(RoomList.getSelectedIndex());
-				
-				JOptionPane.showMessageDialog(frame, "Room Delete!");
+					listModelRoom.remove(RoomList.getSelectedIndex());
+					
+					JOptionPane.showMessageDialog(frame, "Room Delete!");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(frame, "Please select an Employee!");
+				}
 			}
 		});
 		btnDeleteRoom.setBounds(324, 215, 75, 29);

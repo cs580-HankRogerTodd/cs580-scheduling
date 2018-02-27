@@ -16,6 +16,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JPanel;
+
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 public class LoginPage {
@@ -46,6 +49,8 @@ public class LoginPage {
 	
 	private int MeetingDay;
 	private int currentDay = LocalDate.now().getDayOfMonth();
+	
+	String currentDirectory = System.getProperty("user.dir");
 
 	
 	public LoginPage() {
@@ -56,35 +61,45 @@ public class LoginPage {
 
 	private void initialize() {
 		
+		String currentDirectory = System.getProperty("user.dir");
+		
 		frmLoginPage = new JFrame();
+		//frmLoginPage.getContentPane().setBackground( Color.cyan );
 		frmLoginPage.setTitle("Login Page");
-		frmLoginPage.setBounds(200, 200, 450, 300);
+		frmLoginPage.setBounds(200, 200, 425, 300);
 		frmLoginPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginPage.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Login");
-		lblNewLabel.setBounds(193, 35, 46, 26);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 30));
+		lblNewLabel.setBounds(169, 21, 96, 37);
 		frmLoginPage.getContentPane().add(lblNewLabel);
 		
 		JLabel lblUsername = new JLabel("User Name");
-		lblUsername.setBounds(109, 89, 74, 16);
+		lblUsername.setForeground(Color.WHITE);
+		lblUsername.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblUsername.setBounds(97, 86, 88, 21);
 		frmLoginPage.getContentPane().add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(109, 145, 61, 16);
+		lblPassword.setForeground(Color.WHITE);
+		lblPassword.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblPassword.setBounds(97, 136, 88, 32);
 		frmLoginPage.getContentPane().add(lblPassword);
 		
 		txtUsername = new JTextField();
-		txtUsername.setBounds(193, 84, 130, 26);
+		txtUsername.setBounds(197, 84, 130, 26);
 		frmLoginPage.getContentPane().add(txtUsername);
 		txtUsername.setColumns(10);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(193, 140, 130, 26);
+		txtPassword.setBounds(197, 140, 130, 26);
 		frmLoginPage.getContentPane().add(txtPassword);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 207, 434, 41);
+		panel.setBounds(75, 197, 288, 45);
+		panel.setBackground(new Color(0,0,0,0));
 		frmLoginPage.getContentPane().add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 		
@@ -92,6 +107,7 @@ public class LoginPage {
 		JButton btnLogin = new JButton("Login");
 		panel.add(btnLogin);
 		frmLoginPage.getRootPane().setDefaultButton(btnLogin); // Make enter key press login by default
+		
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -149,6 +165,11 @@ public class LoginPage {
 //////////////////////////////////		
 		JButton btnForgotPassword = new JButton("Forgot");
 		panel.add(btnForgotPassword);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
+		lblNewLabel_1.setBounds(-29, 0, 459, 278);
+		frmLoginPage.getContentPane().add(lblNewLabel_1);
 		btnForgotPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Pleace Contact Admin to Reset Your Password");

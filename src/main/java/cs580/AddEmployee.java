@@ -27,9 +27,9 @@ public class AddEmployee {
 	private JTextField txtUserName;
 	private JTextField txtPassword;
 
-	private String EmployeeName;
-	private String EmployeePassword;
-	private String EmployeeUserName;
+	private String EmployeeName="";
+	private String EmployeePassword="";
+	private String EmployeeUserName="";
 	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
 	MongoClientURI clientUri = new MongoClientURI(uri);
@@ -82,27 +82,42 @@ public class AddEmployee {
 				EmployeePassword = txtPassword.getText();
 				EmployeeName = txtEployeeName.getText();
 				
-				long EmployeeNum = mongoCollection.count();
-				String EID = String.valueOf(EmployeeNum+1);
+				if(EmployeeUserName.equals("")||EmployeePassword.equals("")||EmployeeName.equals(""))
+				{
+					JOptionPane.showMessageDialog(frame, "Please input all the information!");
+				}
+				else
+				{
+					long EmployeeNum = mongoCollection.count();
+					String EID = String.valueOf(EmployeeNum+1);
+					
+					ArrayList< DBObject > array = new ArrayList< DBObject >();
+					Document document = new Document("EID", EID);
+					document.append("Name", EmployeeName);
+					document.append("Availability", "Available");
+					document.append("Username", EmployeeUserName);
+					document.append("Password", EmployeePassword);
+					document.append("Meeting", array);
+					mongoCollection.insertOne(document);
+					
+					JOptionPane.showMessageDialog(frame, "SUCCESSFUL ADDED!");
+					AdminPage mytest = new AdminPage();
+					frame.dispose();
+				}
 				
-				ArrayList< DBObject > array = new ArrayList< DBObject >();
-				Document document = new Document("EID", EID);
-				document.append("Name", EmployeeName);
-				document.append("Availability", "Available");
-				document.append("Username", EmployeeUserName);
-				document.append("Password", EmployeePassword);
-				document.append("Meeting", array);
-				mongoCollection.insertOne(document);
 				
-				JOptionPane.showMessageDialog(frame, "SUCCESSFUL ADDED!");
-				AdminPage mytest = new AdminPage();
-				frame.dispose();
 			}
 		});
 		btnComfirm.setBounds(173, 195, 80, 29);
 		frame.getContentPane().add(btnComfirm);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminPage mytest = new AdminPage();
+				frame.dispose();
+			}
+		});
 		btnCancel.setBounds(248, 195, 66, 29);
 		frame.getContentPane().add(btnCancel);
 	}

@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 import org.bson.Document;
 
@@ -23,7 +24,6 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListModel;
-import javax.swing.SwingConstants;
 
 public class Notification {
 
@@ -123,7 +123,7 @@ public class Notification {
 			        MeetinglistModel.remove(isSelected);
 			        MeetingDetail.setText(null);
 			        
-					JOptionPane.showMessageDialog(frmNotification, "Meeting ACCEPT!");
+			        JOptionPane.showMessageDialog(frmNotification, "Meeting ACCEPT!");
 				}
 			}
 		});
@@ -163,7 +163,7 @@ public class Notification {
 			        MeetinglistModel.remove(isSelected);
 			        MeetingDetail.setText(null);
 			       
-					JOptionPane.showMessageDialog(frmNotification, "Meeting DECLINE!");
+			        JOptionPane.showMessageDialog(frmNotification, "Meeting DECLINE!");
 				}
 			}
 		});

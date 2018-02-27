@@ -43,7 +43,7 @@ public class dbManage
 		
 // Employee Database //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		String username = "Admin";
+		String username = "Hank";
 		
 		// Delete Member
 		/* 
@@ -69,9 +69,9 @@ public class dbManage
         match.put( "Name", username );
 
         BasicDBObject addressSpec = new BasicDBObject();
-        addressSpec.put("MeetingID", 1);
-        addressSpec.put("Respond", "X");
-        addressSpec.put("Update", "1");
+        addressSpec.put("MeetingID", 2);
+        addressSpec.put("Respond", "A");
+        addressSpec.put("Update", "0");
 
         BasicDBObject update = new BasicDBObject();
         update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
@@ -91,7 +91,7 @@ public class dbManage
 		}
 			
 	    //*/  
-		
+
 		
 		// Add New Meeting
         /*
@@ -121,8 +121,8 @@ public class dbManage
 		///*
 		// Add member in member array
 		/*
-		mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", "12"),  
-                new Document( "$addToSet", new Document( "Member", "Todd, Hank")))  
+		mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", 2),  
+                new Document( "$addToSet", new Document( "Member", "Hank")))  
                 .wasAcknowledged ();
 		//*/
 		// how to create an array [aaa, bbb, ccc, ddd, eee] ????????????????????????????????
@@ -174,10 +174,10 @@ public class dbManage
                 .wasAcknowledged ();  
                 //*/
 		
-		// delete meeting
+		// delete room meeting
 					/*
 				   mongoCollectionRooms.updateOne(  
-		                new Document ("RoomNo","1001"),  
+		                new Document ("RoomNo","1003"),  
 		                new Document( "$pull", new Document("TimeBooked" ,  
 		                        new Document( "Host", "Hank"))))  
 		                .wasAcknowledged ();  

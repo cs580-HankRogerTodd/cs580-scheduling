@@ -1,11 +1,14 @@
 package cs580;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -28,7 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
 public class MyMeeting {
 
@@ -52,7 +55,7 @@ public class MyMeeting {
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
 	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
-	
+
 	public MyMeeting(String username) {
 		LoginUsername = username;
 		initialize();
@@ -62,6 +65,8 @@ public class MyMeeting {
 
 
 	private void initialize() {
+		String currentDirectory = System.getProperty("user.dir");
+		
 		frmMeetingManagement = new JFrame();
 		frmMeetingManagement.setTitle("Meeting Management");
 		frmMeetingManagement.setBounds(100, 100, 649, 301);
@@ -89,6 +94,7 @@ public class MyMeeting {
 					}
 					else 
 					{
+						MeetingDetail.setText(null);
 						MeetingDetail.append("Meeting has been Canceled");
 					}
 					
@@ -216,21 +222,29 @@ public class MyMeeting {
 		UpdateMeetingList.setBounds(333, 45, 134, 166);
 		frame.getContentPane().add(UpdateMeetingList);
 		*/
+		
+		//MeetingDetail = new JTextArea();//////////////////////////////
 		//MeetingDetail.setBounds(333, 59, 289, 166);
 		//frame.getContentPane().add(MeetingDetail);
 		
 		JLabel lblAcceptMeeting = new JLabel("Accept Meeting");
 		lblAcceptMeeting.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAcceptMeeting.setBounds(23, 17, 135, 16);
+		lblAcceptMeeting.setBounds(23, 17, 135, 21);
+		lblAcceptMeeting.setForeground(Color.WHITE);
+		lblAcceptMeeting.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmMeetingManagement.getContentPane().add(lblAcceptMeeting);
 		
 		JLabel lblMyMeeting = new JLabel("My Meeting");
 		lblMyMeeting.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMyMeeting.setBounds(185, 18, 152, 16);
+		lblMyMeeting.setBounds(185, 18, 152, 20);
+		lblMyMeeting.setForeground(Color.WHITE);
+		lblMyMeeting.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmMeetingManagement.getContentPane().add(lblMyMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
-		lblMeetingDetail.setBounds(422, 17, 98, 16);
+		lblMeetingDetail.setBounds(422, 17, 125, 21);
+		lblMeetingDetail.setForeground(Color.WHITE);
+		lblMeetingDetail.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmMeetingManagement.getContentPane().add(lblMeetingDetail);
 		
 		JButton btnDecline = new JButton("Decline");
@@ -267,7 +281,7 @@ public class MyMeeting {
 				        AcceptMeetinglistModel.remove(isSelected);
 				        MeetingDetail.setText(null);
 				        
-						JOptionPane.showMessageDialog(frmMeetingManagement, "Meeting DECLINE!");
+				        JOptionPane.showMessageDialog(frmMeetingManagement, "Meeting DECLINE!");
 					}
 					else
 					{	
@@ -313,7 +327,7 @@ public class MyMeeting {
 			public void actionPerformed(ActionEvent e) {
 				if(IntSelectMyMeeting == 0)
 				{
-					JOptionPane.showMessageDialog(frmMeetingManagement, "Please select a meeting!");
+					JOptionPane.showMessageDialog(frmMeetingManagement, "Pleace select a meeting!");
 					
 				}
 				else
@@ -376,6 +390,11 @@ public class MyMeeting {
 		
 		MeetingDetail = new JTextArea();
 		MeetingDetailS.setViewportView(MeetingDetail);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
+		lblNewLabel.setBounds(0, 0, 649, 279);
+		frmMeetingManagement.getContentPane().add(lblNewLabel);
 	}
 	
 	private void setMeetinglist()
@@ -389,19 +408,14 @@ public class MyMeeting {
 		{
 			Document MeetingElement = MeetingLists.get(j);
 			String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));  
+			
+			Integer IntMeetingID = Integer.valueOf(StringMeetingID);
+			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
 
-			if(MeetingElement.get("Respond").equals("A"))
+			if(MeetingElement.get("Respond").equals("A") && !myMeeting.getString("Host").equals(LoginUsername))
 			{
 				AcceptMeetinglistModel.addElement(StringMeetingID);
 			}
-			
-			//if(MeetingElement.get("Update").equals("1"))
-			//{
-			//	UpdateMeetinglistModel.addElement(StringMeetingID);
-			//}
-			
-			Integer IntMeetingID = Integer.valueOf(StringMeetingID);
-			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first(); 
 			
 			if(myMeeting!=null)
 			{
@@ -410,30 +424,6 @@ public class MyMeeting {
 					MyMeetinglistModel.addElement(StringMeetingID);
 				}
 			}
-		}
-		
+		}	
 	}
-	
-/*	
-	private void UserNoticed()
-	{
-		 mongoCollection.updateOne(  
-	                new Document ("Name",LoginUsername),  
-	                new Document( "$pull", new Document("Meeting" ,  
-	                        new Document( "MeetingID", IntSelectUpdateMeeting))))  
-	                .wasAcknowledged (); 
-		 
-		 BasicDBObject matchEmployee = new BasicDBObject();
- 		 matchEmployee.put( "Name", LoginUsername);
-
-	     BasicDBObject Employee_addressSpec = new BasicDBObject();
-	     Employee_addressSpec.put("MeetingID", IntSelectUpdateMeeting);
-	     Employee_addressSpec.put("Respond", "P");
-	     Employee_addressSpec.put("Update", "0");
-	
-	     BasicDBObject updateEmployee = new BasicDBObject();
-	     updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
-	     mongoCollection.updateMany( matchEmployee, updateEmployee );
-	    
-	}*/
 }

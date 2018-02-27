@@ -40,7 +40,10 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import java.awt.Font;
+
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
 public class PersonalCalendar {
 	
@@ -98,6 +101,8 @@ public class PersonalCalendar {
 
 
 	private void initialize() {
+		String currentDirectory = System.getProperty("user.dir");
+		
 		frmPersonalCalendar = new JFrame();
 		frmPersonalCalendar.setTitle("Personal Calendar");
 		frmPersonalCalendar.setBounds(100, 100, 612, 421);
@@ -105,7 +110,7 @@ public class PersonalCalendar {
 		frmPersonalCalendar.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(16, 55, 314, 275);
+		scrollPane.setBounds(17, 82, 314, 275);
 		frmPersonalCalendar.getContentPane().add(scrollPane);
 		
 ///++++++++++++++++++++++++++++++++++++++++		
@@ -157,7 +162,8 @@ public class PersonalCalendar {
 /////////////////////////////////////////////////////////////////////////////////////////  <<  month  >>
 /////////////////////////////////////////////////////////////////////////////////////////
 		JPanel panel = new JPanel();
-		panel.setBounds(48, 20, 244, 23);
+		panel.setBounds(17, 43, 314, 39);
+		//panel.setBackground(new Color(0,0,0,0));
 		frmPersonalCalendar.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
 		
@@ -212,7 +218,7 @@ public class PersonalCalendar {
 ///////////////////////////////////////////////////////////////////////////////////////// Left side detail information
 /////////////////////////////////////////////////////////////////////////////////////////
 		MeetingDetail = new JTextArea();
-		MeetingDetail.setBounds(353, 182, 231, 148);
+		MeetingDetail.setBounds(353, 205, 231, 125);
 		frmPersonalCalendar.getContentPane().add(MeetingDetail);
 		
 		MeetinglistModel = new DefaultListModel();
@@ -238,16 +244,17 @@ public class PersonalCalendar {
 									);
 			}
 		});
-		Meetinglist.setBounds(353, 56, 231, 118);
+		Meetinglist.setBounds(353, 56, 231, 111);
 		frmPersonalCalendar.getContentPane().add(Meetinglist);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(340, 342, 266, 39);
-		frmPersonalCalendar.getContentPane().add(panel_1);
-		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		JPanel NCbtnPanel = new JPanel();
+		NCbtnPanel.setBounds(340, 342, 266, 39);
+		NCbtnPanel.setBackground(new Color(0,0,0,0));
+		frmPersonalCalendar.getContentPane().add(NCbtnPanel);
+		NCbtnPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 						
 						JButton btnNotificationCenter = new JButton("Notification Center");
-						panel_1.add(btnNotificationCenter);
+						NCbtnPanel.add(btnNotificationCenter);
 						
 				btnNotificationCenter.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -278,7 +285,24 @@ public class PersonalCalendar {
 				///////////////////////////////////////////////////////////////////////////////////////// cancel button
 				/////////////////////////////////////////////////////////////////////////////////////////
 						ResizableButton btnCancel = new ResizableButton("Cancel");
-						panel_1.add(btnCancel);
+						NCbtnPanel.add(btnCancel);
+						
+						JLabel lblMeeting = new JLabel("Meeting");
+						lblMeeting.setBounds(439, 27, 77, 25);
+						lblMeeting.setForeground(Color.WHITE);
+						lblMeeting.setFont(new Font("Dialog", Font.BOLD, 16));
+						frmPersonalCalendar.getContentPane().add(lblMeeting);
+						
+						JLabel lblDetail = new JLabel("Meeting Information");
+						lblDetail.setBounds(387, 181, 176, 25);
+						lblDetail.setForeground(Color.WHITE);
+						lblDetail.setFont(new Font("Dialog", Font.BOLD, 16));
+						frmPersonalCalendar.getContentPane().add(lblDetail);
+						
+						JLabel lblNewLabel_1 = new JLabel("New label");
+						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
+						lblNewLabel_1.setBounds(0, 0, 612, 420);
+						frmPersonalCalendar.getContentPane().add(lblNewLabel_1);
 						btnCancel.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								ProfilePage profile = new ProfilePage(LoginUsername);
@@ -453,7 +477,7 @@ public class PersonalCalendar {
 					MeetingDay =  MeetingDateList.get(i+1);
 
 					if (currentMonth == MeetingMonth && IntRunningDay == MeetingDay) {
-						c.setBackground(Color.GREEN);
+						c.setBackground(Color.orange);
 						break;
 					}
 					

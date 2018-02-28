@@ -50,6 +50,7 @@ public class Notification {
 		userName = username;
 		initialize();
 		showPendingMeeting();
+		frmNotification.setLocationRelativeTo(null);
 		frmNotification.setVisible(true);
 	}
 

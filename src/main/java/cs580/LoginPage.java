@@ -56,6 +56,7 @@ public class LoginPage {
 	public LoginPage() {
 		App.setFonts();
 		initialize();
+		frmLoginPage.setLocationRelativeTo(null);
 		frmLoginPage.setVisible(true);
 	}
 

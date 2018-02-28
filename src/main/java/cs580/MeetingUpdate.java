@@ -51,6 +51,7 @@ public class MeetingUpdate {
 		MeetingID = meetingid;
 		initialize();
 		setUpMeetingDetail();
+		frmMeetingUpdate.setLocationRelativeTo(null);
 		frmMeetingUpdate.setVisible(true);
 	}
 

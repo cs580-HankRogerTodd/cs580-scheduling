@@ -90,7 +90,7 @@ public class TimeRoomSelection {
 		CalculateDate(currentMonth, selectedValue);
 		findAvailableTime();
 		initialize();
-		
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

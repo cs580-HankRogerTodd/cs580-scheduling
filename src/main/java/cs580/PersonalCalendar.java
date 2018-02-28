@@ -96,6 +96,7 @@ public class PersonalCalendar {
 		SeperateDate();
 		initialize();
 		setUpMeetingList();
+		frmPersonalCalendar.setLocationRelativeTo(null);
 		frmPersonalCalendar.setVisible(true);
 	}
 
@@ -238,8 +239,8 @@ public class PersonalCalendar {
 				
 				MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
 									 "Room: " + myMeeting.getString("Room") + "\n" +
-									 "Start time: " + myMeeting.getString("StartTime") + "\n" +
-									 "End Time: " + myMeeting.getString("EndTime") + "\n" +
+									 "Start time: " + myMeeting.getString("StartTime") + ":00"  + "\n" +
+									 "End Time: " + myMeeting.getString("EndTime") + ":00" +"\n" +
 									 "Respond: " +meetingRes.get(0).getString("Respond")
 									);
 			}
@@ -351,7 +352,7 @@ public class PersonalCalendar {
 	
 	private void SeperateDate()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", "Hank" )).first(); //get member
+		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first(); //get member
 		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 						//get meeting list
 		int MeetingListSize = MeetingLists.size(); 												//get meeting list size
 		MeetingDateList.clear();
@@ -391,7 +392,7 @@ public class PersonalCalendar {
 			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
 			
 			if(myMeeting.getString("Date").equals(Date)){
-				String outputInList = StringMeetingID + " " + myMeeting.getString("Host") + " " + myMeeting.getString("StartTime") + " - " +myMeeting.getString("EndTime");
+				String outputInList = StringMeetingID + " " + myMeeting.getString("Host") + " " + myMeeting.getString("StartTime") + ":00 - " +myMeeting.getString("EndTime") + ":00";
 				MeetinglistModel.addElement(outputInList);
 			}
 		}		

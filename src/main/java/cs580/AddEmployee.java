@@ -39,6 +39,7 @@ public class AddEmployee {
 	
 	public AddEmployee() {
 		initialize();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

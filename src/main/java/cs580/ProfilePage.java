@@ -55,6 +55,7 @@ public class ProfilePage {
 		LoginUsername = username;
 		initialize();
 		setAvailable();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

@@ -61,6 +61,7 @@ public class AdminPage {
 	public AdminPage() {
 		initModel();
 		initialize();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

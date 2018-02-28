@@ -60,6 +60,7 @@ public class ScheduleCalendar {
 		ExistMeeting = existmeeting;
 		ExistMeetingID = existmeetingID;
 		initialize();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 
@@ -95,7 +96,7 @@ public class ScheduleCalendar {
 					int IntSelectValue = (Integer) selectedValue;
 					//System.out.print(selectYear +" "+selectMonth+" "+IntSelectValue+"\n");
 					
-					if(selectYear==currentYear)// && selectMonth>=currentMonth && IntSelectValue>=currentDay)
+					if(selectYear==currentYear)
 					{
 						if(selectMonth>=currentMonth)
 						{

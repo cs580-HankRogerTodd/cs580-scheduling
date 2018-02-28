@@ -60,6 +60,7 @@ public class MyMeeting {
 		LoginUsername = username;
 		initialize();
 		setMeetinglist();
+		frmMeetingManagement.setLocationRelativeTo(null);
 		frmMeetingManagement.setVisible(true);
 	}
 

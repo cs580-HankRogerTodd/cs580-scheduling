@@ -193,8 +193,8 @@ public class ProfilePage {
 		rdbtnUnavailable.setBounds(404, 26, 89, 23);
 		frame.getContentPane().add(rdbtnUnavailable);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(currentDirectory + "/image/calendarB2.jpg"));
 		lblNewLabel_1.setBounds(-30, 0, 199, 328);
 		frame.getContentPane().add(lblNewLabel_1);
 		

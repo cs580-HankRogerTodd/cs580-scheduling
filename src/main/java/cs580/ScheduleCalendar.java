@@ -2,7 +2,7 @@ package cs580;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -10,7 +10,6 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 
 import customComponents.ResizableButton;
 
@@ -27,6 +26,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.SwingConstants;
 
 public class ScheduleCalendar {
 
@@ -38,21 +41,27 @@ public class ScheduleCalendar {
 	private int selectMonth = LocalDate.now().getMonthValue();
 	private int selectYear = LocalDate.now().getYear();
 	
-	private int currentMonth = LocalDate.now().getMonthValue();
-	private int currentYear = LocalDate.now().getYear();
-	private int currentDay = LocalDate.now().getDayOfMonth();
+	private final int currentMonth = LocalDate.now().getMonthValue();
+	private final int currentYear = LocalDate.now().getYear();
+	private final int currentDay = LocalDate.now().getDayOfMonth();
+	private int MeetingMonth;
+	private int MeetingDay;
 	
 	private final String DAYS_OF_WEEK[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 	private final String MONTHS[] = {"January", "February", "March", "April", "May", "June", "July",
 			"August", "September", "October", "November", "December"};
 	
+	private String RunningDay;	
 	
 	private DefaultListModel<String> Invitee;
 	private JLabel lblNewLabel;
 	private String LoginUsername;
 	private Boolean ExistMeeting;
 	private int ExistMeetingID;
-
+	
+	private Object selectedValue;
+	
+	private ArrayList<Integer> MeetingDateList;
 	
 	public ScheduleCalendar(DefaultListModel<String> listModelInvitee, String Username, Boolean existmeeting, int existmeetingID) {
 		Invitee = listModelInvitee;
@@ -66,22 +75,26 @@ public class ScheduleCalendar {
 
 
 	private void initialize() {
+		MeetingDateList = new ArrayList<Integer>();
 		
 		frame = new JFrame();
-		frame.setTitle("CS580 Scheduling - Group 7");
-		frame.setBounds(100, 100, 450, 440);
+		frame.setTitle("My Calendar");
+		frame.setBounds(100, 100, 500, 460);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		CustomRenderer customRenderer = new CustomRenderer();
+		customRenderer.setHorizontalAlignment(JLabel.CENTER);
+		
 		table = new JTable();
-		table.setShowGrid(false);
+		table.setGridColor(Color.LIGHT_GRAY);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(false);
 		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Object selectedValue = null;
+				selectedValue = null;
 				int row = table.rowAtPoint(arg0.getPoint()); // get row of current mouse cursor
 				int col = table.columnAtPoint(arg0.getPoint()); // get column of current mouse cursor
 				
@@ -96,36 +109,14 @@ public class ScheduleCalendar {
 					int IntSelectValue = (Integer) selectedValue;
 					//System.out.print(selectYear +" "+selectMonth+" "+IntSelectValue+"\n");
 					
-					if(selectYear==currentYear)
-					{
-						if(selectMonth>=currentMonth)
-						{
-							if(selectMonth>currentMonth)
-							{
-								JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(selectYear) + "/" + 
-										Integer.toString(selectMonth) + "/" + selectedValue);
-									
-								TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
-								frame.dispose();
-							}
-							else if(selectMonth == currentMonth && IntSelectValue>=currentDay)
-							{
-								JOptionPane.showMessageDialog(frame, "You selected " + Integer.toString(selectYear) + "/" + 
-										Integer.toString(selectMonth) + "/" + selectedValue);
-									
-								TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
-								frame.dispose();
-							}
-							else {
-								JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
-							}
-						}
+					if(selectYear==currentYear && (selectMonth>=currentMonth)) {
+						if(selectMonth>currentMonth) {}
+						else if(selectMonth == currentMonth && IntSelectValue>=currentDay) {}
 						else {
 							JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
 						}
 						
-					}
-					else {
+					} else {
 						JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
 					}
 				}
@@ -149,13 +140,11 @@ public class ScheduleCalendar {
 		frame.getContentPane().add(scrollPane);
 		
 		table.setModel(model);
+		table.setDefaultRenderer(Object.class, customRenderer);
 		table.setRowHeight(50);
 		table.setFillsViewportHeight(true);
 		table.setBounds(65, 54, 324, 168);
 		scrollPane.setViewportView(table);
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		table.setDefaultRenderer(Object.class, centerRenderer);
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
@@ -196,9 +185,41 @@ public class ScheduleCalendar {
 		button.setFont(ARIAL_FONT);
 		
 		lblNewLabel = new JLabel();
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel, BorderLayout.CENTER);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 11));
 		lblNewLabel.setText(MONTHS[selectMonth - 1] + " " + selectYear);
+		
+		ResizableButton selectBtn = new ResizableButton("Cancel");
+		
+		selectBtn.setText("Select");
+		selectBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int IntSelectValue = (Integer) selectedValue;
+				
+				if(selectYear==currentYear && (selectMonth>=currentMonth)) {
+					if(selectMonth>currentMonth) {	
+						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
+						frame.dispose();
+					}
+					else if(selectMonth == currentMonth && IntSelectValue>=currentDay) {
+						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
+						frame.dispose();
+					}
+					else {
+						JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+					}
+					
+				} else {
+					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
+				}
+			}
+		});
+		selectBtn.setFont(new Font("Arial", Font.BOLD, 11));
+		selectBtn.setBounds(231, 378, 89, 23);
+		frame.getContentPane().add(selectBtn);
+		
+		
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel tempModel = (DefaultTableModel) table.getModel();
@@ -217,8 +238,6 @@ public class ScheduleCalendar {
 			}
 		});
 	}
-	
-	
 	
 	
 	private Object[][] generateDaysInMonth(int year, int month) {
@@ -275,9 +294,36 @@ public class ScheduleCalendar {
 	//*****************************
 	// Getter and setters
 	//*****************************
-	public int getCurrentMonth() {return selectMonth;}
+	public int getCurrentSelectedMonth() {return selectMonth;}
 	
-	public void print(Object o) {
-		System.out.println(o);
+	// Set color
+	private class CustomRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		public Component getTableCellRendererComponent(JTable table, Object value,
+				boolean isSelected, boolean hasFocus, int row, int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			if(table.getValueAt(row, column) != null) {
+				int lengthOfMonth = YearMonth.of(selectYear, selectMonth).lengthOfMonth();
+				int selectDay = (Integer) table.getValueAt(row, column);
+				
+				System.out.println("Year: " + selectYear + ", Month: " + selectMonth + ", Day: "
+						+ selectDay);
+								
+				for(int i=0; i < lengthOfMonth; i++) {
+					if (selectYear < currentYear || 
+						(selectYear == currentYear && selectMonth < currentMonth) ||
+						(selectYear == currentYear && selectMonth == currentMonth && selectDay < currentDay)) {
+						c.setBackground(Color.LIGHT_GRAY);
+					}
+					else {
+						c.setBackground(table.getBackground());
+					}
+				}
+			}
+			
+			return c;
+		}
 	}
 }

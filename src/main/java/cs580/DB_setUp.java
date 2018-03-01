@@ -63,7 +63,7 @@ public class DB_setUp {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblProgram = new JLabel(" TH e SCHEDULing");
+		JLabel lblProgram = new JLabel("Scheduling CS580");
 		lblProgram.setBounds(6, 31, 318, 64);
 		lblProgram.setForeground(Color.WHITE);
 		lblProgram.setFont(new Font("Dialog", Font.BOLD, 33));

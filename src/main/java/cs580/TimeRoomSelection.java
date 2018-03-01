@@ -99,7 +99,7 @@ public class TimeRoomSelection {
 	{		
 		frame = new JFrame();
 		
-		frame.setBounds(100, 100, 500, 350);
+		frame.setBounds(100, 100, 510, 380);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		JLabel lblNewLabel = new JLabel("Date: 2018 / "+ currentMonth + "/" + selectedValue);

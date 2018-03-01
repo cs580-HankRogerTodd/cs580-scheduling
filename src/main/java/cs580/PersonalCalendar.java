@@ -75,8 +75,6 @@ public class PersonalCalendar {
 	private int MeetingDay;
 	
 	private String RunningDay;
-
-	
 	
 	private DefaultTableCellRenderer tcr;
 	private DefaultTableModel tablemodel;
@@ -106,7 +104,7 @@ public class PersonalCalendar {
 		
 		frmPersonalCalendar = new JFrame();
 		frmPersonalCalendar.setTitle("Personal Calendar");
-		frmPersonalCalendar.setBounds(100, 100, 612, 421);
+		frmPersonalCalendar.setBounds(100, 100, 620, 425);
 		frmPersonalCalendar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPersonalCalendar.getContentPane().setLayout(null);
 		
@@ -129,7 +127,7 @@ public class PersonalCalendar {
 		
 		table = new JTable(tablemodel);
 		table.setDefaultRenderer(Object.class, customRenderer);
-		table.setShowGrid(false);
+		table.setGridColor(Color.LIGHT_GRAY);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowSelectionAllowed(false);
 		table.setRowHeight(40);
@@ -300,7 +298,7 @@ public class PersonalCalendar {
 						lblDetail.setFont(new Font("Dialog", Font.BOLD, 16));
 						frmPersonalCalendar.getContentPane().add(lblDetail);
 						
-						JLabel lblNewLabel_1 = new JLabel("New label");
+						JLabel lblNewLabel_1 = new JLabel("");
 						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
 						lblNewLabel_1.setBounds(0, 0, 612, 420);
 						frmPersonalCalendar.getContentPane().add(lblNewLabel_1);

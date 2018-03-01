@@ -167,7 +167,7 @@ public class LoginPage {
 		JButton btnForgotPassword = new JButton("Forgot");
 		panel.add(btnForgotPassword);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
+		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
 		lblNewLabel_1.setBounds(-29, 0, 459, 278);
 		frmLoginPage.getContentPane().add(lblNewLabel_1);

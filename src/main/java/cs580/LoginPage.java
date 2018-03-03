@@ -67,7 +67,7 @@ public class LoginPage {
 		frmLoginPage = new JFrame();
 		//frmLoginPage.getContentPane().setBackground( Color.cyan );
 		frmLoginPage.setTitle("Login Page");
-		frmLoginPage.setBounds(200, 200, 425, 300);
+		frmLoginPage.setBounds(200, 200, 450, 330);
 		frmLoginPage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginPage.getContentPane().setLayout(null);
 		
@@ -105,16 +105,16 @@ public class LoginPage {
 		frmLoginPage.getRootPane().setDefaultButton(btnLogin); // Make enter key press login by default
 		//////////////////////////////////		
 				JButton btnForgotPassword = new JButton("Forgot");
-				btnForgotPassword.setBounds(324, 148, 66, 29);
+				btnForgotPassword.setBounds(333, 149, 86, 29);
 				frmLoginPage.getContentPane().add(btnForgotPassword);
 				//////////////////////////////////		
 						JButton btnReset = new JButton("Register");
 						btnReset.setBounds(324, 243, 95, 29);
 						frmLoginPage.getContentPane().add(btnReset);
 						
-						JLabel lblNewLabel_1 = new JLabel("New label");
+						JLabel lblNewLabel_1 = new JLabel("");
 						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-						lblNewLabel_1.setBounds(-29, 0, 459, 278);
+						lblNewLabel_1.setBounds(-29, 0, 475, 322);
 						frmLoginPage.getContentPane().add(lblNewLabel_1);
 						btnReset.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
@@ -130,7 +130,7 @@ public class LoginPage {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				password = txtPassword.getText();
+				password = String.valueOf(txtPassword.getPassword());
 				username = txtUsername.getText();
 				
 				try

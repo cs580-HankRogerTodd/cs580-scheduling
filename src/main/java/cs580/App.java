@@ -9,6 +9,8 @@ public class App {
 	private static final Font FONT_PLAIN = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 	private static final Font FOLD_BOLD = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 	
+	public static final String CURRENT_DIRECTORY = System.getProperty("user.dir");
+	
 	private static String LoginUsername = "Hank";
 	private static int MeetingID = 2;
 	

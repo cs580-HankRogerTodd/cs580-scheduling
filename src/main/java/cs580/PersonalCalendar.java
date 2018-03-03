@@ -104,7 +104,7 @@ public class PersonalCalendar {
 		
 		frmPersonalCalendar = new JFrame();
 		frmPersonalCalendar.setTitle("Personal Calendar");
-		frmPersonalCalendar.setBounds(100, 100, 610, 425);
+		frmPersonalCalendar.setBounds(100, 100, 610, 435);
 		frmPersonalCalendar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPersonalCalendar.getContentPane().setLayout(null);
 		

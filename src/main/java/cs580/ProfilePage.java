@@ -123,7 +123,7 @@ public class ProfilePage {
 			}
 		});
 //////////////////////////////////		
-		JButton btnNotification = new JButton("Notification Center");
+		JButton btnNotification = new JButton("<html><center>Notification Center</center></html>");
 		btnNotification.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panel.add(btnNotification);
 		btnNotification.addActionListener(new ActionListener() {

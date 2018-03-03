@@ -207,13 +207,13 @@ public class MemberSelection extends JFrame
 				
 				// search button
 				btnSearch = new JButton("Search");
-				btnSearch.setBounds(134, 370, 66, 35);
+				btnSearch.setBounds(145, 370, 76, 35);
 				contents.add(btnSearch);
 				setSpecificSize(btnSearch, new Dimension(80, 20));
 				
 				//Clear button
 				btnClear = new JButton("Clear");
-				btnClear.setBounds(199, 370, 57, 35);
+				btnClear.setBounds(231, 370, 76, 35);
 				contents.add(btnClear);
 				setSpecificSize(btnClear, new Dimension(80, 20));
 				
@@ -227,24 +227,23 @@ public class MemberSelection extends JFrame
 				
 				// Next button
 				btnNext = new JButton("Next >>");
-				btnNext.setBounds(746, 403, 98, 29);
+				btnNext.setBounds(733, 395, 100, 30);
 				contents.add(btnNext);
-				setSpecificSize(btnNext, new Dimension(80, 20));
 				
 				// Back button
 				btnBack = new JButton("Cancel");
-				btnBack.setBounds(653, 403, 97, 29);
+				btnBack.setBounds(627, 395, 100, 30);
 				contents.add(btnBack);
-				setSpecificSize(btnBack, new Dimension(80, 20));
 				
 				txtPerInfo = new JTextArea();
-				txtPerInfo.setBounds(648, 264, 172, 95);
+				txtPerInfo.setBounds(627, 269, 206, 95);
 				contents.add(txtPerInfo);
 				
-				lblNewLabel = new JLabel("New label");
+				lblNewLabel = new JLabel("");
 				lblNewLabel.setIcon(new ImageIcon(currentDirectory + "/image/calendarB2.jpg"));
 				lblNewLabel.setBounds(0, 0, 850, 438);
 				contents.add(lblNewLabel);
+				
 				btnBack.addActionListener(this);
 				btnNext.addActionListener(this);
 				btnClear.addActionListener(this);

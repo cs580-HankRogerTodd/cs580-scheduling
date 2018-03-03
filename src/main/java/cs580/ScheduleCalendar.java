@@ -80,7 +80,7 @@ public class ScheduleCalendar {
 		
 		frame = new JFrame();
 		frame.setTitle("My Calendar");
-		frame.setBounds(100, 100, 462, 440);
+		frame.setBounds(100, 100, 480, 440);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -136,7 +136,7 @@ public class ScheduleCalendar {
 		};
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 85, 386, 272);
+		scrollPane.setBounds(33, 58, 386, 272);
 		frame.getContentPane().add(scrollPane);
 		
 		table.setModel(model);
@@ -148,7 +148,7 @@ public class ScheduleCalendar {
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(373, 389, 89, 23);
+		btnCancel.setBounds(234, 341, 115, 35);
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -158,7 +158,7 @@ public class ScheduleCalendar {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(85, 32, 288, 36);
+		panel.setBounds(84, 11, 288, 36);
 		frame.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
 		
@@ -190,7 +190,7 @@ public class ScheduleCalendar {
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
 		lblNewLabel.setText(MONTHS[selectMonth - 1] + " " + selectYear);
 		
-		ResizableButton selectBtn = new ResizableButton("Cancel");
+		ResizableButton selectBtn = new ResizableButton("Select");
 		
 		selectBtn.setText("Select");
 		selectBtn.addActionListener(new ActionListener() {
@@ -216,11 +216,11 @@ public class ScheduleCalendar {
 			}
 		});
 		selectBtn.setFont(new Font("Arial", Font.BOLD, 11));
-		selectBtn.setBounds(172, 369, 113, 35);
+		selectBtn.setBounds(98, 341, 115, 35);
 		frame.getContentPane().add(selectBtn);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(App.CURRENT_DIRECTORY + "/image/calendarB2.jpg"));
 		lblNewLabel_1.setBounds(0, 0, 462, 418);
 		frame.getContentPane().add(lblNewLabel_1);
 		

@@ -16,7 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
@@ -33,7 +35,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import javax.swing.ImageIcon;
-
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 
 public class TimeRoomSelection {
@@ -45,6 +48,7 @@ public class TimeRoomSelection {
 	
 	private int[] AvailableTimeArray;
 	private int currentMonth;
+	private int currentYear;
 	private int IntUserStartTime;
 	private int IntUserEndTime;
 	private int BookedStartTime;
@@ -62,8 +66,10 @@ public class TimeRoomSelection {
 	private JTextField StartTimeText;
 	private JTextField EndTimeText;
 	
-	JTextArea AvailableRoomText;
-	JTextArea AvailableTimeText;
+	private JTextArea AvailableRoomText;
+	private DefaultListModel<String> listModel;
+	private JList<String> AvailableTimeText;
+	private JScrollPane AvailableTimeScrollpane;
 	
 	private Boolean ExistMeeting;
 	private int ExistMeetingID;
@@ -82,10 +88,11 @@ public class TimeRoomSelection {
 
 	
 
-	public TimeRoomSelection(DefaultListModel<String> listModelInvitee, String Username, int InputcurrentMonth, Object inputSelectedValue, Boolean existmeeting, int existmeetingid) {
+	public TimeRoomSelection(DefaultListModel<String> listModelInvitee, String Username, int inputYear, int InputcurrentMonth, Object inputSelectedValue, Boolean existmeeting, int existmeetingid) {
 		Invitee = listModelInvitee;
 		LoginUsername = Username;
 		currentMonth = InputcurrentMonth;
+		this.currentYear = inputYear;
 		selectedValue = inputSelectedValue;
 		ExistMeeting = existmeeting;
 		ExistMeetingID = existmeetingid;
@@ -105,10 +112,12 @@ public class TimeRoomSelection {
 		frame.setBounds(100, 100, 493, 380);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		JLabel lblNewLabel = new JLabel("2018 / "+ currentMonth + " / " + selectedValue);
-		lblNewLabel.setBounds(158, 6, 210, 31);
+		
+		JLabel lblNewLabel = new JLabel("Selected Date: "+ currentYear + "/"+ currentMonth + "/" + selectedValue);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(0, 6, 477, 31);
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 20));
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Available Time");
@@ -147,7 +156,7 @@ public class TimeRoomSelection {
 		
 /////// Button //////////////////////////////////////////////////////
 		JButton btnFinsh = new JButton("Finish");
-		btnFinsh.setBounds(404, 323, 83, 29);
+		btnFinsh.setBounds(364, 296, 90, 30);
 		frame.getContentPane().add(btnFinsh);
 		btnFinsh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -167,7 +176,7 @@ public class TimeRoomSelection {
 		});	
 //////////////////////////////////		
 		JButton btnNewButton_1 = new JButton("Cancel");
-		btnNewButton_1.setBounds(317, 323, 92, 29);
+		btnNewButton_1.setBounds(262, 296, 90, 30);
 		frame.getContentPane().add(btnNewButton_1);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -176,8 +185,8 @@ public class TimeRoomSelection {
 			}
 		});
 //////////////////////////////////	
-		JButton btnFindRoom = new JButton("Refresh Room");
-		btnFindRoom.setBounds(289, 222, 120, 37);
+		JButton btnFindRoom = new JButton("Find Room");
+		btnFindRoom.setBounds(299, 227, 120, 37);
 		frame.getContentPane().add(btnFindRoom);
 		btnFindRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -195,13 +204,16 @@ public class TimeRoomSelection {
 				
 				else//(UserStartTime != null && UserEndTime != null)
 				{
-
-					IntUserStartTime = Integer.valueOf((String) UserStartTime);
-					IntUserEndTime = Integer.valueOf((String) UserEndTime);
+					String firstTwoDigitsStartTime = UserStartTime.substring(0, 2);
+					String firstTwoDigitsEndTime = UserEndTime.substring(0, 2);
+					
+					IntUserStartTime = Integer.parseInt(firstTwoDigitsStartTime);
+					IntUserEndTime = Integer.parseInt(firstTwoDigitsEndTime);
 				
 					if(IntUserStartTime > IntUserEndTime || IntUserStartTime == IntUserEndTime)
 					{
-						JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
+						JOptionPane.showMessageDialog(frame, "The meeting's start time must occur "
+								+ "before the meeting's end time.");
 						RoomlistModel.clear();
 						StartTimeText.setText(null);
 						EndTimeText.setText(null);
@@ -233,25 +245,70 @@ public class TimeRoomSelection {
 		});
 
 ////// Available Time List ////////////////////////////////////////////
-		AvailableTimeText = new JTextArea();
-		AvailableTimeText.setBounds(53, 79, 175, 173);
-		frame.getContentPane().add(AvailableTimeText);
+		listModel = new DefaultListModel<String>();
+		AvailableTimeText = new JList<String>(listModel);
+		AvailableTimeText.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		AvailableTimeScrollpane = new JScrollPane();
+		AvailableTimeScrollpane.setViewportView(AvailableTimeText);
+		AvailableTimeScrollpane.setBounds(53, 79, 175, 173);
+		
+		frame.getContentPane().add(AvailableTimeScrollpane);
 		for(int i=0; i<17; i++) 
 		{
 			if(AvailableTimeArray[i] == 0)
 			{
 				int endtime = i+1;
-				AvailableTimeText.append(" "+ i + ":00 - " + endtime + ":00" + "\n");
+				listModel.addElement(i + ":00 - " + endtime + ":00");
 			}
 		}
+			
+		AvailableTimeText.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
+					String selectedTime = AvailableTimeText.getSelectedValue();
+					String startTime2, endTime2;
+					
+					if (selectedTime != null) {
+						// 7:00 - 8:00, etc
+						if (selectedTime.length() <= 11) {
+							startTime2 = selectedTime.substring(0,4);
+							endTime2 = selectedTime.substring(7, 11);
+						}
+						// 9:00 - 10:00
+						else if (selectedTime.length() == 12) {
+							// Check if it's NOT 23:00 - 0:00
+							if (selectedTime.substring(0, 2).compareToIgnoreCase("23") != 0) {
+								startTime2 = selectedTime.substring(0, 4);
+								endTime2 = selectedTime.substring(7, 12);
+							}
+							// 23:00 - 0:00
+							else {
+								startTime2 = selectedTime.substring(0, 5);
+								endTime2 = selectedTime.substring(8, 12);
+							}
+						}
+						// 13:00 - 14:00, etc.
+						else {
+							startTime2 = selectedTime.substring(0, 5);
+							endTime2 = selectedTime.substring(8, 13);
+						}
+						
+						StartTimeText.setText(startTime2);
+						EndTimeText.setText(endTime2);
+					}
+				}
+			}
+		});
 /////// Available Room List ////////////////////////////////////////////////////
-		RoomlistModel = new DefaultListModel();
-		ListRoom = new JList(RoomlistModel);
-		ListRoom.setBounds(262, 77, 175, 133);
+		RoomlistModel = new DefaultListModel<String>();
+		ListRoom = new JList<String>(RoomlistModel);
+		ListRoom.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ListRoom.setBounds(262, 77, 192, 133);
         frame.getContentPane().add(ListRoom);
         
-        JLabel lblNewLabel_4 = new JLabel("New label");
-        lblNewLabel_4.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+        JLabel lblNewLabel_4 = new JLabel("");
+        lblNewLabel_4.setIcon(new ImageIcon(App.CURRENT_DIRECTORY + "/image/calendarB2.jpg"));
         lblNewLabel_4.setBounds(0, 0, 493, 358);
         frame.getContentPane().add(lblNewLabel_4);
         ListRoom.addMouseListener(new MouseAdapter() {

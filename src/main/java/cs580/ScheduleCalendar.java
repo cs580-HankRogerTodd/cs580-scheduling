@@ -94,8 +94,7 @@ public class ScheduleCalendar {
 		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				selectedValue = null;
+			public void mousePressed(MouseEvent arg0) {
 				int row = table.rowAtPoint(arg0.getPoint()); // get row of current mouse cursor
 				int col = table.columnAtPoint(arg0.getPoint()); // get column of current mouse cursor
 				
@@ -105,18 +104,11 @@ public class ScheduleCalendar {
 				
 				// Making sure the selected date is not null
 				if (selectedValue != null) {
-					//System.out.print(currentYear +" "+currentMonth+" "+currentDay+"\n");
 					int IntSelectValue = (Integer) selectedValue;
-					//System.out.print(selectYear +" "+selectMonth+" "+IntSelectValue+"\n");
 					
-					if(selectYear==currentYear && (selectMonth>=currentMonth)) {
-						if(selectMonth>currentMonth) {}
-						else if(selectMonth == currentMonth && IntSelectValue>=currentDay) {}
-						else {
-							JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
-						}
-						
-					} else {
+					boolean isSelectionValid = checkForValidDateSelection(selectYear, selectMonth, IntSelectValue);
+					
+					if (!isSelectionValid) {
 						JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
 					}
 				}
@@ -148,7 +140,7 @@ public class ScheduleCalendar {
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(234, 341, 115, 35);
+		btnCancel.setBounds(98, 341, 115, 35);
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -195,28 +187,25 @@ public class ScheduleCalendar {
 		selectBtn.setText("Select");
 		selectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int IntSelectValue = (Integer) selectedValue;
-				
-				if(selectYear==currentYear && (selectMonth>=currentMonth)) {
-					if(selectMonth>currentMonth) {	
-						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
-						frame.dispose();
-					}
-					else if(selectMonth == currentMonth && IntSelectValue>=currentDay) {
-						TimeRoomSelection TimeRoomSelect = new TimeRoomSelection(Invitee, LoginUsername, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
+				if (selectedValue != null) {
+					int IntSelectValue = (Integer) selectedValue;
+					boolean isSelectionValid = checkForValidDateSelection(selectYear, selectMonth, IntSelectValue);
+					
+					if (isSelectionValid) {
+						new TimeRoomSelection(Invitee, LoginUsername, selectYear, selectMonth, selectedValue, ExistMeeting, ExistMeetingID) ;
 						frame.dispose();
 					}
 					else {
 						JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
 					}
-					
-				} else {
+				}
+				else {
 					JOptionPane.showMessageDialog(frame, "You selected an invalid date. Please select another date.");
 				}
 			}
 		});
 		selectBtn.setFont(new Font("Arial", Font.BOLD, 11));
-		selectBtn.setBounds(98, 341, 115, 35);
+		selectBtn.setBounds(234, 341, 115, 35);
 		frame.getContentPane().add(selectBtn);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
@@ -294,6 +283,31 @@ public class ScheduleCalendar {
 		}
 		
 		return days;
+	}
+	
+	/**
+	 * Check if the select year is valid for a meeting.
+	 * @author Tho Nguyen
+	 * @param selectYear1 - The selected year
+	 * @param selectMonth1 - The selected month
+	 * @param selectDay1 - The selected day
+	 * @return True if the date is valid, False otherwise.
+	 */
+	private boolean checkForValidDateSelection(int selectYear1, int selectMonth1, int selectDay1) {
+		if (selectYear1 > currentYear) {
+			return true;
+		}
+		else if(selectYear1 == currentYear) {
+			if(selectMonth1 > currentMonth) {	
+				return true;
+			}
+			
+			else if(selectMonth1 == currentMonth && selectDay1 >= currentDay) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	//*****************************

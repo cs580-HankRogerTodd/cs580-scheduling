@@ -100,7 +100,7 @@ public class LoginPage {
 		
 ////////Button ////////////////////////////////////////////////////////		
 		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(193, 185, 130, 32);
+		btnLogin.setBounds(193, 192, 130, 32);
 		frmLoginPage.getContentPane().add(btnLogin);
 		frmLoginPage.getRootPane().setDefaultButton(btnLogin); // Make enter key press login by default
 		//////////////////////////////////		

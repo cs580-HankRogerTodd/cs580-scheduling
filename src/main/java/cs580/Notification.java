@@ -22,8 +22,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.event.ActionListener;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import javax.swing.ListModel;
+import javax.swing.ImageIcon;
 
 public class Notification {
 
@@ -57,12 +60,12 @@ public class Notification {
 	private void initialize() {
 		frmNotification = new JFrame();
 		frmNotification.setTitle("Notification");
-		frmNotification.setBounds(100, 100, 500, 315);
+		frmNotification.setBounds(100, 100, 530, 312);
 		frmNotification.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmNotification.getContentPane().setLayout(null);
 		
 		final JTextArea MeetingDetail = new JTextArea();
-		MeetingDetail.setBounds(298, 46, 150, 177);
+		MeetingDetail.setBounds(351, 55, 150, 166);
 		frmNotification.getContentPane().add(MeetingDetail);
 
 /// Meeting list table //////////////////////////////////////////////////////// 
@@ -89,7 +92,7 @@ public class Notification {
 				}
 			}
 		});
-		Meetinglist.setBounds(6, 46, 148, 177);
+		Meetinglist.setBounds(24, 55, 143, 166);
 		frmNotification.getContentPane().add(Meetinglist);
 		
 // Button ////////////////////////////////////////////////////////		
@@ -128,7 +131,7 @@ public class Notification {
 				}
 			}
 		});
-		btnAccept.setBounds(6, 235, 75, 29);
+		btnAccept.setBounds(19, 230, 75, 38);
 		frmNotification.getContentPane().add(btnAccept);
 		
 /////////////////////////////////////////////////
@@ -168,7 +171,7 @@ public class Notification {
 				}
 			}
 		});
-		btnDecline.setBounds(79, 235, 75, 29);
+		btnDecline.setBounds(95, 230, 75, 38);
 		frmNotification.getContentPane().add(btnDecline);
 		
 /////////////////////////////////////////////////
@@ -179,18 +182,22 @@ public class Notification {
 				frmNotification.dispose();
 			}
 		});
-		btnCancel.setBounds(351, 235, 97, 29);
+		btnCancel.setBounds(427, 255, 97, 29);
 		frmNotification.getContentPane().add(btnCancel);
 
 /////////////////////////////////////////////////
 		JLabel lblNewMeeting = new JLabel("Pending");
 		lblNewMeeting.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewMeeting.setBounds(6, 18, 148, 16);
+		lblNewMeeting.setBounds(19, 15, 148, 29);
+		lblNewMeeting.setForeground(Color.WHITE);
+		lblNewMeeting.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmNotification.getContentPane().add(lblNewMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
 		lblMeetingDetail.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMeetingDetail.setBounds(298, 18, 150, 16);
+		lblMeetingDetail.setBounds(351, 19, 150, 20);
+		lblMeetingDetail.setForeground(Color.WHITE);
+		lblMeetingDetail.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmNotification.getContentPane().add(lblMeetingDetail);
 		
 		UpdateMeetinglistModel = new DefaultListModel();
@@ -244,13 +251,20 @@ public class Notification {
 				}
 			}
 		});
-		UpdateMeetingList.setBounds(164, 46, 124, 177);
+		UpdateMeetingList.setBounds(188, 55, 143, 166);
 		frmNotification.getContentPane().add(UpdateMeetingList);
 		
 		JLabel lblUpdate = new JLabel("Meeting Update");
 		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUpdate.setBounds(164, 18, 124, 16);
+		lblUpdate.setBounds(188, 19, 143, 20);
+		lblUpdate.setForeground(Color.WHITE);
+		lblUpdate.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmNotification.getContentPane().add(lblUpdate);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+		lblNewLabel.setBounds(0, 0, 530, 290);
+		frmNotification.getContentPane().add(lblNewLabel);
 	}
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////

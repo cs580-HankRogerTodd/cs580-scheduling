@@ -70,7 +70,7 @@ public class MyMeeting {
 		
 		frmMeetingManagement = new JFrame();
 		frmMeetingManagement.setTitle("Meeting Management");
-		frmMeetingManagement.setBounds(100, 100, 649, 301);
+		frmMeetingManagement.setBounds(100, 100, 530, 312);
 		frmMeetingManagement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMeetingManagement.getContentPane().setLayout(null);
 		
@@ -102,7 +102,7 @@ public class MyMeeting {
 				}
 			}
 		});
-		AcceptMeetinglist.setBounds(23, 45, 135, 166);
+		AcceptMeetinglist.setBounds(24, 51, 143, 166);
 		frmMeetingManagement.getContentPane().add(AcceptMeetinglist);
 		
 		MyMeetinglistModel = new DefaultListModel();
@@ -121,7 +121,8 @@ public class MyMeeting {
 										 "Room: " + myMeeting.getString("Room") + "\n" +
 										 "Date: " + myMeeting.getString("Date") + "\n" +
 										 "Start time: " + myMeeting.getString("StartTime") + "\n" +
-										 "End Time: " + myMeeting.getString("EndTime") + "\n"+ "\n" +
+										 "End Time: " + myMeeting.getString("EndTime") + "\n"+
+										 "-------------------"+ "\n"+
 										 "Member: "+ "\n"
 										);
 					
@@ -166,7 +167,7 @@ public class MyMeeting {
 				}
 			}
 		});
-		MyMeetinglist.setBounds(185, 45, 152, 166);
+		MyMeetinglist.setBounds(188, 51, 143, 166);
 		frmMeetingManagement.getContentPane().add(MyMeetinglist);
 		/*
 		UpdateMeetinglistModel = new DefaultListModel();
@@ -230,7 +231,7 @@ public class MyMeeting {
 		
 		JLabel lblAcceptMeeting = new JLabel("Accept Meeting");
 		lblAcceptMeeting.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAcceptMeeting.setBounds(23, 17, 135, 21);
+		lblAcceptMeeting.setBounds(31, 18, 135, 21);
 		lblAcceptMeeting.setForeground(Color.WHITE);
 		lblAcceptMeeting.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmMeetingManagement.getContentPane().add(lblAcceptMeeting);
@@ -243,7 +244,7 @@ public class MyMeeting {
 		frmMeetingManagement.getContentPane().add(lblMyMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
-		lblMeetingDetail.setBounds(422, 17, 125, 21);
+		lblMeetingDetail.setBounds(365, 17, 125, 21);
 		lblMeetingDetail.setForeground(Color.WHITE);
 		lblMeetingDetail.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmMeetingManagement.getContentPane().add(lblMeetingDetail);
@@ -292,7 +293,7 @@ public class MyMeeting {
 				}
 			}
 		});
-		btnDecline.setBounds(23, 222, 135, 29);
+		btnDecline.setBounds(24, 233, 135, 29);
 		frmMeetingManagement.getContentPane().add(btnDecline);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -302,7 +303,7 @@ public class MyMeeting {
 				frmMeetingManagement.dispose();
 			}
 		});
-		btnCancel.setBounds(505, 223, 117, 29);
+		btnCancel.setBounds(438, 255, 86, 29);
 		frmMeetingManagement.getContentPane().add(btnCancel);
 		
 		JButton btnUpdate = new JButton("Update");
@@ -320,7 +321,7 @@ public class MyMeeting {
 				
 			}
 		});
-		btnUpdate.setBounds(185, 222, 79, 29);
+		btnUpdate.setBounds(186, 233, 79, 29);
 		frmMeetingManagement.getContentPane().add(btnUpdate);
 		
 		JButton MeetCancel = new JButton("Delete");
@@ -382,11 +383,11 @@ public class MyMeeting {
 
 			}
 		});
-		MeetCancel.setBounds(258, 222, 79, 29);
+		MeetCancel.setBounds(259, 233, 79, 29);
 		frmMeetingManagement.getContentPane().add(MeetCancel);
 		
 		JScrollPane MeetingDetailS = new JScrollPane();
-		MeetingDetailS.setBounds(351, 45, 270, 166);
+		MeetingDetailS.setBounds(352, 51, 160, 166);
 		frmMeetingManagement.getContentPane().add(MeetingDetailS);
 		
 		MeetingDetail = new JTextArea();
@@ -394,7 +395,7 @@ public class MyMeeting {
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-		lblNewLabel.setBounds(0, 0, 649, 279);
+		lblNewLabel.setBounds(0, 0, 530, 291);
 		frmMeetingManagement.getContentPane().add(lblNewLabel);
 	}
 	

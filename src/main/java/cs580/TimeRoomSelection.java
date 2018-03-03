@@ -1,6 +1,8 @@
 package cs580;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -30,6 +32,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import javax.swing.ImageIcon;
 
 
 
@@ -99,42 +102,52 @@ public class TimeRoomSelection {
 	{		
 		frame = new JFrame();
 		
-		frame.setBounds(100, 100, 510, 380);
+		frame.setBounds(100, 100, 493, 380);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		JLabel lblNewLabel = new JLabel("Date: 2018 / "+ currentMonth + "/" + selectedValue);
-		lblNewLabel.setBounds(6, 6, 203, 31);
+		JLabel lblNewLabel = new JLabel("2018 / "+ currentMonth + " / " + selectedValue);
+		lblNewLabel.setBounds(158, 6, 210, 31);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 25));
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Available Time");
-		lblNewLabel_1.setBounds(89, 37, 120, 16);
+		lblNewLabel_1.setBounds(78, 51, 129, 26);
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Available Room");
-		lblNewLabel_2.setBounds(317, 37, 120, 16);
+		lblNewLabel_2.setBounds(289, 49, 130, 26);
+		lblNewLabel_2.setForeground(Color.WHITE);
+		lblNewLabel_2.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Start Time: ");
-		lblNewLabel_3.setBounds(55, 239, 95, 16);
+		lblNewLabel_3.setBounds(53, 271, 92, 16);
+		lblNewLabel_3.setForeground(Color.WHITE);
+		lblNewLabel_3.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblNewLabel_3);
 		
-		JLabel lblEndTime = new JLabel("End Time: ");
-		lblEndTime.setBounds(55, 267, 79, 16);
+		JLabel lblEndTime = new JLabel(" End Time: ");
+		lblEndTime.setBounds(53, 299, 95, 16);
+		lblEndTime.setForeground(Color.WHITE);
+		lblEndTime.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblEndTime);
 		
 		StartTimeText = new JTextField();
-		StartTimeText.setBounds(152, 234, 79, 26);
+		StartTimeText.setBounds(146, 267, 82, 26);
 		frame.getContentPane().add(StartTimeText);
 		StartTimeText.setColumns(10);
 		
 		EndTimeText = new JTextField();
-		EndTimeText.setBounds(152, 262, 79, 26);
+		EndTimeText.setBounds(146, 295, 82, 26);
 		frame.getContentPane().add(EndTimeText);
 		EndTimeText.setColumns(10);
 		
 /////// Button //////////////////////////////////////////////////////
 		JButton btnFinsh = new JButton("Finish");
-		btnFinsh.setBounds(386, 272, 95, 29);
+		btnFinsh.setBounds(404, 323, 83, 29);
 		frame.getContentPane().add(btnFinsh);
 		btnFinsh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -154,7 +167,7 @@ public class TimeRoomSelection {
 		});	
 //////////////////////////////////		
 		JButton btnNewButton_1 = new JButton("Cancel");
-		btnNewButton_1.setBounds(284, 272, 102, 29);
+		btnNewButton_1.setBounds(317, 323, 92, 29);
 		frame.getContentPane().add(btnNewButton_1);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,8 +176,8 @@ public class TimeRoomSelection {
 			}
 		});
 //////////////////////////////////	
-		JButton btnFindRoom = new JButton("Find Room");
-		btnFindRoom.setBounds(141, 293, 102, 29);
+		JButton btnFindRoom = new JButton("Refresh Room");
+		btnFindRoom.setBounds(289, 222, 120, 37);
 		frame.getContentPane().add(btnFindRoom);
 		btnFindRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -221,21 +234,26 @@ public class TimeRoomSelection {
 
 ////// Available Time List ////////////////////////////////////////////
 		AvailableTimeText = new JTextArea();
-		AvailableTimeText.setBounds(55, 65, 175, 162);
+		AvailableTimeText.setBounds(53, 79, 175, 173);
 		frame.getContentPane().add(AvailableTimeText);
 		for(int i=0; i<17; i++) 
 		{
 			if(AvailableTimeArray[i] == 0)
 			{
 				int endtime = i+1;
-				AvailableTimeText.append(i + ":00 - " + endtime + ":00" + "\n");
+				AvailableTimeText.append(" "+ i + ":00 - " + endtime + ":00" + "\n");
 			}
 		}
 /////// Available Room List ////////////////////////////////////////////////////
 		RoomlistModel = new DefaultListModel();
 		ListRoom = new JList(RoomlistModel);
-		ListRoom.setBounds(284, 65, 175, 82);
+		ListRoom.setBounds(262, 77, 175, 133);
         frame.getContentPane().add(ListRoom);
+        
+        JLabel lblNewLabel_4 = new JLabel("New label");
+        lblNewLabel_4.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+        lblNewLabel_4.setBounds(0, 0, 493, 358);
+        frame.getContentPane().add(lblNewLabel_4);
         ListRoom.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) 
@@ -309,7 +327,7 @@ public class TimeRoomSelection {
 				{
 					 if(MeetingElement.getString("Respond").equals("A"))
 						{
-							System.out.print("BBB");
+				
 							String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
 							int IntMeetingID = Integer.parseInt(StringMeetingID);
 							// use meeting ID to get meeting detail
@@ -322,7 +340,6 @@ public class TimeRoomSelection {
 							
 							if (convertedToString.equals(Four_Digit_Date)==true)
 							{
-								System.out.print("CCC");
 								int IntStartTime = Integer.valueOf((String) myMeeting.get("StartTime"));
 								int IntEndTime = Integer.valueOf((String) myMeeting.get("EndTime"));
 								

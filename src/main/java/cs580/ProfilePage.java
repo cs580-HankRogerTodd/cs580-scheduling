@@ -38,6 +38,10 @@ public class ProfilePage {
 	private JPanel contentPane;
 	private JRadioButton rdbtnUnavailable;
 	private JRadioButton rdbtnAvailable;
+	private Object University;
+	private Object Department;
+	private Object Degree;
+	private Object Byear;
 	
 
 //////Database Setup /////////////////////////////////////////////////////////////////////////
@@ -71,17 +75,24 @@ public class ProfilePage {
 		String currentDirectory = System.getProperty("user.dir");
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(255, 46, 137, 161);
+		lblNewLabel.setBounds(255, 32, 137, 161);
 		ImageIcon MyImage = new ImageIcon(currentDirectory + "/image/"+ LoginUsername + ".jpg");
 		Image img = MyImage.getImage();
 		Image NewImg = img.getScaledInstance(lblNewLabel.getWidth(), lblNewLabel.getHeight(), Image.SCALE_SMOOTH);  
 		ImageIcon image = new ImageIcon(NewImg);
 		lblNewLabel.setIcon(image);
 		frame.getContentPane().add(lblNewLabel);
+		 
+		Document myMeeting = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+		University = myMeeting.get("University") ;
+		Department = myMeeting.get("Department");
+		Byear = myMeeting.get("Byear") ;
+		Degree = myMeeting.get("Degree");
 		
 		JTextPane txtpnCaliforniaState = new JTextPane();
-		txtpnCaliforniaState.setText("                  "+LoginUsername + "\n\n         Cal Poly Pomona\n          Master student\n        Computer Science\n");
-		txtpnCaliforniaState.setBounds(240, 219, 177, 89);
+		//txtpnCaliforniaState.setText("                  "+LoginUsername + "\n\n         "+University+"\n          "
+		//		+Degree+"\n        "+Department+"\n                  "+Byear);
+		txtpnCaliforniaState.setBounds(236, 205, 177, 106);
 		frame.getContentPane().add(txtpnCaliforniaState);
 		
 		JPanel panel = new JPanel();
@@ -199,7 +210,7 @@ public class ProfilePage {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel ImgBackground = new JLabel("");
-		ImgBackground.setBounds(249, 40, 150, 174);
+		ImgBackground.setBounds(248, 26, 150, 174);
 		ImgBackground.setOpaque(true);
 		ImgBackground.setBackground(new Color(255, 255, 224));
 		frame.getContentPane().add(ImgBackground);

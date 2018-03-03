@@ -1,7 +1,9 @@
 package cs580;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -28,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 
 public class AdminPage {
 
@@ -53,10 +56,8 @@ public class AdminPage {
 	MongoDatabase mongoDatabase = mongoClient.getDatabase("580Schedule");
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
+	MongoCollection<Document> mongoCollectionAdmin = mongoDatabase.getCollection("AdminUse");
 ///////////////////////////////////////////////////////////////////////////////////////
-	
-	
-
 
 	public AdminPage() {
 		initModel();
@@ -82,16 +83,8 @@ public class AdminPage {
 		JButton btnAddEmployee = new JButton("Add");
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(EmployeeList.getSelectedValue()!=null)
-				{
 					AddEmployee AddEmp = new AddEmployee();
 					frame.dispose();
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(frame, "Please select an Employee!");
-				}
-				
 			}
 		});
 		btnAddEmployee.setBounds(55, 215, 75, 29);
@@ -117,7 +110,7 @@ public class AdminPage {
 				
 			}
 		});
-		btnDeleteEmployee.setBounds(124, 215, 75, 29);
+		btnDeleteEmployee.setBounds(127, 215, 75, 29);
 		frame.getContentPane().add(btnDeleteEmployee);
 		
 		JScrollPane scrollPane_Room = new JScrollPane(RoomList);
@@ -146,8 +139,9 @@ public class AdminPage {
 		JButton btnDeleteRoom = new JButton("Delete");
 		btnDeleteRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(EmployeeList.getSelectedValue()!=null)
+				if(RoomList.getSelectedValue()!=null)
 				{
+					System.out.print(String.valueOf(RoomList.getSelectedValue()));
 					Bson filter = new Document("RoomNo", String.valueOf(RoomList.getSelectedValue()));
 					mongoCollectionRooms.deleteOne(filter);
 			
@@ -157,7 +151,7 @@ public class AdminPage {
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(frame, "Please select an Employee!");
+					JOptionPane.showMessageDialog(frame, "Please select a Room!");
 				}
 			}
 		});
@@ -165,11 +159,15 @@ public class AdminPage {
 		frame.getContentPane().add(btnDeleteRoom);
 		
 		JLabel lblEmployee = new JLabel("Employee");
-		lblEmployee.setBounds(96, 17, 61, 16);
+		lblEmployee.setBounds(85, 17, 86, 16);
+		lblEmployee.setForeground(Color.WHITE);
+		lblEmployee.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblEmployee);
 		
 		JLabel lblRoom = new JLabel("Room");
 		lblRoom.setBounds(298, 17, 61, 16);
+		lblRoom.setForeground(Color.WHITE);
+		lblRoom.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblRoom);
 		
 		JButton btnCancel = new JButton("Logout");
@@ -181,6 +179,31 @@ public class AdminPage {
 		});
 		btnCancel.setBounds(352, 263, 92, 29);
 		frame.getContentPane().add(btnCancel);
+		
+		JButton btnApplicationForm = new JButton("Application Form");
+		btnApplicationForm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(mongoCollectionAdmin.count()==0)
+				{
+					JOptionPane.showMessageDialog(frame, "No Application!");
+				}
+				else
+				{
+					AdminAppForm mytest = new AdminAppForm();
+					frame.dispose();
+				}
+				
+			}
+		});
+		btnApplicationForm.setBounds(207, 263, 152, 29);
+		frame.getContentPane().add(btnApplicationForm);
+		
+		String currentDirectory = System.getProperty("user.dir");
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
+		lblNewLabel.setBounds(0, 0, 450, 298);
+		frame.getContentPane().add(lblNewLabel);
 
 	}
 	
@@ -219,5 +242,4 @@ public class AdminPage {
 			listModelRoom.addElement(r);
 		}
 	}
-
 }

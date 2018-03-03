@@ -30,6 +30,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
 public class ScheduleCalendar {
 
@@ -79,7 +80,7 @@ public class ScheduleCalendar {
 		
 		frame = new JFrame();
 		frame.setTitle("My Calendar");
-		frame.setBounds(100, 100, 500, 460);
+		frame.setBounds(100, 100, 462, 440);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -105,7 +106,6 @@ public class ScheduleCalendar {
 				// Making sure the selected date is not null
 				if (selectedValue != null) {
 					//System.out.print(currentYear +" "+currentMonth+" "+currentDay+"\n");
-					
 					int IntSelectValue = (Integer) selectedValue;
 					//System.out.print(selectYear +" "+selectMonth+" "+IntSelectValue+"\n");
 					
@@ -136,7 +136,7 @@ public class ScheduleCalendar {
 		};
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 65, 386, 300);
+		scrollPane.setBounds(36, 85, 386, 272);
 		frame.getContentPane().add(scrollPane);
 		
 		table.setModel(model);
@@ -148,7 +148,7 @@ public class ScheduleCalendar {
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(333, 378, 89, 23);
+		btnCancel.setBounds(373, 389, 89, 23);
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -158,7 +158,7 @@ public class ScheduleCalendar {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(91, 30, 275, 23);
+		panel.setBounds(85, 32, 288, 36);
 		frame.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
 		
@@ -187,7 +187,7 @@ public class ScheduleCalendar {
 		lblNewLabel = new JLabel();
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(lblNewLabel, BorderLayout.CENTER);
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 11));
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
 		lblNewLabel.setText(MONTHS[selectMonth - 1] + " " + selectYear);
 		
 		ResizableButton selectBtn = new ResizableButton("Cancel");
@@ -216,8 +216,13 @@ public class ScheduleCalendar {
 			}
 		});
 		selectBtn.setFont(new Font("Arial", Font.BOLD, 11));
-		selectBtn.setBounds(231, 378, 89, 23);
+		selectBtn.setBounds(172, 369, 113, 35);
 		frame.getContentPane().add(selectBtn);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon("/Users/hanktsou/Documents/GitHub/cs580-scheduling/image/calendarB2.jpg"));
+		lblNewLabel_1.setBounds(0, 0, 462, 418);
+		frame.getContentPane().add(lblNewLabel_1);
 		
 		
 		button.addActionListener(new ActionListener() {
@@ -296,6 +301,7 @@ public class ScheduleCalendar {
 	//*****************************
 	public int getCurrentSelectedMonth() {return selectMonth;}
 	
+	
 	// Set color
 	private class CustomRenderer extends DefaultTableCellRenderer {
 		private static final long serialVersionUID = 1L;
@@ -307,9 +313,6 @@ public class ScheduleCalendar {
 			if(table.getValueAt(row, column) != null) {
 				int lengthOfMonth = YearMonth.of(selectYear, selectMonth).lengthOfMonth();
 				int selectDay = (Integer) table.getValueAt(row, column);
-				
-				System.out.println("Year: " + selectYear + ", Month: " + selectMonth + ", Day: "
-						+ selectDay);
 								
 				for(int i=0; i < lengthOfMonth; i++) {
 					if (selectYear < currentYear || 

@@ -29,7 +29,8 @@ public class dbManage
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
 	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
-	
+	MongoCollection<Document> mongoCollectionAdmin = mongoDatabase.getCollection("AdminUse");
+
 	// Size of Database = System.out.print(mongoCollectionMeeting.count());
 
 	public dbManage()
@@ -46,21 +47,31 @@ public class dbManage
 		String username = "Hank";
 		
 		// Delete Member
-		/* 
-        Bson filter = new Document("Name", username);
-		mongoCollection.deleteOne(filter);
+		/*
+		for(int i = 0; i<10; i++)
+		{
+			Bson filter = new Document("Availability", "Available");
+			mongoCollection.deleteOne(filter);
+		}
+        
 		//*/
 		
 		// New Member
 		/* 
 		ArrayList< DBObject > array = new ArrayList< DBObject >();
-		Document document = new Document("EID", "0");
-		document.append("Name", username);
-		document.append("Availability", "Available");
-		document.append("Username", username);
-		document.append("Password", "0000");
-		document.append("Meeting", array);
-		mongoCollection.insertOne(document);
+			Document document = new Document("EID", 0);
+			document.append("Name", "Admin");
+			document.append("Availability", "Available");
+			document.append("Username", "Admin");
+			document.append("Password", "null");
+			
+			document.append("University", "Cal Poly Pomona");
+			document.append("Department", "Computer Science");
+			document.append("Degree", "Staff");
+			document.append("Byear", "1978");
+			
+			document.append("Meeting", array);
+			mongoCollection.insertOne(document);
 		//*/
         
 		// Add meeting detail in meeting array
@@ -86,7 +97,7 @@ public class dbManage
 		/*
 		for(int i =1; i<9; i++)
 		{
-			Bson filter = new Document("MeetingID", i);
+			Bson filter = new Document("Host", "Todd");
 		    mongoCollectionMeeting.deleteOne(filter);
 		}
 			
@@ -177,9 +188,9 @@ public class dbManage
 		// delete room meeting
 					/*
 				   mongoCollectionRooms.updateOne(  
-		                new Document ("RoomNo","1003"),  
+		                new Document ("RoomNo","1002"),  
 		                new Document( "$pull", new Document("TimeBooked" ,  
-		                        new Document( "Host", "Hank"))))  
+		                        new Document( "Host", "Todd"))))  
 		                .wasAcknowledged ();  
 		                //*/
 
@@ -210,6 +221,12 @@ public class dbManage
         MongoCursor<Document> mongoCursorRoom = findIterableRoom.iterator();  
         while(mongoCursorRoom.hasNext()){  
            System.out.println(mongoCursorRoom.next());  
+        } 
+        System.out.print("\n");
+        FindIterable<Document> findIterableAdmin = mongoCollectionAdmin.find();
+        MongoCursor<Document> mongoCursorAdmin = findIterableAdmin.iterator();  
+        while(mongoCursorAdmin.hasNext()){  
+           System.out.println(mongoCursorAdmin.next());  
         } 
         //*/
         

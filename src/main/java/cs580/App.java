@@ -15,16 +15,16 @@ public class App {
 	
 	public static void main( String[] args ) {
 		
-		
-		DB_setUp ProgramStart = new DB_setUp();
-		//LoginPage login = new LoginPage();
+		//DB_setUp ProgramStart = new DB_setUp();
+		LoginPage login = new LoginPage();
+		//MemberSelection memslct = new MemberSelection("Hank");
 		//MyMeeting Mymet = new MyMeeting();
 		//AdminPage mytest = new AdminPage();
+		//AdminAppForm mytest = new AdminAppForm();
 		//AddEmployee AdEmp = new AddEmployee();
 		//AddMember AdMem = new AddMember(LoginUsername, MeetingID);
-		//dbManage member = new dbManage();
+		dbManage member = new dbManage();
 		
-	
 	}
 	
 	public static void setFonts() {

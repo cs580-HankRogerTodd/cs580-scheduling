@@ -104,12 +104,12 @@ public class PersonalCalendar {
 		
 		frmPersonalCalendar = new JFrame();
 		frmPersonalCalendar.setTitle("Personal Calendar");
-		frmPersonalCalendar.setBounds(100, 100, 620, 425);
+		frmPersonalCalendar.setBounds(100, 100, 610, 425);
 		frmPersonalCalendar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPersonalCalendar.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(17, 82, 314, 275);
+		scrollPane.setBounds(20, 82, 314, 260);
 		frmPersonalCalendar.getContentPane().add(scrollPane);
 		
 ///++++++++++++++++++++++++++++++++++++++++		
@@ -161,7 +161,7 @@ public class PersonalCalendar {
 /////////////////////////////////////////////////////////////////////////////////////////  <<  month  >>
 /////////////////////////////////////////////////////////////////////////////////////////
 		JPanel panel = new JPanel();
-		panel.setBounds(17, 43, 314, 39);
+		panel.setBounds(20, 43, 314, 39);
 		//panel.setBackground(new Color(0,0,0,0));
 		frmPersonalCalendar.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
@@ -235,11 +235,12 @@ public class PersonalCalendar {
 				Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
 				List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
 				
-				MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
-									 "Room: " + myMeeting.getString("Room") + "\n" +
-									 "Start time: " + myMeeting.getString("StartTime") + ":00"  + "\n" +
-									 "End Time: " + myMeeting.getString("EndTime") + ":00" +"\n" +
-									 "Respond: " +meetingRes.get(0).getString("Respond")
+				MeetingDetail.append(" Host: " + myMeeting.getString("Host") + "\n" +
+									 " Room: " + myMeeting.getString("Room") + "\n\n" +
+									 " Start Time: " + myMeeting.getString("StartTime") + ":00"  + "\n" +
+									 " End Time: " + myMeeting.getString("EndTime") + ":00" +"\n" +
+									 "-----------------------------"+"\n" +
+									 " Respond: " +meetingRes.get(0).getString("Respond")
 									);
 			}
 		});
@@ -247,7 +248,7 @@ public class PersonalCalendar {
 		frmPersonalCalendar.getContentPane().add(Meetinglist);
 		
 		JPanel NCbtnPanel = new JPanel();
-		NCbtnPanel.setBounds(340, 342, 266, 39);
+		NCbtnPanel.setBounds(338, 358, 266, 39);
 		NCbtnPanel.setBackground(new Color(0,0,0,0));
 		frmPersonalCalendar.getContentPane().add(NCbtnPanel);
 		NCbtnPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -300,7 +301,7 @@ public class PersonalCalendar {
 						
 						JLabel lblNewLabel_1 = new JLabel("");
 						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-						lblNewLabel_1.setBounds(0, 0, 612, 420);
+						lblNewLabel_1.setBounds(0, 0, 610, 403);
 						frmPersonalCalendar.getContentPane().add(lblNewLabel_1);
 						btnCancel.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {

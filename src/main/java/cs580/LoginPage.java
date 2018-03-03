@@ -74,40 +74,58 @@ public class LoginPage {
 		JLabel lblNewLabel = new JLabel("Login");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 30));
-		lblNewLabel.setBounds(169, 21, 96, 37);
+		lblNewLabel.setBounds(165, 29, 96, 37);
 		frmLoginPage.getContentPane().add(lblNewLabel);
 		
 		JLabel lblUsername = new JLabel("User Name");
 		lblUsername.setForeground(Color.WHITE);
 		lblUsername.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblUsername.setBounds(97, 86, 88, 21);
+		lblUsername.setBounds(93, 94, 88, 21);
 		frmLoginPage.getContentPane().add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setForeground(Color.WHITE);
 		lblPassword.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblPassword.setBounds(97, 136, 88, 32);
+		lblPassword.setBounds(102, 144, 79, 32);
 		frmLoginPage.getContentPane().add(lblPassword);
 		
 		txtUsername = new JTextField();
-		txtUsername.setBounds(197, 84, 130, 26);
+		txtUsername.setBounds(193, 92, 130, 26);
 		frmLoginPage.getContentPane().add(txtUsername);
 		txtUsername.setColumns(10);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(197, 140, 130, 26);
+		txtPassword.setBounds(193, 148, 130, 26);
 		frmLoginPage.getContentPane().add(txtPassword);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(75, 197, 288, 45);
-		panel.setBackground(new Color(0,0,0,0));
-		frmLoginPage.getContentPane().add(panel);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 		
 ////////Button ////////////////////////////////////////////////////////		
 		JButton btnLogin = new JButton("Login");
-		panel.add(btnLogin);
+		btnLogin.setBounds(193, 185, 130, 32);
+		frmLoginPage.getContentPane().add(btnLogin);
 		frmLoginPage.getRootPane().setDefaultButton(btnLogin); // Make enter key press login by default
+		//////////////////////////////////		
+				JButton btnForgotPassword = new JButton("Forgot");
+				btnForgotPassword.setBounds(324, 148, 66, 29);
+				frmLoginPage.getContentPane().add(btnForgotPassword);
+				//////////////////////////////////		
+						JButton btnReset = new JButton("Register");
+						btnReset.setBounds(324, 243, 95, 29);
+						frmLoginPage.getContentPane().add(btnReset);
+						
+						JLabel lblNewLabel_1 = new JLabel("New label");
+						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
+						lblNewLabel_1.setBounds(-29, 0, 459, 278);
+						frmLoginPage.getContentPane().add(lblNewLabel_1);
+						btnReset.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								ApplicationForm Apply= new ApplicationForm();
+							}
+						});
+				btnForgotPassword.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JOptionPane.showMessageDialog(null, "Pleace Contact Admin to Reset Your Password");
+					}
+				});
 		
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -123,6 +141,12 @@ public class LoginPage {
 						{
 							frmLoginPage.dispose();
 							AdminPage Admin = new AdminPage();
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Login Error");
+							txtPassword.setText(null);
+							txtUsername.setText(null);
 						}
 					}
 					else
@@ -152,28 +176,6 @@ public class LoginPage {
 					txtUsername.setText(null);
 				}
 				
-			}
-		});
-//////////////////////////////////		
-		JButton btnReset = new JButton("Reset");
-		panel.add(btnReset);
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtUsername.setText(null);
-				txtPassword.setText(null);
-			}
-		});
-//////////////////////////////////		
-		JButton btnForgotPassword = new JButton("Forgot");
-		panel.add(btnForgotPassword);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-		lblNewLabel_1.setBounds(-29, 0, 459, 278);
-		frmLoginPage.getContentPane().add(lblNewLabel_1);
-		btnForgotPassword.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Pleace Contact Admin to Reset Your Password");
 			}
 		});
 //////////////////////////////////

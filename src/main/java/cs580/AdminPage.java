@@ -34,7 +34,7 @@ import javax.swing.ImageIcon;
 
 public class AdminPage {
 
-	private JFrame frame;
+	private JFrame frmAdminProfilePage;
 	private JList EmployeeList;
 	private JList RoomList;
 	private JLabel lblListEmployee;
@@ -62,8 +62,8 @@ public class AdminPage {
 	public AdminPage() {
 		initModel();
 		initialize();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		frmAdminProfilePage.setLocationRelativeTo(null);
+		frmAdminProfilePage.setVisible(true);
 		NewApplication();
 	}
 
@@ -72,24 +72,25 @@ public class AdminPage {
 		EmployeeList = new JList<String>(listModelEmployee);
 		RoomList = new JList<String>(listModelRoom);
 		
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 320);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmAdminProfilePage = new JFrame();
+		frmAdminProfilePage.setTitle("Admin Profile Page");
+		frmAdminProfilePage.setBounds(100, 100, 450, 340);
+		frmAdminProfilePage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmAdminProfilePage.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane_Emp = new JScrollPane(EmployeeList);
 		scrollPane_Emp.setBounds(45, 45, 164, 165);
-		frame.getContentPane().add(scrollPane_Emp);
+		frmAdminProfilePage.getContentPane().add(scrollPane_Emp);
 		
 		JButton btnAddEmployee = new JButton("Add");
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					AddEmployee AddEmp = new AddEmployee();
-					frame.dispose();
+					frmAdminProfilePage.dispose();
 			}
 		});
 		btnAddEmployee.setBounds(55, 215, 70, 29);
-		frame.getContentPane().add(btnAddEmployee);
+		frmAdminProfilePage.getContentPane().add(btnAddEmployee);
 		
 		JButton btnDeleteEmployee = new JButton("Delete");
 		btnDeleteEmployee.addActionListener(new ActionListener() {
@@ -98,7 +99,7 @@ public class AdminPage {
 				{
 					if(String.valueOf(EmployeeList.getSelectedValue()).equals("Admin"))
 					{
-						JOptionPane.showMessageDialog(frame, "Admin Can not delete!");
+						JOptionPane.showMessageDialog(frmAdminProfilePage, "Admin Can not delete!");
 					}
 					else
 					{
@@ -107,23 +108,23 @@ public class AdminPage {
 				
 						listModelEmployee.remove(EmployeeList.getSelectedIndex());
 						
-						JOptionPane.showMessageDialog(frame, "Employee Delete!");
+						JOptionPane.showMessageDialog(frmAdminProfilePage, "Employee Delete!");
 					}
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(frame, "Please select an Employee!");
+					JOptionPane.showMessageDialog(frmAdminProfilePage, "Please select an Employee!");
 				}
 				
 				
 			}
 		});
 		btnDeleteEmployee.setBounds(127, 215, 75, 29);
-		frame.getContentPane().add(btnDeleteEmployee);
+		frmAdminProfilePage.getContentPane().add(btnDeleteEmployee);
 		
 		JScrollPane scrollPane_Room = new JScrollPane(RoomList);
 		scrollPane_Room.setBounds(243, 45, 160, 165);
-		frame.getContentPane().add(scrollPane_Room);
+		frmAdminProfilePage.getContentPane().add(scrollPane_Room);
 		
 		JButton btnAddRoom = new JButton("Add");
 		btnAddRoom.addActionListener(new ActionListener() {
@@ -138,11 +139,11 @@ public class AdminPage {
 				
 				listModelRoom.addElement(RoomNo);
 				
-				JOptionPane.showMessageDialog(frame, "Room Add");
+				JOptionPane.showMessageDialog(frmAdminProfilePage, "Room Add");
 			}
 		});
 		btnAddRoom.setBounds(253, 215, 70, 29);
-		frame.getContentPane().add(btnAddRoom);
+		frmAdminProfilePage.getContentPane().add(btnAddRoom);
 		
 		JButton btnDeleteRoom = new JButton("Delete");
 		btnDeleteRoom.addActionListener(new ActionListener() {
@@ -155,63 +156,63 @@ public class AdminPage {
 			
 					listModelRoom.remove(RoomList.getSelectedIndex());
 					
-					JOptionPane.showMessageDialog(frame, "Room Delete!");
+					JOptionPane.showMessageDialog(frmAdminProfilePage, "Room Delete!");
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(frame, "Please select a Room!");
+					JOptionPane.showMessageDialog(frmAdminProfilePage, "Please select a Room!");
 				}
 			}
 		});
 		btnDeleteRoom.setBounds(324, 215, 75, 29);
-		frame.getContentPane().add(btnDeleteRoom);
+		frmAdminProfilePage.getContentPane().add(btnDeleteRoom);
 		
 		JLabel lblEmployee = new JLabel("Employee");
 		lblEmployee.setBounds(85, 17, 86, 16);
 		lblEmployee.setForeground(Color.WHITE);
 		lblEmployee.setFont(new Font("Dialog", Font.BOLD, 16));
-		frame.getContentPane().add(lblEmployee);
+		frmAdminProfilePage.getContentPane().add(lblEmployee);
 		
 		JLabel lblRoom = new JLabel("Room");
 		lblRoom.setBounds(298, 17, 61, 16);
 		lblRoom.setForeground(Color.WHITE);
 		lblRoom.setFont(new Font("Dialog", Font.BOLD, 16));
-		frame.getContentPane().add(lblRoom);
+		frmAdminProfilePage.getContentPane().add(lblRoom);
 		
 		JButton btnCancel = new JButton("Logout");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginPage login = new LoginPage();
-				frame.dispose();
+				frmAdminProfilePage.dispose();
 			}
 		});
-		btnCancel.setBounds(352, 263, 92, 29);
-		frame.getContentPane().add(btnCancel);
+		btnCancel.setBounds(334, 263, 92, 29);
+		frmAdminProfilePage.getContentPane().add(btnCancel);
 		
 		JButton btnApplicationForm = new JButton("Application Form");
 		btnApplicationForm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(mongoCollectionAdmin.count()==0)
 				{
-					JOptionPane.showMessageDialog(frame, "No Application!");
+					JOptionPane.showMessageDialog(frmAdminProfilePage, "No Application!");
 				}
 				else
 				{
 					AdminAppForm mytest = new AdminAppForm();
-					frame.dispose();
+					frmAdminProfilePage.dispose();
 				}
 				
 			}
 		});
-		btnApplicationForm.setBounds(207, 263, 152, 29);
-		frame.getContentPane().add(btnApplicationForm);
+		btnApplicationForm.setBounds(172, 263, 152, 29);
+		frmAdminProfilePage.getContentPane().add(btnApplicationForm);
 		
 		String currentDirectory = System.getProperty("user.dir");
 		
-		JLabel lblNewLabel = new JLabel("New label");
+		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
 		lblNewLabel.setBounds(0, 0, 450, 298);
-		frame.getContentPane().add(lblNewLabel);
+		frmAdminProfilePage.getContentPane().add(lblNewLabel);
 
 	}
 	
@@ -255,7 +256,7 @@ public class AdminPage {
 	{
 		if(mongoCollectionAdmin.count()!=0)
 		{
-			JOptionPane.showMessageDialog(frame, "You have new application!");
+			JOptionPane.showMessageDialog(frmAdminProfilePage, "You have new application!");
 		}
 		
 	}

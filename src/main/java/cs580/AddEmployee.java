@@ -90,17 +90,17 @@ public class AddEmployee {
 		frame.getContentPane().add(lblPassword);
 		
 		txtEployeeName = new JTextField();
-		txtEployeeName.setBounds(124, 53, 130, 26);
+		txtEployeeName.setBounds(124, 53, 170, 27);
 		frame.getContentPane().add(txtEployeeName);
 		txtEployeeName.setColumns(10);
 		
 		txtUserName = new JTextField();
-		txtUserName.setBounds(124, 92, 130, 26);
+		txtUserName.setBounds(124, 92, 170, 27);
 		frame.getContentPane().add(txtUserName);
 		txtUserName.setColumns(10);
 		
 		txtPassword = new JTextField();
-		txtPassword.setBounds(124, 131, 130, 26);
+		txtPassword.setBounds(124, 131, 170, 27);
 		frame.getContentPane().add(txtPassword);
 		txtPassword.setColumns(10);
 		
@@ -174,7 +174,7 @@ public class AddEmployee {
 				
 			}
 		});
-		btnComfirm.setBounds(174, 353, 80, 29);
+		btnComfirm.setBounds(124, 330, 80, 30);
 		frame.getContentPane().add(btnComfirm);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -184,12 +184,12 @@ public class AddEmployee {
 				frame.dispose();
 			}
 		});
-		btnCancel.setBounds(248, 353, 66, 29);
+		btnCancel.setBounds(214, 330, 80, 30);
 		frame.getContentPane().add(btnCancel);
 		
 		textUniversity = new JTextField();
 		textUniversity.setText("Cal Poly Pomona");
-		textUniversity.setBounds(124, 169, 130, 26);
+		textUniversity.setBounds(124, 169, 170, 27);
 		frame.getContentPane().add(textUniversity);
 		textUniversity.setColumns(10);
 		
@@ -218,7 +218,7 @@ public class AddEmployee {
 		frame.getContentPane().add(lblBday);
 		
 		CBoxDepartment = new JComboBox(Department);
-		CBoxDepartment.setBounds(124, 207, 168, 27);
+		CBoxDepartment.setBounds(124, 207, 170, 27);
 		CBoxDepartment.setSelectedItem(null);
 		frame.getContentPane().add(CBoxDepartment);
 		
@@ -228,7 +228,7 @@ public class AddEmployee {
 		frame.getContentPane().add(CBoxDegree);
 		
 		CBoxByear = new JComboBox(Byear);
-		CBoxByear.setBounds(124, 286, 104, 27);
+		CBoxByear.setBounds(124, 286, 170, 27);
 		CBoxByear.setSelectedItem(null);
 		frame.getContentPane().add(CBoxByear);
 		
@@ -240,7 +240,7 @@ public class AddEmployee {
 		
 		String currentDirectory = System.getProperty("user.dir");
 		
-		JLabel lblNewLabel = new JLabel("New label");
+		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
 		lblNewLabel.setBounds(0, 0, 320, 388);
 		frame.getContentPane().add(lblNewLabel);

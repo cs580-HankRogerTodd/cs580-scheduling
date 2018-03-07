@@ -243,7 +243,7 @@ public class ApplicationForm {
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-		lblNewLabel.setBounds(0, 0, 320, 428);
+		lblNewLabel.setBounds(0, 0, 320, 388);
 		frame.getContentPane().add(lblNewLabel);
 	}
 }

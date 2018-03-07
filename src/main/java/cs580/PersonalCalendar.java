@@ -104,7 +104,7 @@ public class PersonalCalendar {
 		
 		frmPersonalCalendar = new JFrame();
 		frmPersonalCalendar.setTitle("Personal Calendar");
-		frmPersonalCalendar.setBounds(100, 100, 610, 435);
+		frmPersonalCalendar.setBounds(100, 100, 610, 428);
 		frmPersonalCalendar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPersonalCalendar.getContentPane().setLayout(null);
 		
@@ -301,7 +301,7 @@ public class PersonalCalendar {
 						
 						JLabel lblNewLabel_1 = new JLabel("");
 						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-						lblNewLabel_1.setBounds(0, 0, 610, 403);
+						lblNewLabel_1.setBounds(0, 0, 610, 406);
 						frmPersonalCalendar.getContentPane().add(lblNewLabel_1);
 						btnCancel.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {

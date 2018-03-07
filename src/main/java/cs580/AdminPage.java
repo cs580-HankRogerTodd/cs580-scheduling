@@ -64,6 +64,7 @@ public class AdminPage {
 		initialize();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		NewApplication();
 	}
 
 	private void initialize() {
@@ -87,7 +88,7 @@ public class AdminPage {
 					frame.dispose();
 			}
 		});
-		btnAddEmployee.setBounds(55, 215, 75, 29);
+		btnAddEmployee.setBounds(55, 215, 70, 29);
 		frame.getContentPane().add(btnAddEmployee);
 		
 		JButton btnDeleteEmployee = new JButton("Delete");
@@ -95,12 +96,19 @@ public class AdminPage {
 			public void actionPerformed(ActionEvent e) {
 				if(EmployeeList.getSelectedValue()!=null)
 				{
-					Bson filter = new Document("Name", String.valueOf(EmployeeList.getSelectedValue()));
-					mongoCollection.deleteOne(filter);
-			
-					listModelEmployee.remove(EmployeeList.getSelectedIndex());
-					
-					JOptionPane.showMessageDialog(frame, "Employee Delete!");
+					if(String.valueOf(EmployeeList.getSelectedValue()).equals("Admin"))
+					{
+						JOptionPane.showMessageDialog(frame, "Admin Can not delete!");
+					}
+					else
+					{
+						Bson filter = new Document("Name", String.valueOf(EmployeeList.getSelectedValue()));
+						mongoCollection.deleteOne(filter);
+				
+						listModelEmployee.remove(EmployeeList.getSelectedIndex());
+						
+						JOptionPane.showMessageDialog(frame, "Employee Delete!");
+					}
 				}
 				else
 				{
@@ -241,5 +249,14 @@ public class AdminPage {
 		{
 			listModelRoom.addElement(r);
 		}
+	}
+	
+	private void NewApplication()
+	{
+		if(mongoCollectionAdmin.count()!=0)
+		{
+			JOptionPane.showMessageDialog(frame, "You have new application!");
+		}
+		
 	}
 }

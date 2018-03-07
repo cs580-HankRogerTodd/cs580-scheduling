@@ -124,7 +124,8 @@ public class MeetingUpdate {
 		frmMeetingUpdate.getContentPane().add(btnAdd);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddMember AdMem = new AddMember(LoginUsername, MeetingID);
+				AddMember AdMem = new AddMember(LoginUsername, MeetingID, ExistMeeting);
+				frmMeetingUpdate.dispose();
 			}
 		});
 		

@@ -1,6 +1,8 @@
 package cs580;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -62,11 +64,13 @@ public class AdminAppForm {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblApplicationForm = new JLabel("APPLICATION FORM");
-		lblApplicationForm.setBounds(210, 6, 129, 16);
+		lblApplicationForm.setBounds(211, 16, 170, 16);
+		lblApplicationForm.setForeground(Color.WHITE);
+		lblApplicationForm.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblApplicationForm);
 		
 		AppForm = new JTextArea();
-		AppForm.setBounds(159, 35, 256, 185);
+		AppForm.setBounds(160, 45, 256, 185);
 		frame.getContentPane().add(AppForm);
 		
 		JButton btnAccept = new JButton("Accept");
@@ -107,7 +111,7 @@ public class AdminAppForm {
 				
 			}
 		});
-		btnAccept.setBounds(196, 232, 87, 29);
+		btnAccept.setBounds(197, 242, 87, 29);
 		frame.getContentPane().add(btnAccept);
 		
 		JButton btnReject = new JButton("Reject");
@@ -131,7 +135,7 @@ public class AdminAppForm {
 				}
 			}
 		});
-		btnReject.setBounds(293, 232, 87, 29);
+		btnReject.setBounds(294, 242, 87, 29);
 		frame.getContentPane().add(btnReject);
 		
 		Employeelist = new JList(listModelEmployee);
@@ -160,7 +164,7 @@ public class AdminAppForm {
 				}
 			}
 		});
-		Employeelist.setBounds(25, 35, 111, 185);
+		Employeelist.setBounds(26, 79, 111, 151);
 		frame.getContentPane().add(Employeelist);
 		
 		JButton btnBack = new JButton("Back");
@@ -170,10 +174,16 @@ public class AdminAppForm {
 				frame.dispose();
 			}
 		});
-		btnBack.setBounds(363, 271, 87, 29);
+		btnBack.setBounds(375, 271, 75, 29);
 		frame.getContentPane().add(btnBack);
 		
 		String currentDirectory = System.getProperty("user.dir");
+		
+		JLabel lblApplicant = new JLabel("Applicant");
+		lblApplicant.setBounds(41, 51, 82, 16);
+		lblApplicant.setForeground(Color.WHITE);
+		lblApplicant.setFont(new Font("Dialog", Font.BOLD, 16));
+		frame.getContentPane().add(lblApplicant);
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));

@@ -114,7 +114,7 @@ public class LoginPage {
 						
 						JLabel lblNewLabel_1 = new JLabel("");
 						lblNewLabel_1.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-						lblNewLabel_1.setBounds(-29, 0, 475, 322);
+						lblNewLabel_1.setBounds(-29, 0, 479, 322);
 						frmLoginPage.getContentPane().add(lblNewLabel_1);
 						btnReset.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {

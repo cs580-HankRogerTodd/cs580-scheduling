@@ -70,7 +70,7 @@ public class MyMeeting {
 		
 		frmMeetingManagement = new JFrame();
 		frmMeetingManagement.setTitle("Meeting Management");
-		frmMeetingManagement.setBounds(100, 100, 530, 312);
+		frmMeetingManagement.setBounds(100, 100, 545, 312);
 		frmMeetingManagement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMeetingManagement.getContentPane().setLayout(null);
 		
@@ -244,7 +244,7 @@ public class MyMeeting {
 		frmMeetingManagement.getContentPane().add(lblMyMeeting);
 		
 		JLabel lblMeetingDetail = new JLabel("Meeting Detail");
-		lblMeetingDetail.setBounds(365, 17, 125, 21);
+		lblMeetingDetail.setBounds(379, 18, 125, 21);
 		lblMeetingDetail.setForeground(Color.WHITE);
 		lblMeetingDetail.setFont(new Font("Dialog", Font.BOLD, 16));
 		frmMeetingManagement.getContentPane().add(lblMeetingDetail);
@@ -303,7 +303,7 @@ public class MyMeeting {
 				frmMeetingManagement.dispose();
 			}
 		});
-		btnCancel.setBounds(438, 255, 86, 29);
+		btnCancel.setBounds(453, 255, 86, 29);
 		frmMeetingManagement.getContentPane().add(btnCancel);
 		
 		JButton btnUpdate = new JButton("Update");
@@ -387,7 +387,7 @@ public class MyMeeting {
 		frmMeetingManagement.getContentPane().add(MeetCancel);
 		
 		JScrollPane MeetingDetailS = new JScrollPane();
-		MeetingDetailS.setBounds(352, 51, 160, 166);
+		MeetingDetailS.setBounds(352, 51, 172, 166);
 		frmMeetingManagement.getContentPane().add(MeetingDetailS);
 		
 		MeetingDetail = new JTextArea();
@@ -395,7 +395,7 @@ public class MyMeeting {
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
-		lblNewLabel.setBounds(0, 0, 530, 291);
+		lblNewLabel.setBounds(0, 0, 545, 291);
 		frmMeetingManagement.getContentPane().add(lblNewLabel);
 	}
 	

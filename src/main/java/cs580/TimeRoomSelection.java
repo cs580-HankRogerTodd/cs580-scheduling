@@ -37,9 +37,11 @@ import com.mongodb.client.model.Filters;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
-public class TimeRoomSelection {
+public class TimeRoomSelection implements ListSelectionListener{
 
 	private JFrame frame;
 
@@ -73,6 +75,8 @@ public class TimeRoomSelection {
 	
 	private Boolean ExistMeeting;
 	private int ExistMeetingID;
+	
+	private ArrayList<String> destinations = new ArrayList<String>();
     
 
     
@@ -133,30 +137,30 @@ public class TimeRoomSelection {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Start Time: ");
-		lblNewLabel_3.setBounds(53, 271, 92, 16);
+		lblNewLabel_3.setBounds(53, 289, 92, 16);
 		lblNewLabel_3.setForeground(Color.WHITE);
 		lblNewLabel_3.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblNewLabel_3);
 		
 		JLabel lblEndTime = new JLabel(" End Time: ");
-		lblEndTime.setBounds(53, 299, 95, 16);
+		lblEndTime.setBounds(53, 317, 95, 16);
 		lblEndTime.setForeground(Color.WHITE);
 		lblEndTime.setFont(new Font("Dialog", Font.BOLD, 16));
 		frame.getContentPane().add(lblEndTime);
 		
 		StartTimeText = new JTextField();
-		StartTimeText.setBounds(146, 267, 82, 26);
+		StartTimeText.setBounds(146, 285, 82, 26);
 		frame.getContentPane().add(StartTimeText);
 		StartTimeText.setColumns(10);
 		
 		EndTimeText = new JTextField();
-		EndTimeText.setBounds(146, 295, 82, 26);
+		EndTimeText.setBounds(146, 313, 82, 26);
 		frame.getContentPane().add(EndTimeText);
 		EndTimeText.setColumns(10);
 		
 /////// Button //////////////////////////////////////////////////////
 		JButton btnFinsh = new JButton("Finish");
-		btnFinsh.setBounds(364, 296, 90, 30);
+		btnFinsh.setBounds(376, 309, 90, 30);
 		frame.getContentPane().add(btnFinsh);
 		btnFinsh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -166,17 +170,32 @@ public class TimeRoomSelection {
 				}
 				else
 				{
-					UpdateDB_NewMeeting();
-					JOptionPane.showMessageDialog(null, "Request Send");
-					ProfilePage profile = new ProfilePage(LoginUsername);
-					frame.dispose();
+					int answer = JOptionPane.showConfirmDialog(frame, "YOUR MEETING" + "\n\n"+
+																	 "HOST: " + LoginUsername +"\n" +
+																	 "DATE: " + Date +"\n" +
+																	 "StartTime: " + UserStartTime + "\n" +
+																	 "EndTime: " + UserEndTime +"\n" +
+																	 "Members: " + Invitee +"\n\n" +
+																	 "Do you want to SUBMIT the meeting?");
+				    if (answer == JOptionPane.YES_OPTION) 
+				    {
+				    		UpdateDB_NewMeeting();
+						JOptionPane.showMessageDialog(null, "Request Send");
+						ProfilePage profile = new ProfilePage(LoginUsername);
+						frame.dispose();
+				    } 
+				    else if (answer == JOptionPane.NO_OPTION) 
+				    {
+				    		
+				    }
+
 				}
 
 			}
 		});	
 //////////////////////////////////		
 		JButton btnNewButton_1 = new JButton("Cancel");
-		btnNewButton_1.setBounds(262, 296, 90, 30);
+		btnNewButton_1.setBounds(274, 309, 90, 30);
 		frame.getContentPane().add(btnNewButton_1);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -202,7 +221,7 @@ public class TimeRoomSelection {
 					UserEndTime = null;
 				}	
 				
-				else//(UserStartTime != null && UserEndTime != null)
+				else
 				{
 					String firstTwoDigitsStartTime = UserStartTime.substring(0, 2);
 					String firstTwoDigitsEndTime = UserEndTime.substring(0, 2);
@@ -210,36 +229,25 @@ public class TimeRoomSelection {
 					IntUserStartTime = Integer.parseInt(firstTwoDigitsStartTime);
 					IntUserEndTime = Integer.parseInt(firstTwoDigitsEndTime);
 				
-					if(IntUserStartTime > IntUserEndTime || IntUserStartTime == IntUserEndTime)
+					
+					for(int i=IntUserStartTime; i<IntUserEndTime; i++)
 					{
-						JOptionPane.showMessageDialog(frame, "The meeting's start time must occur "
-								+ "before the meeting's end time.");
-						RoomlistModel.clear();
-						StartTimeText.setText(null);
-						EndTimeText.setText(null);
-						UserStartTime = null;
-						UserEndTime = null;
-					}
-					else
-					{
-						for(int i=IntUserStartTime; i<IntUserEndTime; i++)
+						if(AvailableTimeArray[i] == 1)
 						{
-							if(AvailableTimeArray[i] == 1)
-							{
-								JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
-								RoomlistModel.clear();
-								StartTimeText.setText(null);
-								EndTimeText.setText(null);
-								UserStartTime = null;
-								UserEndTime = null;
-								break;
-							}
-							else if(i == IntUserEndTime-1)
-							{
-								findAvailableRoom();
-							}
-						}	
-					}
+							JOptionPane.showMessageDialog(null, "Pleace Input Available Time");
+							RoomlistModel.clear();
+							StartTimeText.setText(null);
+							EndTimeText.setText(null);
+							UserStartTime = null;
+							UserEndTime = null;
+							break;
+						}
+						else if(i == IntUserEndTime-1)
+						{
+							findAvailableRoom();
+						}
+					}	
+					
 				}
 			}
 		});
@@ -247,11 +255,12 @@ public class TimeRoomSelection {
 ////// Available Time List ////////////////////////////////////////////
 		listModel = new DefaultListModel<String>();
 		AvailableTimeText = new JList<String>(listModel);
-		AvailableTimeText.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		AvailableTimeText.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		AvailableTimeText.addListSelectionListener(this);
 		
 		AvailableTimeScrollpane = new JScrollPane();
 		AvailableTimeScrollpane.setViewportView(AvailableTimeText);
-		AvailableTimeScrollpane.setBounds(53, 79, 175, 173);
+		AvailableTimeScrollpane.setBounds(53, 99, 175, 178);
 		
 		frame.getContentPane().add(AvailableTimeScrollpane);
 		for(int i=0; i<17; i++) 
@@ -259,44 +268,36 @@ public class TimeRoomSelection {
 			if(AvailableTimeArray[i] == 0)
 			{
 				int endtime = i+1;
-				listModel.addElement(i + ":00 - " + endtime + ":00");
+				
+				if(i+1<10)
+				{
+					listModel.addElement("0" + i + ":00 - " + "0" + endtime + ":00");
+				}
+				else if(i<10)
+				{
+					listModel.addElement("0"+i + ":00 - " + endtime + ":00");
+				}
+				else
+				{
+					listModel.addElement(i + ":00 - " + endtime + ":00");
+				}
+				
 			}
 		}
 			
+		
+		  
 		AvailableTimeText.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent mouseEvent) {
 				if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-					String selectedTime = AvailableTimeText.getSelectedValue();
+				
 					String startTime2, endTime2;
+				
+					startTime2 = destinations.get(0).substring(0, 5);
+					endTime2 = destinations.get(destinations.size()-1).substring(8, 13);
 					
-					if (selectedTime != null) {
-						// 7:00 - 8:00, etc
-						if (selectedTime.length() <= 11) {
-							startTime2 = selectedTime.substring(0,4);
-							endTime2 = selectedTime.substring(7, 11);
-						}
-						// 9:00 - 10:00
-						else if (selectedTime.length() == 12) {
-							// Check if it's NOT 23:00 - 0:00
-							if (selectedTime.substring(0, 2).compareToIgnoreCase("23") != 0) {
-								startTime2 = selectedTime.substring(0, 4);
-								endTime2 = selectedTime.substring(7, 12);
-							}
-							// 23:00 - 0:00
-							else {
-								startTime2 = selectedTime.substring(0, 5);
-								endTime2 = selectedTime.substring(8, 12);
-							}
-						}
-						// 13:00 - 14:00, etc.
-						else {
-							startTime2 = selectedTime.substring(0, 5);
-							endTime2 = selectedTime.substring(8, 13);
-						}
-						
-						StartTimeText.setText(startTime2);
-						EndTimeText.setText(endTime2);
-					}
+					StartTimeText.setText(startTime2);
+					EndTimeText.setText(endTime2);
 				}
 			}
 		});
@@ -306,6 +307,12 @@ public class TimeRoomSelection {
 		ListRoom.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ListRoom.setBounds(262, 77, 192, 133);
         frame.getContentPane().add(ListRoom);
+        
+        JLabel lblPleasePressShift = new JLabel(" Press SHIFT to select the time");
+        lblPleasePressShift.setBounds(44, 71, 190, 29);
+        lblPleasePressShift.setForeground(Color.WHITE);
+        lblPleasePressShift.setFont(new Font("Dialog", Font.BOLD, 12));
+        frame.getContentPane().add(lblPleasePressShift);
         
         JLabel lblNewLabel_4 = new JLabel("");
         lblNewLabel_4.setIcon(new ImageIcon(App.CURRENT_DIRECTORY + "/image/calendarB2.jpg"));
@@ -319,6 +326,20 @@ public class TimeRoomSelection {
         	}
         });
 	}
+	
+	
+	public void valueChanged(ListSelectionEvent e)
+	  {
+		destinations.clear();
+	    Object obj[ ] = AvailableTimeText.getSelectedValues();
+	    for(int i = 0; i < obj.length; i++)
+	    {
+	      destinations.add((String) obj[i]);
+	    }
+
+	  }
+
+	
 	
 	private void CalculateDate(int currentMonth, Object SelectedValue)
 	{
@@ -539,7 +560,8 @@ public class TimeRoomSelection {
             				BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
                 			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
 
-                			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
+                			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime)
+                					||(IntUserStartTime<=BookedStartTime && IntUserEndTime >= BookedEndTime))
                 			{
                     			RoomAvailable = false;	
                 			}
@@ -558,6 +580,8 @@ public class TimeRoomSelection {
         		}
         } 
 	}
+	
+	
 
 	private void UpdateDB_NewMeeting()
 	{
@@ -569,6 +593,8 @@ public class TimeRoomSelection {
 		 String LoginUsername
 		*/
 		
+		UserStartTime = String.valueOf(IntUserStartTime);
+		UserEndTime = String.valueOf(IntUserEndTime);
 /////// Add new meeting into Meeting database
 		if(ExistMeeting == false)
 		{
@@ -722,13 +748,26 @@ public class TimeRoomSelection {
 			//private Boolean ExistMeeting;
 			//Used to update only one document by a filter ("Name") and field("Availability")
 			//document.append("Update", "0");
-			Bson filter = new Document("MeetingID", ExistMeetingID);
-			Document document = new Document("Date", Date);
+	        Bson filter = new Document("MeetingID", ExistMeetingID);
+		    mongoCollectionMeeting.deleteOne(filter);
+			
+			ArrayList< DBObject > array = new ArrayList< DBObject >();
+			Document document = new Document("MeetingID", ExistMeetingID);
+			document.append("Host", LoginUsername);
+			document.append("Date", Date);
 			document.append("StartTime", UserStartTime);
 			document.append("EndTime", UserEndTime);
 			document.append("Room", UserSelectedRoom);
-			Bson updateOperationDocument = new Document("$set", document);
-			mongoCollectionMeeting.updateOne(filter, updateOperationDocument);
+			document.append("Member", array);
+			mongoCollectionMeeting.insertOne(document);
+			
+			
+			for (int i=0 ; i < Invitee.size(); i++)
+			{
+				mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", ExistMeetingID),  
+		                new Document( "$addToSet", new Document( "Member", Invitee.getElementAt(i))))  
+		                .wasAcknowledged ();
+			}
 		}
 		
 		//System.out.print(Invitee.size());

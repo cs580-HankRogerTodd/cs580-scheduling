@@ -80,7 +80,7 @@ public class ScheduleCalendar {
 		
 		frame = new JFrame();
 		frame.setTitle("My Calendar");
-		frame.setBounds(100, 100, 480, 440);
+		frame.setBounds(100, 100, 460, 430);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -128,7 +128,7 @@ public class ScheduleCalendar {
 		};
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(33, 58, 386, 272);
+		scrollPane.setBounds(34, 68, 386, 272);
 		frame.getContentPane().add(scrollPane);
 		
 		table.setModel(model);
@@ -140,7 +140,7 @@ public class ScheduleCalendar {
 		
 		ResizableButton btnCancel = new ResizableButton("Cancel");
 		btnCancel.setFont(new Font("Arial", Font.BOLD, 11));
-		btnCancel.setBounds(98, 341, 115, 35);
+		btnCancel.setBounds(244, 352, 96, 36);
 		frame.getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -150,7 +150,7 @@ public class ScheduleCalendar {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(84, 11, 288, 36);
+		panel.setBounds(85, 21, 288, 36);
 		frame.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(10, 0));
 		
@@ -205,12 +205,12 @@ public class ScheduleCalendar {
 			}
 		});
 		selectBtn.setFont(new Font("Arial", Font.BOLD, 11));
-		selectBtn.setBounds(234, 341, 115, 35);
+		selectBtn.setBounds(117, 352, 96, 36);
 		frame.getContentPane().add(selectBtn);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(App.CURRENT_DIRECTORY + "/image/calendarB2.jpg"));
-		lblNewLabel_1.setBounds(0, 0, 462, 418);
+		lblNewLabel_1.setBounds(0, 0, 460, 408);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		

@@ -34,11 +34,8 @@ public class AddMember extends JFrame
 	private Box boxButtons = Box.createVerticalBox();
 	private Box boxListEmployee = Box.createVerticalBox();
 	private Box boxListInvitee = Box.createVerticalBox();
-	private Box boxListSearch = Box.createVerticalBox();
 	
 	private JPanel contents;
-	private JPanel panelCenter;
-	private JPanel panelSouth;
 	
 	//components
 	private JButton btnAdd;
@@ -64,6 +61,7 @@ public class AddMember extends JFrame
 	private JList<String> listEmployee;
 	private JList<String> listInvitee;
 	private JTextField searchName;
+	private JTextArea txtPerInfo;
 	
 	private ArrayList<String> employees = new ArrayList<String>();
 	
@@ -72,14 +70,12 @@ public class AddMember extends JFrame
 	private DefaultListModel<String> listModelTemp = new DefaultListModel<String>();
 	
 	private boolean pressSearch = false; 
-	private String ForClearReset;
 	private String LoginUsername;
-	private Boolean ExistMeeting=false;
-	private int ExistMeetingID = 0;
-	private int MeetingID;
+	private Boolean ExistMeeting;
+	private int ExistMeetingID;
 	private JFrame frame;
 	
-	//private ArrayList<String> ExistMember = new ArrayList<String>();
+	private String currentDirectory = System.getProperty("user.dir");
 	
 //////Database Setup ////////////////////////////////////////////////////////////////	
 	String uri = "mongodb://rhalf001:admin@580scheduledb-shard-00-00-w3srb.mongodb.net:27017,580scheduledb-shard-00-01-w3srb.mongodb.net:27017,580scheduledb-shard-00-02-w3srb.mongodb.net:27017/test?ssl=true&replicaSet=580scheduleDB-shard-0&authSource=admin";
@@ -91,38 +87,40 @@ public class AddMember extends JFrame
 ///////////////////////////////////////////////////////////////////////////////////////
 	
 	MongoCursor<Document> cursor = mongoCollection.find().iterator();
-	private JSeparator separator;
+	private JLabel lblNewLabel;
 
-	public AddMember(String username, int meetingid)
+	public AddMember(String username, int meetingid, boolean existmeeting)
 	{
 		super("Member Selection");
 		App.setFonts();
 		LoginUsername = username;
-		MeetingID = meetingid;
-		
+		ExistMeetingID = meetingid;
+		ExistMeeting = existmeeting;
+				
 		RestEmployeelist();
-
+	
 		/////// main container //////
 		contents = new JPanel();
-		contents.setBorder(borderContents); // biggest border around Frame
-		contents.setLayout(new BorderLayout()); // NORTH, SOUTH, EAST, WEST, CENTER
+		contents.setBorder(borderContents);
 		setContentPane(contents);
+		contents.setLayout(null);
 		
 		/////// Add Components ///////
 		
 		// North Part
 		JLabel lblTitle = new JLabel ("Member Selection", SwingConstants.CENTER);
-		contents.add(lblTitle, BorderLayout.NORTH);
-		
-		/////// Center Part --> new panel --> set border --> set label + list + scroll --> add into "BOX" --> add into Center
-		panelCenter = new JPanel();
-		panelCenter.setBorder(borderCenter);
-		
-		// Employee List
-		lblListEmployee = new JLabel("Employee");
-		lblListEmployee.setAlignmentX(LEFT_ALIGNMENT);
+		lblTitle.setBounds(309, 0, 238, 34);
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 25));
+		contents.add(lblTitle);
+		//lblListEmployee.setAlignmentX(CENTER_ALIGNMENT);
 		
 		initEmployeeModel();
+		
+		// Employee List
+		lblListEmployee = new JLabel("            Employee");
+		lblListEmployee.setForeground(Color.WHITE);
+		lblListEmployee.setFont(new Font("Dialog", Font.BOLD, 16));
 		listEmployee = new JList<String>(listModelEmployee); // already set default
 		listEmployee.setAlignmentX(LEFT_ALIGNMENT);
 		listEmployee.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -132,119 +130,119 @@ public class AddMember extends JFrame
 		scrollListEmployee.setAlignmentX(LEFT_ALIGNMENT);
 		scrollListEmployee.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		setSpecificSize(scrollListEmployee, new Dimension(200, 300));
+		boxListEmployee.setBounds(39, 36, 200, 328);
+		contents.add(boxListEmployee);
 		
 		boxListEmployee.add(lblListEmployee);
 		boxListEmployee.add(scrollListEmployee);
-		panelCenter.add(boxListEmployee);
-		 
-/////// Space //////////////////////////////////////////////////////
-		panelCenter.add(Box.createRigidArea(new Dimension(10, 1)));
-/////// Space //////////////////////////////////////////////////////		
-
-		/////// Add and Remove button ///////
-		btnAdd = new JButton("Add >>");
-		btnAddAll = new JButton("Add All >>");
-		btnRemove = new JButton("<< Remove");
-		btnRemoveAll = new JButton("<< Remove All");
+		listEmployee.addListSelectionListener(this);
+		/////// Space //////////////////////////////////////////////////////			
+				
+				// Invited List
+				lblListInvitee = new JLabel("             Member");
+				lblListInvitee.setForeground(Color.WHITE);
+				lblListInvitee.setFont(new Font("Dialog", Font.BOLD, 16));
+				//lblListInvitee.setAlignmentX(CENTER_ALIGNMENT);
+				
+				listInvitee = new JList<String>(listModelInvitee);
+				listInvitee.setAlignmentX(LEFT_ALIGNMENT);
+				listInvitee.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				listInvitee.setBorder(borderList);
+				
+						JScrollPane scrollListInvitee = new JScrollPane(listInvitee);
+						scrollListInvitee.setAlignmentX(LEFT_ALIGNMENT);
+						scrollListInvitee.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+						setSpecificSize(scrollListInvitee, new Dimension(200, 300));
+						boxListInvitee.setBounds(417, 43, 200, 321);
+						contents.add(boxListInvitee);
+						
+						boxListInvitee.add(lblListInvitee);
+						boxListInvitee.add(scrollListInvitee);
+						listInvitee.addListSelectionListener(this);
+		/////// Space /////////
+				
+				// Image Part
+				lblListSearch = new JLabel("Personal Information"); // space is for looking
+				lblListSearch.setBounds(648, 60, 172, 20);
+				contents.add(lblListSearch);
+				lblListSearch.setForeground(Color.WHITE);
+				lblListSearch.setFont(new Font("Dialog", Font.BOLD, 16));
+				//lblListSearch.setAlignmentX(LEFT_ALIGNMENT);
+				
+				// image position
+				lblImage = new JLabel(new ImageIcon());
+				lblImage.setBounds(664, 88, 138, 164);
+				contents.add(lblImage);
+				lblImage.setAlignmentX(LEFT_ALIGNMENT);
+				setSpecificSize(lblImage, new Dimension(137, 161));
+				
+		/////// Space //////////////////////////////////////////////////////		
 		
-		
-		Dimension dimRemoveAll = btnRemoveAll.getPreferredSize();
-		setSpecificSize(btnAdd, dimRemoveAll);
-		setSpecificSize(btnAddAll, dimRemoveAll);
-		setSpecificSize(btnRemove, dimRemoveAll);
-		
-		boxButtons.add(btnAdd);
-		boxButtons.add(Box.createRigidArea(new Dimension (1, 5)));
-		boxButtons.add(btnAddAll);
-		boxButtons.add(Box.createRigidArea(new Dimension (1, 20)));
-		boxButtons.add(btnRemove);
-		boxButtons.add(Box.createRigidArea(new Dimension (1, 5)));
-		boxButtons.add(btnRemoveAll);
-		
-		panelCenter.add(boxButtons);
-		
-/////// Space //////////////////////////////////////////////////////	
-		panelCenter.add(Box.createRigidArea(new Dimension(10, 1)));
-/////// Space //////////////////////////////////////////////////////			
-		
-		// Invited List
-		lblListInvitee = new JLabel("Member");
-		lblListInvitee.setAlignmentX(LEFT_ALIGNMENT);
-		
-		listInvitee = new JList<String>(listModelInvitee);
-		listInvitee.setAlignmentX(LEFT_ALIGNMENT);
-		listInvitee.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listInvitee.setBorder(borderList);
-
-		JScrollPane scrollListInvitee = new JScrollPane(listInvitee);
-		scrollListInvitee.setAlignmentX(LEFT_ALIGNMENT);
-		scrollListInvitee.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		setSpecificSize(scrollListInvitee, new Dimension(200, 300));
-		
-		boxListInvitee.add(lblListInvitee);
-		boxListInvitee.add(scrollListInvitee);
-		panelCenter.add(boxListInvitee);
-		
-/////// Space /////////
-		panelCenter.add(Box.createRigidArea(new Dimension(10, 1)));
-/////// Space /////////
-		
-		// Image Part
-		lblListSearch = new JLabel("Personal Information"); // space is for looking
-		lblListSearch.setAlignmentX(LEFT_ALIGNMENT);
-		
-		// image position
-		lblImage = new JLabel(new ImageIcon());
-		lblImage.setAlignmentX(LEFT_ALIGNMENT);
-		setSpecificSize(lblImage, new Dimension(200, 150));
-		
-		boxListSearch.add(lblListSearch);
-		boxListSearch.add(Box.createRigidArea(new Dimension(1, 20)));
-		boxListSearch.add(lblImage);
-		panelCenter.add(boxListSearch);
-		
-		contents.add(panelCenter, BorderLayout.CENTER);
-		
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		// South Part
-		panelSouth = new JPanel();
-		
-		searchName = new JTextField();
-		searchName.setAlignmentX(LEFT_ALIGNMENT);
-		
-		Dimension dimSearchView = searchName.getPreferredSize();
-		setSpecificSize(searchName, new Dimension(100, dimSearchView.height));
-		
-		// search button
-		btnSearch = new JButton("Search");
-		setSpecificSize(btnSearch, new Dimension(80, 20));
-		
-		// Next button
-		btnNext = new JButton("Next >>");
-		setSpecificSize(btnNext, new Dimension(80, 20));
-		
-		// Back button
-		btnBack = new JButton("<< Back");
-		setSpecificSize(btnBack, new Dimension(80, 20));
-		
-		//Clear button
-		btnClear = new JButton("Clear");
-		setSpecificSize(btnClear, new Dimension(80, 20));
-		
-		panelSouth.add(searchName);
-		panelSouth.add(btnSearch);
-		panelSouth.add(btnClear);
-		
-		separator = new JSeparator();
-		panelSouth.add(separator);
-		Component rigidArea = Box.createRigidArea(new Dimension(350, 50));
-		panelSouth.add(rigidArea);
-		panelSouth.add(btnBack);
-		panelSouth.add(Box.createRigidArea(new Dimension(10, 1)));
-		panelSouth.add(btnNext);
-		//panelSouth.add(Box.createRigidArea(new Dimension(10, 50)));
-		contents.add(panelSouth, BorderLayout.SOUTH);
+				/////// Add and Remove button ///////
+				btnAdd = new JButton("Add >>");
+				btnAddAll = new JButton("Add All >>");
+				btnRemove = new JButton("<< Remove");
+				btnRemoveAll = new JButton("<< Remove All");
+				
+				
+				Dimension dimRemoveAll = btnRemoveAll.getPreferredSize();
+				setSpecificSize(btnAdd, dimRemoveAll);
+				setSpecificSize(btnAddAll, dimRemoveAll);
+				setSpecificSize(btnRemove, dimRemoveAll);
+				boxButtons.setBounds(259, 131, 138, 146);
+				contents.add(boxButtons);
+				
+				boxButtons.add(btnAdd);
+				boxButtons.add(Box.createRigidArea(new Dimension (1, 5)));
+				boxButtons.add(btnAddAll);
+				boxButtons.add(Box.createRigidArea(new Dimension (1, 20)));
+				boxButtons.add(btnRemove);
+				boxButtons.add(Box.createRigidArea(new Dimension (1, 5)));
+				boxButtons.add(btnRemoveAll);
+				
+				// search button
+				btnSearch = new JButton("Search");
+				btnSearch.setBounds(145, 370, 76, 35);
+				contents.add(btnSearch);
+				setSpecificSize(btnSearch, new Dimension(80, 20));
+				
+				//Clear button
+				btnClear = new JButton("Clear");
+				btnClear.setBounds(231, 370, 76, 35);
+				contents.add(btnClear);
+				setSpecificSize(btnClear, new Dimension(80, 20));
+				
+				searchName = new JTextField();
+				searchName.setBounds(37, 370, 98, 34);
+				contents.add(searchName);
+				searchName.setAlignmentX(LEFT_ALIGNMENT);
+				
+				Dimension dimSearchView = searchName.getPreferredSize();
+				setSpecificSize(searchName, new Dimension(100, dimSearchView.height));
+				
+				// Next button
+				btnNext = new JButton("Add");
+				btnNext.setBounds(733, 395, 100, 30);
+				contents.add(btnNext);
+				
+				// Back button
+				btnBack = new JButton("Cancel");
+				btnBack.setBounds(627, 395, 100, 30);
+				contents.add(btnBack);
+				
+				txtPerInfo = new JTextArea();
+				txtPerInfo.setBounds(627, 269, 206, 95);
+				contents.add(txtPerInfo);
+				
+				lblNewLabel = new JLabel("");
+				lblNewLabel.setIcon(new ImageIcon(currentDirectory + "/image/calendarB2.jpg"));
+				lblNewLabel.setBounds(0, 0, 850, 438);
+				contents.add(lblNewLabel);
+				
+				btnBack.addActionListener(this);
+				btnNext.addActionListener(this);
+				btnClear.addActionListener(this);
+				btnSearch.addActionListener(this);
 
 		
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -254,12 +252,6 @@ public class AddMember extends JFrame
 		btnAddAll.addActionListener(this);
 		btnRemove.addActionListener(this);
 		btnRemoveAll.addActionListener(this);
-		btnNext.addActionListener(this);
-		btnBack.addActionListener(this);
-		btnClear.addActionListener(this);
-		btnSearch.addActionListener(this);
-		listEmployee.addListSelectionListener(this);
-		listInvitee.addListSelectionListener(this);
 		//searchName.getDocument().addDocumentListener(new MyDocumentListener());
 
 		/////// set size /////////
@@ -269,11 +261,11 @@ public class AddMember extends JFrame
 		setVisible(true);
 	
 	 }
-
+	
 	private void RestEmployeelist()
 	{
 		Boolean MemberSelected=false;
-		Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", MeetingID )).first();
+		Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", ExistMeetingID )).first();
 		ArrayList MemberLists = (ArrayList) myMeeting.get("Member");
 		
 		try {
@@ -301,7 +293,7 @@ public class AddMember extends JFrame
 		      cursor.close();
 		    }
 	}
-	
+
 	private void initEmployeeModel()
 	{
 		for(String s : employees)
@@ -335,12 +327,28 @@ public class AddMember extends JFrame
 		}
 		if(source == btnNext)
 		{
-			AddNewEmployee();
-			//return;
+			if(listModelInvitee.isEmpty())
+			{
+				JOptionPane.showMessageDialog(frame, "Please select Members!");
+			}
+			else
+			{
+				 int answer = JOptionPane.showConfirmDialog(frame, "Do you want to reschedule the meeting?");
+				    if (answer == JOptionPane.YES_OPTION) 
+				    {
+				    		goToScheduleCalender();
+						return;
+				    } 
+				    else if (answer == JOptionPane.NO_OPTION) 
+				    {
+				    		AddNewEmployee();
+				    		return;
+				    }
+			}
 		}
 		if(source == btnBack)
 		{
-			backToProfile();
+			backToProfile(LoginUsername);
 			return;
 		}
 		if(source == btnSearch)
@@ -353,6 +361,8 @@ public class AddMember extends JFrame
 			showRestEmployee();
 			return;
 		}
+		
+		
 		
 	}
 	
@@ -454,7 +464,7 @@ public class AddMember extends JFrame
 		initEmployeeModel();
 		listModelInvitee.clear();
 	}
-
+	
 	private void AddNewEmployee()
 	{
 		if(listModelInvitee.size()==0)
@@ -465,13 +475,13 @@ public class AddMember extends JFrame
 		{
 			for(int i=0; i<listModelInvitee.size(); i++ )
 			{
-				System.out.print(listModelInvitee.getElementAt(i));
+				//System.out.print(listModelInvitee.getElementAt(i));
 				
 				BasicDBObject match = new BasicDBObject();
 		        match.put( "Name", listModelInvitee.getElementAt(i) );
 
 		        BasicDBObject addressSpec = new BasicDBObject();
-		        addressSpec.put("MeetingID", MeetingID);
+		        addressSpec.put("MeetingID", ExistMeetingID);
 		        addressSpec.put("Respond", "P");
 		        addressSpec.put("Update", "0");
 
@@ -479,7 +489,7 @@ public class AddMember extends JFrame
 		        update.put( "$push", new BasicDBObject( "Meeting", addressSpec ) );
 		        mongoCollection.updateMany( match, update );
 		        
-		        mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", MeetingID),  
+		        mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", ExistMeetingID),  
 		                new Document( "$addToSet", new Document( "Member", listModelInvitee.getElementAt(i))))  
 		                .wasAcknowledged ();
 			}
@@ -489,10 +499,27 @@ public class AddMember extends JFrame
 			dispose();
 		}
 	}
-	
-	private void backToProfile()
+
+	private void goToScheduleCalender()
 	{
-		new MeetingUpdate(LoginUsername, MeetingID);
+
+		Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", ExistMeetingID )).first();
+		ArrayList MemberLists = (ArrayList) myMeeting.get("Member");
+		
+	 	for(int i=0; i<MemberLists.size(); i++)
+		{
+	 		listModelInvitee.addElement(String.valueOf(MemberLists.get(i)));
+		}
+	 	
+	 	//System.out.print(listModelInvitee);
+	 	
+		ScheduleCalendar timeslct = new ScheduleCalendar(listModelInvitee, LoginUsername, ExistMeeting, ExistMeetingID);
+		dispose();
+	}
+	
+	private void backToProfile(String LoginUsername)
+	{
+		new ProfilePage(LoginUsername);
 		dispose();
 	}
 	
@@ -501,23 +528,57 @@ public class AddMember extends JFrame
 		int employeeIsSelected = listEmployee.getSelectedIndex();
 		int inviteeIsSelected = listInvitee.getSelectedIndex();
 		
-		String currentDirectory = System.getProperty("user.dir");
-		
 		if(employeeIsSelected == -1 && inviteeIsSelected == -1)
 		{
 			lblImage.setIcon(null);
+			txtPerInfo.setText(null);
 			return;
 		}
 		else if(employeeIsSelected != -1 ){
-		String imageName = listEmployee.getSelectedValue();
-		imageName = currentDirectory + "/image/" + imageName + ".jpg";
-		lblImage.setIcon(new ImageIcon(imageName));
-		}
-		else if(inviteeIsSelected != -1 ) {
-		String imageName2 = listInvitee.getSelectedValue();
-		imageName2 = currentDirectory + "/image/" + imageName2 + ".jpg";
-		lblImage.setIcon(new ImageIcon(imageName2));
-		}
+			String imageName = listEmployee.getSelectedValue();
+			ImageIcon MyImage = new ImageIcon(currentDirectory + "/image/"+ imageName + ".jpg");
+			Image img = MyImage.getImage();
+			Image NewImg = img.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_SMOOTH);  
+			ImageIcon image = new ImageIcon(NewImg);
+			lblImage.setIcon(image);
+			
+			txtPerInfo.setText(null);
+			
+			Document myMeeting = mongoCollection.find(Filters.eq("Username", imageName )).first();
+			if(myMeeting != null)
+			{
+				txtPerInfo.append(" Uni: " + myMeeting.getString("University") + "\n" +
+									" Dep: " + myMeeting.getString("Department") + "\n" +
+									 " Degree: " + myMeeting.getString("Degree") + "\n" +
+									"---------------------" + "\n" +
+									 " Availability: " + myMeeting.getString("Availability")
+									);
+			}
+			
+			
+			}
+			else if(inviteeIsSelected != -1 ) {
+			String imageName2 = listInvitee.getSelectedValue();
+			ImageIcon MyImage = new ImageIcon(currentDirectory + "/image/"+ imageName2 + ".jpg");
+			Image img = MyImage.getImage();
+			Image NewImg = img.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_SMOOTH);  
+			ImageIcon image = new ImageIcon(NewImg);
+			lblImage.setIcon(image);
+			
+			txtPerInfo.setText(null);
+			
+			Document myMeeting = mongoCollection.find(Filters.eq("Username", imageName2 )).first();
+			if(myMeeting != null)
+			{
+				txtPerInfo.append(" Uni: " + myMeeting.getString("University") + "\n" +
+						" Dep: " + myMeeting.getString("Department") + "\n" +
+						 " Degree: " + myMeeting.getString("Degree") + "\n" +
+						"---------------------" + "\n" +
+						 " Availability: " + myMeeting.getString("Availability")
+						);
+			}
+			
+			}
 		
 	}
 	
@@ -623,8 +684,6 @@ public class AddMember extends JFrame
 	        Document doc = cursor.next();
 	      }
 	}
-	
-
 }
 	
 	

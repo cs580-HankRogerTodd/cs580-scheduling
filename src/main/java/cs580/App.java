@@ -26,6 +26,7 @@ public class App {
 		//AddEmployee AdEmp = new AddEmployee();
 		//AddMember AdMem = new AddMember(LoginUsername, MeetingID);
 		dbManage member = new dbManage();
+		//test member = new test();
 		
 	}
 	

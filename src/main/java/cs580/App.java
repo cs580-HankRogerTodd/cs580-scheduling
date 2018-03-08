@@ -18,7 +18,7 @@ public class App {
 	public static void main( String[] args ) {
 		
 		//DB_setUp ProgramStart = new DB_setUp();
-		//LoginPage login = new LoginPage();
+		LoginPage login = new LoginPage();
 		//MemberSelection memslct = new MemberSelection("Hank");
 		//MyMeeting Mymet = new MyMeeting();
 		//AdminPage mytest = new AdminPage();
@@ -26,7 +26,7 @@ public class App {
 		//AddEmployee AdEmp = new AddEmployee();
 		//AddMember AdMem = new AddMember(LoginUsername, MeetingID);
 		//dbManage member = new dbManage();
-		test testcase = new test();
+		//test testcase = new test();
 		
 	}
 

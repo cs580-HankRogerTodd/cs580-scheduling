@@ -150,7 +150,7 @@ public class AdminPage {
 			public void actionPerformed(ActionEvent e) {
 				if(RoomList.getSelectedValue()!=null)
 				{
-					System.out.print(String.valueOf(RoomList.getSelectedValue()));
+					//System.out.print(String.valueOf(RoomList.getSelectedValue()));
 					Bson filter = new Document("RoomNo", String.valueOf(RoomList.getSelectedValue()));
 					mongoCollectionRooms.deleteOne(filter);
 			

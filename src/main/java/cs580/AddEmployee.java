@@ -167,6 +167,7 @@ public class AddEmployee {
 						mongoCollection.insertOne(document);
 						
 						JOptionPane.showMessageDialog(frame, "SUCCESSFUL SUBMITTED!");
+						AdminPage mytest = new AdminPage();
 						frame.dispose();
 					}
 				

@@ -42,8 +42,8 @@ public class test
 	private void DBtest()
 	{
 		ClearDB();
-		//SetupEmp();
-		//SetupRoom();		
+		SetupEmp();
+		SetupRoom();		
 		SetupMeeting();
 		/*
 		System.out.print("inin");

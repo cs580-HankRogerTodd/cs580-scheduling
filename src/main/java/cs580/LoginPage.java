@@ -118,7 +118,9 @@ public class LoginPage {
 						frmLoginPage.getContentPane().add(lblNewLabel_1);
 						btnReset.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-								ApplicationForm Apply= new ApplicationForm();
+								Boolean FromEmployee = true;
+								Boolean FromAdmin = false;
+								ApplicationForm Apply= new ApplicationForm(FromEmployee, FromAdmin);
 							}
 						});
 				btnForgotPassword.addActionListener(new ActionListener() {

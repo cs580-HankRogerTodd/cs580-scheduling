@@ -1,4 +1,4 @@
-package cs580;
+/*package cs580;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -246,4 +246,4 @@ public class AddEmployee {
 		lblNewLabel.setBounds(0, 0, 320, 388);
 		frame.getContentPane().add(lblNewLabel);
 	}
-}
+}*/

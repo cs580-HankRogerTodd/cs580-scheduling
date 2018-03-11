@@ -46,6 +46,9 @@ public class ApplicationForm {
 	private String DepartmentVal = "";
 	private String DegreeVal = "";
 	
+	private Boolean FromEmployee;
+	private Boolean FromAdmin;
+	
 	String[] Department={"Biological Sciences","Chemistry","Computer Science", "Geological Sciences", "Mathematics & Statistics", "Physics & Astronomy", "Health Promotion "};
 	String[] Degree={"Bachelar Student", "Master Student", "PHD"};
 	String[] Byear={"1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000"};
@@ -59,7 +62,10 @@ public class ApplicationForm {
 	
 	private JTextField textUniversity;
 	
-	public ApplicationForm() {
+	public ApplicationForm(Boolean fromemployee, Boolean fromadmin) {
+		FromEmployee = fromemployee;
+		FromAdmin = fromadmin;
+		
 		initialize();
 		
 		Document myDoc = (Document)mongoCollectionAdmin.find().sort(new BasicDBObject("EID",-1)).first();
@@ -125,7 +131,7 @@ public class ApplicationForm {
 				{
 					JOptionPane.showMessageDialog(frame, "Please input all the information!");
 				}
-				else
+				else 
 				{
 					//if()
 						
@@ -142,7 +148,7 @@ public class ApplicationForm {
 			        		}
 			        } 
 			        
-			        if(UserNameUsed == false)
+			        if(UserNameUsed == false && FromEmployee == true)
 					{
 						Document myDoc = (Document)mongoCollectionAdmin.find().sort(new BasicDBObject("EID",-1)).first();
 						int EID;
@@ -171,7 +177,40 @@ public class ApplicationForm {
 						JOptionPane.showMessageDialog(frame, "SUCCESSFUL SUBMITTED!");
 						frame.dispose();
 					}
+			        
+			        else if(UserNameUsed == false && FromAdmin == true)
+					{
+			        	Document myDoc = (Document)mongoCollection.find().sort(new BasicDBObject("EID",-1)).first();
+						int EID;
+						
+						if(myDoc == null){
+							EID = 1;
+						}
+						else{
+							EID = myDoc.getInteger("EID")+1;
+						}
+						
+						ArrayList< DBObject > array = new ArrayList< DBObject >();
+						Document document = new Document("EID", EID);
+						document.append("Name", EmployeeName);
+						document.append("Availability", "Available");
+						document.append("Username", EmployeeUserName);
+						document.append("Password", EmployeePassword);
+						
+						document.append("University", UniversityName);
+						document.append("Department", DepartmentVal);
+						document.append("Degree", DegreeVal);
+						document.append("Byear", ByearVal);
+						document.append("Meeting", array);
+						
+						mongoCollection.insertOne(document);
+						
+						JOptionPane.showMessageDialog(frame, "SUCCESSFUL SUBMITTED!");
+						AdminPage mytest = new AdminPage();
+						frame.dispose();
+					}
 				}
+				
 
 			}
 		});
@@ -181,7 +220,15 @@ public class ApplicationForm {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LoginPage login = new LoginPage();
+				if(FromEmployee == true)
+				{
+					LoginPage login = new LoginPage();
+				}
+				if(FromAdmin == true)
+				{
+					AdminPage mytest = new AdminPage();
+				}
+				
 				frame.dispose();
 			}
 		});

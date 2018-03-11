@@ -18,10 +18,10 @@ public class App {
 	public static void main( String[] args ) {
 		
 		//DB_setUp ProgramStart = new DB_setUp();
-		LoginPage login = new LoginPage();
+		//LoginPage login = new LoginPage();
 		//ClearDB Cleaner = new ClearDB();
 		//dbManage member = new dbManage();
-		//test testcase = new test();
+		test testcase = new test();
 		
 	}
 

@@ -85,8 +85,10 @@ public class AdminPage {
 		JButton btnAddEmployee = new JButton("Add");
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					AddEmployee AddEmp = new AddEmployee();
-					frmAdminProfilePage.dispose();
+				Boolean FromEmployee = false;
+				Boolean FromAdmin = true;
+				ApplicationForm Apply= new ApplicationForm(FromEmployee, FromAdmin);
+				frmAdminProfilePage.dispose();
 			}
 		});
 		btnAddEmployee.setBounds(55, 215, 70, 29);
@@ -198,7 +200,7 @@ public class AdminPage {
 				}
 				else
 				{
-					AdminAppForm mytest = new AdminAppForm();
+					AdminAppForm Appform = new AdminAppForm();
 					frmAdminProfilePage.dispose();
 				}
 				

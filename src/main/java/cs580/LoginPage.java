@@ -214,27 +214,49 @@ public class LoginPage {
 		for(int j=0; j<MeetingListSize; j++)
 		{
 			Document MeetingElement = MeetingLists.get(j);
-			String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));  
-			Integer IntMeetingID = Integer.valueOf(StringMeetingID);
-			
-			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first(); 
-			
-			if(myMeeting != null)
+			String StringRespond = String.valueOf(MeetingElement.get("Respond"));  
+			if(StringRespond.equals("P"))
 			{
-				int Date = Integer.valueOf((String) myMeeting.get("Date"));
-				MeetingDay = Date % 100;
+				String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));  
+				Integer IntMeetingID = Integer.valueOf(StringMeetingID);
 				
-				if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 3){
-					JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 3 days!");
-					break;
+				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first(); 
+				
+				if(myMeeting != null)
+				{
+					int Date = Integer.valueOf((String) myMeeting.get("Date"));
+					MeetingDay = Date % 100;
+					
+					if(MeetingDay - currentDay >0 && MeetingDay - currentDay == 3){
+						JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 3 days!");
+						break;
+					}
+					else if(MeetingDay - currentDay >0 && MeetingDay - currentDay == 2){
+						JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 2 days!");
+						break;
+					}
+					else if(MeetingDay - currentDay >0 && MeetingDay - currentDay == 1){
+						JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 1 days!");
+						break;
+					}
 				}
-				if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 2){
-					JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 2 days!");
-					break;
-				}
-				if(MeetingDay - currentDay >0 && MeetingDay - currentDay < 1){
-					JOptionPane.showMessageDialog(frame, "You have a Meeting Expire in 1 days!");
-					break;
+			}
+			else
+			{
+				String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));  
+				Integer IntMeetingID = Integer.valueOf(StringMeetingID);
+				
+				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first(); 
+				
+				if(myMeeting != null)
+				{
+					int Date = Integer.valueOf((String) myMeeting.get("Date"));
+					MeetingDay = Date % 100;
+					
+					if(MeetingDay - currentDay >0 && MeetingDay - currentDay == 1){
+						JOptionPane.showMessageDialog(frame, "You have a Meeting tomorrow!");
+						break;
+					}
 				}
 			}
 		}

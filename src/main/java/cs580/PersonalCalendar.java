@@ -93,7 +93,7 @@ public class PersonalCalendar {
 		LoginUsername = username;
 		SeperateDate();
 		initialize();
-		setUpMeetingList();
+		//setUpMeetingList();
 		frmPersonalCalendar.setLocationRelativeTo(null);
 		frmPersonalCalendar.setVisible(true);
 	}
@@ -313,7 +313,7 @@ public class PersonalCalendar {
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	/*
 	private void setUpMeetingList()
 	{
 		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
@@ -331,7 +331,7 @@ public class PersonalCalendar {
 			StringDate = String.valueOf( myMeeting.get("Date"));
 			myMeetingList.add(StringDate); 
 		}
-	}
+	}*/
 
 	private void CalculateDate()
 	{

@@ -1,3 +1,8 @@
+/*
+ * this class combined with AdminAppForm class
+ * just for record, do not remove this class. thanks =)
+ */
+
 /*package cs580;
 
 import java.awt.Color;

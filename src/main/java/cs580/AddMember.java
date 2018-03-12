@@ -11,8 +11,6 @@ import javax.swing.event.*;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
@@ -51,12 +49,6 @@ public class AddMember extends JFrame
 	private JLabel lblListInvitee;
 	private JLabel lblListSearch;
 	private JLabel lblImage;
-	//private JLabel lblSelectHidden;
-	//private JLabel lblSelectHiddenLabel;
-	//private JLabel lblSelectVisible;
-	//private JLabel lblSelectVisibleLabel;
-	//private JLabel lblSelectBorder;
-	//private JLabel lblSelectBorderLabel;
 	
 	private JList<String> listEmployee;
 	private JList<String> listInvitee;
@@ -113,7 +105,6 @@ public class AddMember extends JFrame
 		lblTitle.setForeground(Color.WHITE);
 		lblTitle.setFont(new Font("Dialog", Font.BOLD, 25));
 		contents.add(lblTitle);
-		//lblListEmployee.setAlignmentX(CENTER_ALIGNMENT);
 		
 		initEmployeeModel();
 		
@@ -142,7 +133,6 @@ public class AddMember extends JFrame
 				lblListInvitee = new JLabel("             Member");
 				lblListInvitee.setForeground(Color.WHITE);
 				lblListInvitee.setFont(new Font("Dialog", Font.BOLD, 16));
-				//lblListInvitee.setAlignmentX(CENTER_ALIGNMENT);
 				
 				listInvitee = new JList<String>(listModelInvitee);
 				listInvitee.setAlignmentX(LEFT_ALIGNMENT);
@@ -244,7 +234,6 @@ public class AddMember extends JFrame
 				btnClear.addActionListener(this);
 				btnSearch.addActionListener(this);
 
-		
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 		
 		/////// event listener ////////
@@ -252,7 +241,6 @@ public class AddMember extends JFrame
 		btnAddAll.addActionListener(this);
 		btnRemove.addActionListener(this);
 		btnRemoveAll.addActionListener(this);
-		//searchName.getDocument().addDocumentListener(new MyDocumentListener());
 
 		/////// set size /////////
 		setSize(850, 460);
@@ -361,11 +349,7 @@ public class AddMember extends JFrame
 			showRestEmployee();
 			return;
 		}
-		
-		
-		
 	}
-	
 
 	private void addItem()
 	{
@@ -376,13 +360,12 @@ public class AddMember extends JFrame
 		}
 		
 		String addedItem = listEmployee.getSelectedValue();
-		//ForClearReset = listEmployee.getSelectedValue();
+		
 		// remove from left list
 		listModelEmployee.remove(isSelected);
 		if (pressSearch == true)
 		{
 			listModelTemp.removeElement(addedItem);
-			//System.out.print(listModelTemp);
 		}
 		//displaySelectedItems(); ///////////////////////////////////////////////////////////
 		
@@ -432,7 +415,6 @@ public class AddMember extends JFrame
 		
 		// remove from right list
 		listModelInvitee.remove(iSelected);
-		//displaySelectedItems();
 		
 		// add to left list
 		int size = listModelEmployee.getSize();
@@ -474,9 +456,7 @@ public class AddMember extends JFrame
 		else 
 		{
 			for(int i=0; i<listModelInvitee.size(); i++ )
-			{
-				//System.out.print(listModelInvitee.getElementAt(i));
-				
+			{				
 				BasicDBObject match = new BasicDBObject();
 		        match.put( "Name", listModelInvitee.getElementAt(i) );
 

@@ -182,7 +182,9 @@ public class PersonalCalendar {
 				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
 				SeperateDate();
-///++++++++++++++++++++++++++++++++++++++++				
+///++++++++++++++++++++++++++++++++++++++++		
+				MeetinglistModel.clear();
+				MeetingDetail.setText(null);
 			}
 		});		
 		
@@ -211,6 +213,8 @@ public class PersonalCalendar {
 				Object[][] tempData = generateDaysInMonth(currentYear, currentMonth);
 				table.setModel(new DefaultTableModel(tempData, DAYS_OF_WEEK));
 ///+++++++++++++++++++++++++++++++++++++++
+				MeetinglistModel.clear();
+				MeetingDetail.setText(null);
 			}
 		});
 		

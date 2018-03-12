@@ -19,6 +19,7 @@ import javax.swing.ListSelectionModel;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -64,7 +65,7 @@ public class AdminPage {
 		initialize();
 		frmAdminProfilePage.setLocationRelativeTo(null);
 		frmAdminProfilePage.setVisible(true);
-		NewApplication();
+		
 	}
 
 	private void initialize() {
@@ -131,11 +132,15 @@ public class AdminPage {
 		JButton btnAddRoom = new JButton("Add");
 		btnAddRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				long TotalRoom = mongoCollectionRooms.count();
-				String RoomNo = String.valueOf(1000+TotalRoom+1);
+				Document myDoc = (Document)mongoCollectionRooms.find().sort(new BasicDBObject("RID",-1)).first();
+				int largestRoomID = myDoc.getInteger("RID");
+				
+				//long TotalRoom = mongoCollectionRooms.count();
+				String RoomNo = String.valueOf(1000+largestRoomID+1);
 				
 				ArrayList< DBObject > array = new ArrayList< DBObject >();
-				Document document = new Document("RoomNo", RoomNo);
+				Document document = new Document("RID", largestRoomID+1);
+				document.append("RoomNo", RoomNo);
 				document.append("TimeBooked", array);
 				mongoCollectionRooms.insertOne(document);
 				
@@ -252,14 +257,5 @@ public class AdminPage {
 		{
 			listModelRoom.addElement(r);
 		}
-	}
-	
-	private void NewApplication()
-	{
-		if(mongoCollectionAdmin.count()!=0)
-		{
-			JOptionPane.showMessageDialog(frmAdminProfilePage, "You have new application!");
-		}
-		
 	}
 }

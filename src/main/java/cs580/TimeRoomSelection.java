@@ -602,11 +602,14 @@ public class TimeRoomSelection implements ListSelectionListener{
 /////// Add new meeting into Meeting database
 		if(ExistMeeting == false)
 		{
-			long TotalMeeting = mongoCollectionMeeting.count();
+			Document myDoc = (Document)mongoCollectionMeeting.find().sort(new BasicDBObject("MeetingID",-1)).first();
+	        int lastMeetingID = myDoc.getInteger("MeetingID");
+	        
+			//long TotalMeeting = mongoCollectionMeeting.count();
 			///*
 			
 			ArrayList< DBObject > array = new ArrayList< DBObject >();
-			Document document = new Document("MeetingID", TotalMeeting+1);
+			Document document = new Document("MeetingID", lastMeetingID+1);
 			document.append("Host", RealName);
 			document.append("Date", Date);
 			document.append("StartTime", UserStartTime);
@@ -618,7 +621,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 			
 			for (int i=0 ; i < Invitee.size(); i++)
 			{
-				mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", TotalMeeting+1),  
+				mongoCollectionMeeting. updateOne( Filters.eq( "MeetingID", lastMeetingID+1),  
 		                new Document( "$addToSet", new Document( "Member", Invitee.getElementAt(i))))  
 		                .wasAcknowledged ();
 			}
@@ -635,7 +638,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 	        addressSpec.put("StartTime", UserStartTime);
 	        addressSpec.put("EndTime", UserEndTime);
 	        addressSpec.put("Host", RealName);
-	        addressSpec.put("MeetingID", TotalMeeting+1);
+	        addressSpec.put("MeetingID", lastMeetingID+1);
 
 	        BasicDBObject update = new BasicDBObject();
 	        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
@@ -652,7 +655,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 		        		matchEmployee.put( "Username", LoginUsername);
 
 		            BasicDBObject Employee_addressSpec = new BasicDBObject();
-		            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
+		            Employee_addressSpec.put("MeetingID", lastMeetingID+1);
 		            Employee_addressSpec.put("Respond", "A");
 		            Employee_addressSpec.put("Update", "0");
 
@@ -666,7 +669,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 		        		matchEmployee.put( "Name", Invitee.elementAt(i) );
 
 		            BasicDBObject Employee_addressSpec = new BasicDBObject();
-		            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
+		            Employee_addressSpec.put("MeetingID", lastMeetingID+1);
 		            Employee_addressSpec.put("Respond", "P");
 		            Employee_addressSpec.put("Update", "0");
 

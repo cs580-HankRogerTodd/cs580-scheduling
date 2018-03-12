@@ -231,7 +231,11 @@ public class dbManage
            System.out.println(mongoCursorAdmin.next());  
         } 
         //*/
+       // Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", 1 )).first();
+        //System.out.print(myMeeting+"++++++++++++++++ \n");
         
+        //Document myDoc = (Document)mongoCollectionMeeting.find().sort(new BasicDBObject("MeetingID",-1)).first();
+        //System.out.print(myDoc.getInteger("MeetingID"));
        // Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", 1)).first();
         //System.out.println(myMeeting);  
         

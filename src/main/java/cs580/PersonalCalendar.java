@@ -65,7 +65,7 @@ public class PersonalCalendar {
 	
 	private JLabel lblNewLabel;
 	private Object selectedValue;
-	private Boolean NewMeeting = false;
+	private Boolean NewNotification = false;
 	private JTextArea MeetingDetail;
 	
 	private String Date;
@@ -236,16 +236,19 @@ public class PersonalCalendar {
 				MeetingDetail.setText(null);
 				
 				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntID )).first();
-				Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
-				List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
-				
-				MeetingDetail.append(" Host: " + myMeeting.getString("Host") + "\n" +
-									 " Room: " + myMeeting.getString("Room") + "\n\n" +
-									 " Start Time: " + myMeeting.getString("StartTime") + ":00"  + "\n" +
-									 " End Time: " + myMeeting.getString("EndTime") + ":00" +"\n" +
-									 "-----------------------------"+"\n" +
-									 " Respond: " +meetingRes.get(0).getString("Respond")
-									);
+				if(myMeeting != null)
+				{
+					Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
+					List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
+					
+					MeetingDetail.append(" Host: " + myMeeting.getString("Host") + "\n" +
+										 " Room: " + myMeeting.getString("Room") + "\n\n" +
+										 " Start Time: " + myMeeting.getString("StartTime") + ":00"  + "\n" +
+										 " End Time: " + myMeeting.getString("EndTime") + ":00" +"\n" +
+										 "-----------------------------"+"\n" +
+										 " Respond: " +meetingRes.get(0).getString("Respond")
+										);
+				}
 			}
 		});
 		Meetinglist.setBounds(353, 56, 231, 111);
@@ -270,17 +273,20 @@ public class PersonalCalendar {
 							Document MeetingElement = meetingRes.get(i);					
 							String StringRespond = MeetingElement.getString("Respond");
 							if(StringRespond.equals("P")){
-								NewMeeting = true;
+								NewNotification = true;
+							}
+							else if(StringRespond.equals("X")){
+								NewNotification = true;
 							}
 						}
 						
-						if(NewMeeting == true){
+						if(NewNotification == true){
 							Notification Notice = new Notification(LoginUsername);
 							frmPersonalCalendar.dispose();
 						}
 						
 						else{
-							JOptionPane.showMessageDialog(frmPersonalCalendar, "No New Meeting!");
+							JOptionPane.showMessageDialog(frmPersonalCalendar, "No New Norification!");
 						
 						}
 					}
@@ -364,19 +370,22 @@ public class PersonalCalendar {
 		{
 			Document MeetingElement = MeetingLists.get(j);
 			//System.out.println(MeetingElement); // get meeting ID to find the meeting date, start time and end time
-			String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
-			int IntMeetingID = Integer.parseInt(StringMeetingID);
-			// use meeting ID to get meeting detail
-			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
-			
-			//String convertedToString = myMeeting.get("Date").toString();
-			int MeetingDate = Integer.valueOf((String) myMeeting.get("Date"));
-			
-			MeetingMonth = MeetingDate/100;
-			MeetingDay = MeetingDate%100;
-			
-			MeetingDateList.add(MeetingMonth);
-			MeetingDateList.add(MeetingDay);	
+			if(!MeetingElement.getString("Respond").equals("X"))
+			{
+				String StringMeetingID = String.valueOf(MeetingElement.get("MeetingID"));
+				int IntMeetingID = Integer.parseInt(StringMeetingID);
+				// use meeting ID to get meeting detail
+				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
+				
+				//String convertedToString = myMeeting.get("Date").toString();
+				int MeetingDate = Integer.valueOf((String) myMeeting.get("Date"));
+				
+				MeetingMonth = MeetingDate/100;
+				MeetingDay = MeetingDate%100;
+				
+				MeetingDateList.add(MeetingMonth);
+				MeetingDateList.add(MeetingDay);	
+			}
 		}
 	}
 	
@@ -384,19 +393,23 @@ public class PersonalCalendar {
 	{
 		Document myDoc = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 		List<Document> meetinglsit = (List<Document>) myDoc.get("Meeting");
+		
 		int size = meetinglsit.size();
 		
 		for (int i=0; i<size; i++)
 		{
 			Document meeting = meetinglsit.get(i);
-			String StringMeetingID = String.valueOf(meeting.get("MeetingID"));
-			int IntMeetingID = Integer.parseInt(StringMeetingID);
-			
-			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
-			
-			if(myMeeting.getString("Date").equals(Date)){
-				String outputInList = StringMeetingID + " " + myMeeting.getString("Host") + " " + myMeeting.getString("StartTime") + ":00 - " +myMeeting.getString("EndTime") + ":00";
-				MeetinglistModel.addElement(outputInList);
+			if(!meeting.getString("Respond").equals("X"))
+			{
+				String StringMeetingID = String.valueOf(meeting.get("MeetingID"));
+				int IntMeetingID = Integer.parseInt(StringMeetingID);
+				
+				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
+				
+				if(myMeeting.getString("Date").equals(Date)){
+					String outputInList = StringMeetingID + " " + myMeeting.getString("Host") + " " + myMeeting.getString("StartTime") + ":00 - " +myMeeting.getString("EndTime") + ":00";
+					MeetinglistModel.addElement(outputInList);
+				}
 			}
 		}		
 	}

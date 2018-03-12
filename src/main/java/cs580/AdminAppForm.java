@@ -149,7 +149,7 @@ public class AdminAppForm {
 					String StringEmpName = String.valueOf(Employeelist.getSelectedValue());  
 					Document myMeeting = mongoCollectionAdmin.find(Filters.eq("Name", StringEmpName )).first();
 				
-					AppForm.append("Employee ID:	" + myMeeting.getInteger("EID") + "\n\n" +
+					AppForm.append("Applicant ID:	" + myMeeting.getInteger("EID") + "\n\n" +
 							 "Name:	" + myMeeting.getString("Name") + "\n" +
 							 "Username:	" + myMeeting.getString("Username") + "\n\n" +
 							 "University:	" + myMeeting.getString("University") + "\n" +

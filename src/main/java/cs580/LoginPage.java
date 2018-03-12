@@ -38,6 +38,7 @@ public class LoginPage {
 	MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("Users");
 	MongoCollection<Document> mongoCollectionRooms = mongoDatabase.getCollection("Rooms");
 	MongoCollection<Document> mongoCollectionMeeting = mongoDatabase.getCollection("Meeting");
+	MongoCollection<Document> mongoCollectionAdmin = mongoDatabase.getCollection("AdminUse");
 ///////////////////////////////////////////////////////////////////////////////////////
 	
 	private JFrame frame;
@@ -142,6 +143,7 @@ public class LoginPage {
 						if(password.equals("0000"))
 						{
 							frmLoginPage.dispose();
+							NewApplication();
 							AdminPage Admin = new AdminPage();
 						}
 						else
@@ -264,5 +266,13 @@ public class LoginPage {
 		}
 	}
 	
+	private void NewApplication()
+	{
+		if(mongoCollectionAdmin.count()!=0)
+		{
+			JOptionPane.showMessageDialog(frame, "You have new application!");
+		}
+		
+	}
 	
 }

@@ -97,7 +97,7 @@ public class MemberSelection extends JFrame
 		        Document doc = cursor.next();
 		        if(doc.get("Availability").equals("Available"))
 		        {
-		        	employees.add(doc.get("Username").toString());
+		        	employees.add(doc.get("Name").toString());
 		        }
 		      }
 		    } finally {

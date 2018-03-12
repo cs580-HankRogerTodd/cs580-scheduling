@@ -236,7 +236,7 @@ public class PersonalCalendar {
 				MeetingDetail.setText(null);
 				
 				Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntID )).first();
-				Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+				Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 				List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
 				
 				MeetingDetail.append(" Host: " + myMeeting.getString("Host") + "\n" +
@@ -262,7 +262,7 @@ public class PersonalCalendar {
 						
 				btnNotificationCenter.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+						Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 						List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
 						
 						for(int i=0; i<meetingRes.size(); i++)
@@ -355,7 +355,7 @@ public class PersonalCalendar {
 	
 	private void SeperateDate()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first(); //get member
+		Document myDoc = mongoCollection.find(Filters.eq("Username", LoginUsername )).first(); //get member
 		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 						//get meeting list
 		int MeetingListSize = MeetingLists.size(); 												//get meeting list size
 		MeetingDateList.clear();
@@ -382,7 +382,7 @@ public class PersonalCalendar {
 	
 	private void listMeetingSchedule()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+		Document myDoc = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 		List<Document> meetinglsit = (List<Document>) myDoc.get("Meeting");
 		int size = meetinglsit.size();
 		

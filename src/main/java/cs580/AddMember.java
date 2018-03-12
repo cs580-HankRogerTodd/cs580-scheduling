@@ -263,7 +263,7 @@ public class AddMember extends JFrame
 		        {
 			        	for(int i=0; i<MemberLists.size(); i++)
 			    		{
-			        		if(doc.get("Username").toString().equals(String.valueOf(MemberLists.get(i))))
+			        		if(doc.get("Name").toString().equals(String.valueOf(MemberLists.get(i))))
 			        		{
 			        			MemberSelected = true;
 			        			break;
@@ -272,7 +272,7 @@ public class AddMember extends JFrame
 
 			        	if(MemberSelected==false)
 			        	{
-			        		employees.add(doc.get("Username").toString());
+			        		employees.add(doc.get("Name").toString());
 			        	}
 			        	MemberSelected = false;
 		        }

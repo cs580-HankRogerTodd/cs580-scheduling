@@ -170,6 +170,10 @@ public class MyMeeting {
 		MyMeetinglist.setBounds(188, 51, 143, 166);
 		frmMeetingManagement.getContentPane().add(MyMeetinglist);
 		/*
+		 * this part move to notification class
+		 * here just for record
+		 */
+		/*
 		UpdateMeetinglistModel = new DefaultListModel();
 		UpdateMeetingList = new JList(UpdateMeetinglistModel);
 		UpdateMeetingList.addMouseListener(new MouseAdapter() {
@@ -225,7 +229,7 @@ public class MyMeeting {
 		frame.getContentPane().add(UpdateMeetingList);
 		*/
 		
-		//MeetingDetail = new JTextArea();//////////////////////////////
+		//MeetingDetail = new JTextArea();
 		//MeetingDetail.setBounds(333, 59, 289, 166);
 		//frame.getContentPane().add(MeetingDetail);
 		
@@ -262,7 +266,7 @@ public class MyMeeting {
 					if(myMeeting != null)
 					{
 						mongoCollection.updateOne(  
-				                new Document ("Name",LoginUsername),  
+				                new Document ("Username",LoginUsername),  
 				                new Document( "$pull", new Document("Meeting" ,  
 				                        new Document( "MeetingID", SelectAcceptMeeting))))  
 				                .wasAcknowledged ();  
@@ -401,10 +405,10 @@ public class MyMeeting {
 	
 	private void setMeetinglist()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();    //get member
+		Document myDoc = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();    //get member
 		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 					//get meeting list
 		int MeetingListSize = MeetingLists.size(); 											//get meeting list size
-		
+		String RealName = myDoc.getString("Name");
 		// Count meeting list
 		for(int j=0; j<MeetingListSize; j++)
 		{
@@ -414,14 +418,14 @@ public class MyMeeting {
 			Integer IntMeetingID = Integer.valueOf(StringMeetingID);
 			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
 
-			if(MeetingElement.get("Respond").equals("A") && !myMeeting.getString("Host").equals(LoginUsername))
+			if(MeetingElement.get("Respond").equals("A") && !myMeeting.getString("Host").equals(RealName))
 			{
 				AcceptMeetinglistModel.addElement(StringMeetingID);
 			}
 			
 			if(myMeeting!=null)
 			{
-				if(myMeeting.getString("Host").equals(LoginUsername))
+				if(myMeeting.getString("Host").equals(RealName))
 				{
 					MyMeetinglistModel.addElement(StringMeetingID);
 				}

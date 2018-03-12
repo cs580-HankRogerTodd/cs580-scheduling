@@ -34,7 +34,7 @@ public class Notification {
 	private JList Meetinglist ;
 	private DefaultListModel<String> MeetinglistModel;
 	private DefaultListModel<String> UpdateMeetinglistModel;
-	private String userName; 
+	private String LoginUsername; 
 	private int IntSelectMeeting = 0;
 	private int IntSelectUpdateMeeting = 0;
 	private JList UpdateMeetingList;
@@ -50,7 +50,7 @@ public class Notification {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 	public Notification(String username) {
-		userName = username;
+		LoginUsername = username;
 		initialize();
 		showPendingMeeting();
 		frmNotification.setLocationRelativeTo(null);
@@ -106,13 +106,13 @@ public class Notification {
 				else
 				{
 					mongoCollection.updateOne(  
-			                new Document ("Name",userName),  
+			                new Document ("Username",LoginUsername),  
 			                new Document( "$pull", new Document("Meeting" ,  
 			                        new Document( "MeetingID", IntSelectMeeting))))  
 			                .wasAcknowledged ();  
 					
 					BasicDBObject match = new BasicDBObject();
-			        match.put( "Name", userName );
+			        match.put( "Username", LoginUsername);
 
 			        BasicDBObject addressSpec = new BasicDBObject();
 			        addressSpec.put("MeetingID", IntSelectMeeting);
@@ -128,6 +128,8 @@ public class Notification {
 			        MeetingDetail.setText(null);
 			        
 			        JOptionPane.showMessageDialog(frmNotification, "Meeting ACCEPT!");
+			        Notification Notice = new Notification(LoginUsername);
+			        frmNotification.dispose();
 				}
 			}
 		});
@@ -145,7 +147,7 @@ public class Notification {
 				else
 				{
 					mongoCollection.updateOne(  
-			                new Document ("Name",userName),  
+			                new Document ("Username",LoginUsername),  
 			                new Document( "$pull", new Document("Meeting" ,  
 			                        new Document( "MeetingID", IntSelectMeeting))))  
 			                .wasAcknowledged ();  
@@ -168,6 +170,8 @@ public class Notification {
 			        MeetingDetail.setText(null);
 			       
 			        JOptionPane.showMessageDialog(frmNotification, "Meeting DECLINE!");
+			        Notification Notice = new Notification(LoginUsername);
+				    frmNotification.dispose();
 				}
 			}
 		});
@@ -178,7 +182,7 @@ public class Notification {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ProfilePage profile = new ProfilePage(userName);
+				ProfilePage profile = new ProfilePage(LoginUsername);
 				frmNotification.dispose();
 			}
 		});
@@ -235,7 +239,7 @@ public class Notification {
 					else
 					{
 						mongoCollection.updateOne(  
-				                new Document ("Name",userName),  
+				                new Document ("Username",LoginUsername),  
 				                new Document( "$pull", new Document("Meeting" ,  
 				                        new Document( "MeetingID", IntSelectUpdateMeeting))))  
 				                .wasAcknowledged ();  
@@ -272,7 +276,7 @@ public class Notification {
 
 	private void showPendingMeeting()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", userName )).first(); //get member
+		Document myDoc = mongoCollection.find(Filters.eq("Username", LoginUsername )).first(); //get member
 		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 			//get meeting list
 		int MeetingListSize = MeetingLists.size(); 									//get meeting list size
 		
@@ -300,13 +304,13 @@ public class Notification {
 	private void UserNoticed()
 	{
 		 mongoCollection.updateOne(  
-	                new Document ("Name",userName),  
+	                new Document ("Username",LoginUsername),  
 	                new Document( "$pull", new Document("Meeting" ,  
 	                        new Document( "MeetingID", IntSelectUpdateMeeting))))  
 	                .wasAcknowledged (); 
 		 
 		 BasicDBObject matchEmployee = new BasicDBObject();
- 		 matchEmployee.put( "Name", userName);
+ 		 matchEmployee.put( "Username", LoginUsername);
 
 	     BasicDBObject Employee_addressSpec = new BasicDBObject();
 	     Employee_addressSpec.put("MeetingID", IntSelectUpdateMeeting);
@@ -316,6 +320,9 @@ public class Notification {
 	     BasicDBObject updateEmployee = new BasicDBObject();
 	     updateEmployee.put( "$push", new BasicDBObject( "Meeting", Employee_addressSpec ) );
 	     mongoCollection.updateMany( matchEmployee, updateEmployee );
+	     
+	     Notification Notice = new Notification(LoginUsername);
+	     frmNotification.dispose();
 	    
 	}
 }

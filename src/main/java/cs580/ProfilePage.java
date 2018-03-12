@@ -83,7 +83,7 @@ public class ProfilePage {
 		lblNewLabel.setIcon(image);
 		frame.getContentPane().add(lblNewLabel);
 		 
-		Document myMeeting = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+		Document myMeeting = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 		University = myMeeting.get("University") ;
 		Department = myMeeting.get("Department");
 		Byear = myMeeting.get("Byear") ;
@@ -129,7 +129,7 @@ public class ProfilePage {
 		btnNotification.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+				Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 				List<Document> meetingRes = (List<Document>) myStatus.get("Meeting");
 				
 				for(int i=0; i<meetingRes.size(); i++)
@@ -179,7 +179,7 @@ public class ProfilePage {
 		rdbtnAvailable = new JRadioButton("Available");
 		rdbtnAvailable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Bson filter = new Document("Name", LoginUsername);
+				Bson filter = new Document("Username", LoginUsername);
 				Bson newValue = new Document("Availability", "Available");
 				Bson updateOperationDocument = new Document("$set", newValue);
 				mongoCollection.updateOne(filter, updateOperationDocument);
@@ -193,7 +193,7 @@ public class ProfilePage {
 		rdbtnUnavailable = new JRadioButton("Busy");
 		rdbtnUnavailable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Bson filter = new Document("Name", LoginUsername);
+				Bson filter = new Document("Username", LoginUsername);
 				Bson newValue = new Document("Availability", "Unavailable");
 				Bson updateOperationDocument = new Document("$set", newValue);
 				mongoCollection.updateOne(filter, updateOperationDocument);
@@ -221,7 +221,7 @@ public class ProfilePage {
 	
 	private void setAvailable()
 	{
-		Document myStatus = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
+		Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
 		if(myStatus.getString("Availability").equals("Available"))
 		{
 			rdbtnAvailable.setSelected(true);

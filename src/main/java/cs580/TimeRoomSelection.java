@@ -75,6 +75,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 	
 	private Boolean ExistMeeting;
 	private int ExistMeetingID;
+	private String RealName;
 	
 	private ArrayList<String> destinations = new ArrayList<String>();
     
@@ -100,6 +101,9 @@ public class TimeRoomSelection implements ListSelectionListener{
 		selectedValue = inputSelectedValue;
 		ExistMeeting = existmeeting;
 		ExistMeetingID = existmeetingid;
+		
+		Document myStatus = mongoCollection.find(Filters.eq("Username", LoginUsername )).first();
+        RealName = myStatus.getString("Name");
 		
 		CalculateDate(currentMonth, selectedValue);
 		findAvailableTime();
@@ -171,7 +175,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 				else
 				{
 					int answer = JOptionPane.showConfirmDialog(frame, "YOUR MEETING" + "\n\n"+
-																	 "HOST: " + LoginUsername +"\n" +
+																	 "HOST: " + RealName +"\n" +
 																	 "DATE: " + Date +"\n" +
 																	 "StartTime: " + UserStartTime + "\n" +
 																	 "EndTime: " + UserEndTime +"\n" +
@@ -603,7 +607,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 			
 			ArrayList< DBObject > array = new ArrayList< DBObject >();
 			Document document = new Document("MeetingID", TotalMeeting+1);
-			document.append("Host", LoginUsername);
+			document.append("Host", RealName);
 			document.append("Date", Date);
 			document.append("StartTime", UserStartTime);
 			document.append("EndTime", UserEndTime);
@@ -630,7 +634,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 	        addressSpec.put("Date", Date);
 	        addressSpec.put("StartTime", UserStartTime);
 	        addressSpec.put("EndTime", UserEndTime);
-	        addressSpec.put("Host", LoginUsername);
+	        addressSpec.put("Host", RealName);
 	        addressSpec.put("MeetingID", TotalMeeting+1);
 
 	        BasicDBObject update = new BasicDBObject();
@@ -639,13 +643,13 @@ public class TimeRoomSelection implements ListSelectionListener{
 	        //*/
 
 	/////// Add new meeting schedule into Employee database
-			
+	        
 	        for (int i= 0; i< Invitee.size(); i++)
 	        {
-	        		if(Invitee.elementAt(i).equals(LoginUsername))
+	        		if(Invitee.elementAt(i).equals(RealName))
 	        		{
 	        			BasicDBObject matchEmployee = new BasicDBObject();
-		        		matchEmployee.put( "Name", LoginUsername);
+		        		matchEmployee.put( "Username", LoginUsername);
 
 		            BasicDBObject Employee_addressSpec = new BasicDBObject();
 		            Employee_addressSpec.put("MeetingID", TotalMeeting+1);
@@ -682,7 +686,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 			
 			for (int i= 0; i< Invitee.size(); i++)
 	        {
-				if(Invitee.elementAt(i).equals(LoginUsername))
+				if(Invitee.elementAt(i).equals(RealName))
 	        		{
 					mongoCollection.updateOne(  
 			                new Document ("Name",Invitee.elementAt(i)),  
@@ -738,7 +742,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 		        addressSpec.put("Date", Date);
 		        addressSpec.put("StartTime", UserStartTime);
 		        addressSpec.put("EndTime", UserEndTime);
-		        addressSpec.put("Host", LoginUsername);
+		        addressSpec.put("Host", RealName);
 		        addressSpec.put("MeetingID", ExistMeetingID);
 
 		        BasicDBObject update = new BasicDBObject();
@@ -753,7 +757,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 			
 			ArrayList< DBObject > array = new ArrayList< DBObject >();
 			Document document = new Document("MeetingID", ExistMeetingID);
-			document.append("Host", LoginUsername);
+			document.append("Host", RealName);
 			document.append("Date", Date);
 			document.append("StartTime", UserStartTime);
 			document.append("EndTime", UserEndTime);

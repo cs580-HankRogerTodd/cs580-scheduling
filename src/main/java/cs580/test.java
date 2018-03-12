@@ -304,7 +304,7 @@ public class test
 		Document document = new Document("EID", 0);
 		document.append("Name", "Admin");
 		document.append("Availability", "Unavailable");
-		document.append("Username", "Admin");
+		document.append("Username", "AdminU");
 		document.append("Password", "null");
 		
 		document.append("University", "Cal Poly Pomona");
@@ -318,7 +318,7 @@ public class test
 		Document document1 = new Document("EID", 1);
 		document1.append("Name", "Employee1");
 		document1.append("Availability", "Available");
-		document1.append("Username", "Employee1");
+		document1.append("Username", "UEmployee1");
 		document1.append("Password", "0000");
 		
 		document1.append("University", "Cal Poly Pomona");
@@ -355,7 +355,7 @@ public class test
 	    Document document2 = new Document("EID", 2);
 	    document2.append("Name", "Employee2");
 	    document2.append("Availability", "Available");
-	    document2.append("Username", "Employee2");
+	    document2.append("Username", "UEmployee2");
 	    document2.append("Password", "0000");
 		
 	    document2.append("University", "Cal Poly Pomona");
@@ -399,7 +399,7 @@ public class test
 		Document document3 = new Document("EID", 3);
 	    document3.append("Name", "Employee3");
 	    document3.append("Availability", "Available");
-	    document3.append("Username", "Employee3");
+	    document3.append("Username", "UEmployee3");
 	    document3.append("Password", "0000");
 		
 	    document3.append("University", "Cal Poly Pomona");
@@ -426,7 +426,7 @@ public class test
 		    Document document4 = new Document("EID", 4);
 		    document4.append("Name", "Employee4");
 		    document4.append("Availability", "Available");
-		    document4.append("Username", "Employee4");
+		    document4.append("Username", "UEmployee4");
 		    document4.append("Password", "0000");
 			
 		    document4.append("University", "Cal Poly Pomona");
@@ -452,7 +452,7 @@ public class test
 		    Document document5 = new Document("EID", 5);
 		    document5.append("Name", "Employee5");
 		    document5.append("Availability", "Available");
-		    document5.append("Username", "Employee5");
+		    document5.append("Username", "UEmployee5");
 		    document5.append("Password", "0000");
 			
 		    document5.append("University", "Cal Poly Pomona");
@@ -487,7 +487,7 @@ public class test
 		    Document document6 = new Document("EID", 6);
 		    document6.append("Name", "Employee6");
 		    document6.append("Availability", "Available");
-		    document6.append("Username", "Employee6");
+		    document6.append("Username", "UEmployee6");
 		    document6.append("Password", "0000");
 			
 		    document6.append("University", "Cal Poly Pomona");
@@ -513,7 +513,7 @@ public class test
 		    Document document7 = new Document("EID", 7);
 		    document7.append("Name", "Employee7");
 		    document7.append("Availability", "Available");
-		    document7.append("Username", "Employee7");
+		    document7.append("Username", "UEmployee7");
 		    document7.append("Password", "0000");
 			
 		    document7.append("University", "Cal Poly Pomona");

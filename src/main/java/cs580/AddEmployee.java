@@ -1,5 +1,5 @@
 /*
- * this class combined with AdminAppForm class
+ * this class combined with ApplicationForm class
  * just for record, do not remove this class. thanks =)
  */
 

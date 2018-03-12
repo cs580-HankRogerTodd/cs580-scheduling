@@ -153,7 +153,7 @@ public class LoginPage {
 					}
 					else
 					{
-						Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();
+						Document myDoc = mongoCollection.find(Filters.eq("Username", username )).first();
 						if(myDoc.get("Password").equals(password))
 						{
 							frmLoginPage.dispose();
@@ -188,7 +188,7 @@ public class LoginPage {
 
 	private void MeetingNotification()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();    //get member
+		Document myDoc = mongoCollection.find(Filters.eq("Username", username )).first();    //get member
 		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 					//get meeting list
 		int MeetingListSize = MeetingLists.size(); 											//get meeting list size
 		
@@ -208,7 +208,7 @@ public class LoginPage {
 	
 	private void ExpireNotification()
 	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", username )).first();    //get member
+		Document myDoc = mongoCollection.find(Filters.eq("Username", username )).first();    //get member
 		List<Document> MeetingLists = (List<Document>) myDoc.get("Meeting"); 					//get meeting list
 		int MeetingListSize = MeetingLists.size(); 											//get meeting list size
 		

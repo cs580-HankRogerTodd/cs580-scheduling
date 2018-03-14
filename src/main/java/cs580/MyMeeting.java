@@ -86,9 +86,11 @@ public class MyMeeting {
 					if(myMeeting != null)
 					{
 						MeetingDetail.setText(null);
+						String meetingDate1 = getDateWithBackslash(myMeeting.getString("Date"));
+						
 						MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
 											 "Room: " + myMeeting.getString("Room") + "\n" +
-											 "Date: " + myMeeting.getString("Date") + "\n" +
+											 "Date: " + meetingDate1 + "\n" +
 											 "Start time: " + myMeeting.getString("StartTime") + "\n" +
 											 "End Time: " + myMeeting.getString("EndTime")  
 											);
@@ -117,9 +119,10 @@ public class MyMeeting {
 					IntSelectMyMeeting = Integer.valueOf((String) MyMeetinglist.getSelectedValue());
 					
 					Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntSelectMyMeeting )).first();
+					String meetingDate1 = getDateWithBackslash(myMeeting.getString("Date"));
 					MeetingDetail.append("Host: " + myMeeting.getString("Host") + "\n" +
 										 "Room: " + myMeeting.getString("Room") + "\n" +
-										 "Date: " + myMeeting.getString("Date") + "\n" +
+										 "Date: " + meetingDate1 + "\n" +
 										 "Start time: " + myMeeting.getString("StartTime") + "\n" +
 										 "End Time: " + myMeeting.getString("EndTime") + "\n"+
 										 "-------------------"+ "\n"+
@@ -431,5 +434,20 @@ public class MyMeeting {
 				}
 			}
 		}	
+	}
+	
+	private String getDateWithBackslash(String meetingDate)
+	{
+		String meetingDate1 = meetingDate;
+		if (meetingDate1.length() == 4)
+		{
+			meetingDate1 = meetingDate1.substring(0, 2) + "/" + meetingDate1.substring(2, meetingDate1.length());
+		}
+		else if (meetingDate1.length() == 3)
+		{
+			meetingDate1 = meetingDate1.substring(0, 1) + "/" + meetingDate1.substring(1, meetingDate1.length());
+		}
+		
+		return meetingDate1;
 	}
 }

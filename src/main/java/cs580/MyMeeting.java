@@ -70,7 +70,7 @@ public class MyMeeting {
 		
 		frmMeetingManagement = new JFrame();
 		frmMeetingManagement.setTitle("Meeting Management");
-		frmMeetingManagement.setBounds(100, 100, 545, 312);
+		frmMeetingManagement.setBounds(100, 100, 545, 325);
 		frmMeetingManagement.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMeetingManagement.getContentPane().setLayout(null);
 		
@@ -167,7 +167,7 @@ public class MyMeeting {
 				}
 			}
 		});
-		MyMeetinglist.setBounds(188, 51, 143, 166);
+		MyMeetinglist.setBounds(188, 51, 149, 166);
 		frmMeetingManagement.getContentPane().add(MyMeetinglist);
 		/*
 		 * this part move to notification class
@@ -307,7 +307,7 @@ public class MyMeeting {
 				frmMeetingManagement.dispose();
 			}
 		});
-		btnCancel.setBounds(453, 255, 86, 29);
+		btnCancel.setBounds(438, 233, 86, 29);
 		frmMeetingManagement.getContentPane().add(btnCancel);
 		
 		JButton btnUpdate = new JButton("Update");
@@ -397,7 +397,7 @@ public class MyMeeting {
 		MeetingDetail = new JTextArea();
 		MeetingDetailS.setViewportView(MeetingDetail);
 		
-		JLabel lblNewLabel = new JLabel("New label");
+		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(currentDirectory+"/image/calendarB2.jpg"));
 		lblNewLabel.setBounds(0, 0, 545, 291);
 		frmMeetingManagement.getContentPane().add(lblNewLabel);

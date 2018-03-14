@@ -170,6 +170,5 @@ public class MeetingUpdate {
 			listModelInvitee.addElement(StringMember);
 		}
 		
-		//System.out.print(listModelInvitee);
 	}
 }

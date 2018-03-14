@@ -323,25 +323,6 @@ public class PersonalCalendar {
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/*
-	private void setUpMeetingList()
-	{
-		Document myDoc = mongoCollection.find(Filters.eq("Name", LoginUsername )).first();
-		List<Document> meetinglsit = (List<Document>) myDoc.get("Meeting");
-		int size = meetinglsit.size();
-		
-		for (int i=0; i<size; i++)
-		{
-			Document meeting = meetinglsit.get(i);
-			String StringMeetingID = String.valueOf(meeting.get("MeetingID"));
-			int IntMeetingID = Integer.parseInt(StringMeetingID);
-	
-			Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
-	
-			StringDate = String.valueOf( myMeeting.get("Date"));
-			myMeetingList.add(StringDate); 
-		}
-	}*/
 
 	private void CalculateDate()
 	{

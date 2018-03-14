@@ -4,6 +4,8 @@ import java.awt.Font;
 
 import javax.swing.UIManager;
 
+import NoUse.dbManage;
+
 public class App {	
 
 	private static final Font FONT_PLAIN = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
@@ -20,7 +22,7 @@ public class App {
 		//DB_setUp ProgramStart = new DB_setUp();
 		LoginPage login = new LoginPage();
 		//ClearDB Cleaner = new ClearDB();
-		dbManage member = new dbManage();
+		//dbManage member = new dbManage();
 		//test testcase = new test();
 		
 	}

@@ -1,3 +1,4 @@
+package NoUse;
 /*
  * this class combined with ApplicationForm class
  * just for record, do not remove this class. thanks =)

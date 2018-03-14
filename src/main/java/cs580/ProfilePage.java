@@ -90,8 +90,8 @@ public class ProfilePage {
 		Degree = myMeeting.get("Degree");
 		
 		JTextPane txtpnCaliforniaState = new JTextPane();
-		//txtpnCaliforniaState.setText("                  "+LoginUsername + "\n\n         "+University+"\n          "
-		//		+Degree+"\n        "+Department+"\n                  "+Byear);
+		txtpnCaliforniaState.setText("             "+LoginUsername + "\n\n         "+University+"\n          "
+				+Degree+"\n        "+Department+"\n                  "+Byear);
 		txtpnCaliforniaState.setBounds(236, 205, 177, 106);
 		frame.getContentPane().add(txtpnCaliforniaState);
 		

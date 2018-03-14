@@ -416,10 +416,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 							Document myMeeting = mongoCollectionMeeting.find(Filters.eq("MeetingID", IntMeetingID )).first();
 							
 							String convertedToString = myMeeting.get("Date").toString();
-							
-							//System.out.print(convertedToString+"\n");
-							//System.out.print(Four_Digit_Date+"\n");
-							
+	
 							if (convertedToString.equals(Four_Digit_Date)==true)
 							{
 								int IntStartTime = Integer.valueOf((String) myMeeting.get("StartTime"));
@@ -429,8 +426,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 								{
 									AvailableTimeArray[Mtime] = 1;
 								}
-								//System.out.println(Arrays.toString(AvailableTimeArray));
-								//System.out.print(AvailableTimeArray);
+			
 							}
 							else 
 							{
@@ -505,7 +501,6 @@ public class TimeRoomSelection implements ListSelectionListener{
             			{
             				BookedStartTime = Integer.valueOf((String) RoomBookedTime.get(i).get("StartTime"));
                 			BookedEndTime = Integer.valueOf((String) RoomBookedTime.get(i).get("EndTime"));
-                			//int UpdateMeetingID = Integer.valueOf((String) RoomBookedTime.get(i).get("MeetingID"));
                 			
                 			if ((IntUserStartTime >= BookedStartTime && IntUserStartTime < BookedEndTime) || (IntUserEndTime > BookedStartTime && IntUserEndTime <= BookedEndTime))
                 			{
@@ -752,9 +747,6 @@ public class TimeRoomSelection implements ListSelectionListener{
 		        update.put( "$push", new BasicDBObject( "TimeBooked", addressSpec ) );
 		        mongoCollectionRooms.updateMany( match, update );
 			
-			//private Boolean ExistMeeting;
-			//Used to update only one document by a filter ("Name") and field("Availability")
-			//document.append("Update", "0");
 	        Bson filter = new Document("MeetingID", ExistMeetingID);
 		    mongoCollectionMeeting.deleteOne(filter);
 			
@@ -776,19 +768,7 @@ public class TimeRoomSelection implements ListSelectionListener{
 		                .wasAcknowledged ();
 			}
 		}
-		
-		//System.out.print(Invitee.size());
-		//System.out.print(Invitee.elementAt(0));
-		
-		/*
-		System.out.print("Host: " + LoginUsername + "\n");
-		System.out.print("Member: " + Invitee + "\n");
-		System.out.print("Date: " + Date + "\n");
-		System.out.print("Start time: " + UserStartTime + "\n");
-		System.out.print("End time: " + UserEndTime + "\n");
-		System.out.print("Room: " + UserSelectedRoom + "\n");
-		//*/
-		
+
 		FindIterable<Document> findIterable = mongoCollection.find();
         MongoCursor<Document> mongoCursor = findIterable.iterator();  
         while(mongoCursor.hasNext()){  

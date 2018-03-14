@@ -122,6 +122,7 @@ public class LoginPage {
 								Boolean FromEmployee = true;
 								Boolean FromAdmin = false;
 								ApplicationForm Apply= new ApplicationForm(FromEmployee, FromAdmin);
+								frmLoginPage.dispose();
 							}
 						});
 				btnForgotPassword.addActionListener(new ActionListener() {
